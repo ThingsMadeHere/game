@@ -6,7 +6,7 @@ C_DEFINES = -D_DEFAULT_SOURCE -D_GLFW_X11
 
 C_INCLUDES = -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src/external/glfw/include -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src/external/glfw/src -I/home/carter/Desktop/Farout/build/_deps/raylib-build/raylib/external/glfw/src
 
-C_FLAGS = -fno-strict-aliasing -Werror=implicit-function-declaration -Werror=pointer-arith  -O3 -DNDEBUG -std=c99 -fPIC -Wall
+C_FLAGS = -fno-strict-aliasing -Werror=implicit-function-declaration -Werror=pointer-arith  -std=c99 -fPIC -Wall
 
 # Custom flags: _deps/raylib-build/raylib/external/glfw/src/CMakeFiles/glfw.dir/context.c.o_FLAGS = -Wdeclaration-after-statement
 

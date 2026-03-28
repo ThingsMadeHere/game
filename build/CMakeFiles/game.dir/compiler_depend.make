@@ -57,6 +57,7 @@ CMakeFiles/game.dir/src/MarchingCubes.cpp.o: /home/carter/Desktop/Farout/src/Mar
   /usr/include/c++/13/cmath \
   /usr/include/c++/13/compare \
   /usr/include/c++/13/cstddef \
+  /usr/include/c++/13/cstdio \
   /usr/include/c++/13/cstdlib \
   /usr/include/c++/13/debug/assertions.h \
   /usr/include/c++/13/debug/debug.h \
@@ -91,6 +92,7 @@ CMakeFiles/game.dir/src/MarchingCubes.cpp.o: /home/carter/Desktop/Farout/src/Mar
   /usr/include/features.h \
   /usr/include/math.h \
   /usr/include/stdc-predef.h \
+  /usr/include/stdio.h \
   /usr/include/stdlib.h \
   /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h \
   /usr/include/x86_64-linux-gnu/bits/byteswap.h \
@@ -111,25 +113,29 @@ CMakeFiles/game.dir/src/MarchingCubes.cpp.o: /home/carter/Desktop/Farout/src/Mar
   /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
-  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
-  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
   /usr/include/x86_64-linux-gnu/bits/time64.h \
   /usr/include/x86_64-linux-gnu/bits/timesize.h \
   /usr/include/x86_64-linux-gnu/bits/types.h \
+  /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
+  /usr/include/x86_64-linux-gnu/bits/types/__FILE.h \
+  /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
   /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h \
   /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h \
   /usr/include/x86_64-linux-gnu/bits/types/time_t.h \
@@ -148,6 +154,7 @@ CMakeFiles/game.dir/src/MarchingCubes.cpp.o: /home/carter/Desktop/Farout/src/Mar
   /usr/include/x86_64-linux-gnu/sys/cdefs.h \
   /usr/include/x86_64-linux-gnu/sys/select.h \
   /usr/include/x86_64-linux-gnu/sys/types.h \
+  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h
 
 CMakeFiles/game.dir/src/Planet.cpp.o: /home/carter/Desktop/Farout/src/Planet.cpp \
@@ -233,6 +240,7 @@ CMakeFiles/game.dir/src/Planet.cpp.o: /home/carter/Desktop/Farout/src/Planet.cpp
   /usr/include/c++/13/condition_variable \
   /usr/include/c++/13/cstddef \
   /usr/include/c++/13/cstdint \
+  /usr/include/c++/13/cstdio \
   /usr/include/c++/13/cstdlib \
   /usr/include/c++/13/ctime \
   /usr/include/c++/13/cwchar \
@@ -283,6 +291,7 @@ CMakeFiles/game.dir/src/Planet.cpp.o: /home/carter/Desktop/Farout/src/Planet.cpp
   /usr/include/sched.h \
   /usr/include/stdc-predef.h \
   /usr/include/stdint.h \
+  /usr/include/stdio.h \
   /usr/include/stdlib.h \
   /usr/include/time.h \
   /usr/include/wchar.h \
@@ -310,16 +319,13 @@ CMakeFiles/game.dir/src/Planet.cpp.o: /home/carter/Desktop/Farout/src/Planet.cpp
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/sched.h \
-  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
-  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/setjmp.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
@@ -330,15 +336,19 @@ CMakeFiles/game.dir/src/Planet.cpp.o: /home/carter/Desktop/Farout/src/Planet.cpp
   /usr/include/x86_64-linux-gnu/bits/types.h \
   /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
   /usr/include/x86_64-linux-gnu/bits/types/__FILE.h \
+  /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/error_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h \
   /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
   /usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h \
   /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
   /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h \
@@ -353,8 +363,6 @@ CMakeFiles/game.dir/src/Planet.cpp.o: /home/carter/Desktop/Farout/src/Planet.cpp
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
-  /usr/include/x86_64-linux-gnu/bits/wchar2-decl.h \
-  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/atomic_word.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/c++allocator.h \
@@ -376,6 +384,7 @@ CMakeFiles/game.dir/src/Planet.cpp.o: /home/carter/Desktop/Farout/src/Planet.cpp
 
 CMakeFiles/game.dir/src/main.cpp.o: /home/carter/Desktop/Farout/src/main.cpp \
   _deps/raylib-src/src/raylib.h \
+  _deps/raylib-src/src/raymath.h \
   /home/carter/Desktop/Farout/src/MarchingCubes.h \
   /home/carter/Desktop/Farout/src/Planet.h \
   /home/carter/Desktop/Farout/src/ThreadPool.h \
@@ -547,6 +556,7 @@ CMakeFiles/game.dir/src/main.cpp.o: /home/carter/Desktop/Farout/src/main.cpp \
   /usr/include/c++/13/limits \
   /usr/include/c++/13/locale \
   /usr/include/c++/13/map \
+  /usr/include/c++/13/math.h \
   /usr/include/c++/13/memory \
   /usr/include/c++/13/mutex \
   /usr/include/c++/13/new \
@@ -676,22 +686,13 @@ CMakeFiles/game.dir/src/main.cpp.o: /home/carter/Desktop/Farout/src/main.cpp \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/sched.h \
-  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
-  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/setjmp.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
-  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
@@ -729,8 +730,6 @@ CMakeFiles/game.dir/src/main.cpp.o: /home/carter/Desktop/Farout/src/main.cpp \
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
-  /usr/include/x86_64-linux-gnu/bits/wchar2-decl.h \
-  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/atomic_word.h \
@@ -768,12 +767,6 @@ CMakeFiles/game.dir/src/main.cpp.o: /home/carter/Desktop/Farout/src/main.cpp \
 /usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h:
 
 /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h:
-
-/usr/include/x86_64-linux-gnu/bits/string_fortified.h:
 
 /usr/include/x86_64-linux-gnu/bits/locale.h:
 
@@ -831,10 +824,6 @@ CMakeFiles/game.dir/src/main.cpp.o: /home/carter/Desktop/Farout/src/main.cpp \
 
 /usr/include/c++/13/stdexcept:
 
-/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:
-
-/usr/include/c++/13/sstream:
-
 /usr/include/c++/13/pstl/glue_numeric_defs.h:
 
 /usr/include/c++/13/pstl/glue_algorithm_defs.h:
@@ -873,10 +862,6 @@ CMakeFiles/game.dir/src/main.cpp.o: /home/carter/Desktop/Farout/src/main.cpp \
 
 /usr/include/c++/13/cstring:
 
-/usr/include/nlohmann/detail/input/parser.hpp:
-
-/usr/include/c++/13/cstdio:
-
 /usr/include/c++/13/codecvt:
 
 /usr/include/c++/13/clocale:
@@ -905,8 +890,6 @@ CMakeFiles/game.dir/src/main.cpp.o: /home/carter/Desktop/Farout/src/main.cpp \
 
 /usr/include/c++/13/bits/shared_ptr_atomic.h:
 
-/usr/include/x86_64-linux-gnu/bits/stdio2.h:
-
 /usr/include/nlohmann/detail/iterators/iterator_traits.hpp:
 
 /usr/include/c++/13/bits/quoted_string.h:
@@ -917,9 +900,9 @@ CMakeFiles/game.dir/src/main.cpp.o: /home/carter/Desktop/Farout/src/main.cpp \
 
 /usr/include/c++/13/bits/locale_facets_nonio.tcc:
 
-/usr/include/c++/13/bits/stl_multimap.h:
+/usr/include/c++/13/bits/locale_facets_nonio.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
+/usr/include/c++/13/bits/locale_facets.tcc:
 
 /usr/include/x86_64-linux-gnu/bits/time64.h:
 
@@ -929,15 +912,7 @@ CMakeFiles/game.dir/src/main.cpp.o: /home/carter/Desktop/Farout/src/main.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
 
-/usr/include/x86_64-linux-gnu/bits/stdlib.h:
-
-/usr/include/nlohmann/detail/meta/type_traits.hpp:
-
-/usr/include/x86_64-linux-gnu/asm/errno.h:
-
-/usr/include/c++/13/bits/valarray_array.h:
-
-/usr/include/c++/13/bits/atomic_lockfree_defines.h:
+/usr/include/x86_64-linux-gnu/bits/types/FILE.h:
 
 /usr/include/c++/13/string:
 
@@ -962,6 +937,8 @@ CMakeFiles/game.dir/src/main.cpp.o: /home/carter/Desktop/Farout/src/main.cpp \
 /usr/include/x86_64-linux-gnu/bits/math-vector.h:
 
 /usr/include/c++/13/bits/hash_bytes.h:
+
+/usr/include/x86_64-linux-gnu/bits/fp-logb.h:
 
 /usr/include/x86_64-linux-gnu/bits/fp-fast.h:
 
@@ -998,6 +975,10 @@ CMakeFiles/game.dir/src/main.cpp.o: /home/carter/Desktop/Farout/src/main.cpp \
 /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h:
 
 /usr/include/stdlib.h:
+
+/usr/include/c++/13/bits/stl_multimap.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
 
 /usr/include/features-time64.h:
 
@@ -1039,17 +1020,9 @@ CMakeFiles/game.dir/src/main.cpp.o: /home/carter/Desktop/Farout/src/main.cpp \
 
 /usr/include/c++/13/functional:
 
-/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
-
-/usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h:
-
 /usr/include/c++/13/ext/type_traits.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
-
-/usr/include/c++/13/bits/hashtable_policy.h:
 
 /usr/include/nlohmann/json.hpp:
 
@@ -1064,8 +1037,6 @@ CMakeFiles/game.dir/src/main.cpp.o: /home/carter/Desktop/Farout/src/main.cpp \
 /usr/include/c++/13/map:
 
 /usr/include/x86_64-linux-gnu/bits/iscanonical.h:
-
-/usr/include/x86_64-linux-gnu/bits/stdio2-decl.h:
 
 /usr/include/c++/13/bits/ptr_traits.h:
 
@@ -1087,8 +1058,6 @@ CMakeFiles/game.dir/src/main.cpp.o: /home/carter/Desktop/Farout/src/main.cpp \
 
 /usr/include/c++/13/bits/invoke.h:
 
-/usr/include/x86_64-linux-gnu/bits/select2.h:
-
 /usr/include/c++/13/cmath:
 
 /usr/include/x86_64-linux-gnu/c++/13/bits/error_constants.h:
@@ -1102,6 +1071,10 @@ CMakeFiles/game.dir/src/main.cpp.o: /home/carter/Desktop/Farout/src/main.cpp \
 /usr/include/c++/13/bits/alloc_traits.h:
 
 /usr/include/c++/13/bits/concept_check.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/__FILE.h:
+
+/usr/include/math.h:
 
 /usr/include/x86_64-linux-gnu/bits/struct_mutex.h:
 
@@ -1118,12 +1091,6 @@ CMakeFiles/game.dir/src/main.cpp.o: /home/carter/Desktop/Farout/src/main.cpp \
 /usr/include/x86_64-linux-gnu/bits/timesize.h:
 
 /usr/include/c++/13/bits/locale_classes.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
-
-/usr/include/c++/13/ext/numeric_traits.h:
-
-/usr/include/c++/13/bits/stl_iterator.h:
 
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
 
@@ -1146,6 +1113,12 @@ CMakeFiles/game.dir/src/main.cpp.o: /home/carter/Desktop/Farout/src/main.cpp \
 /usr/include/stdio.h:
 
 /usr/include/c++/13/bits/stl_iterator_base_types.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
+
+/usr/include/c++/13/bits/refwrap.h:
+
+/usr/include/c++/13/bits/gslice.h:
 
 /usr/include/alloca.h:
 
@@ -1193,25 +1166,19 @@ _deps/raylib-src/src/raylib.h:
 
 /usr/include/c++/13/bits/requires_hosted.h:
 
-/usr/include/c++/13/bits/locale_facets.tcc:
+/usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h:
+
+/usr/include/time.h:
+
+/usr/include/x86_64-linux-gnu/bits/setjmp.h:
 
 /usr/include/c++/13/bits/move.h:
-
-/usr/include/x86_64-linux-gnu/bits/select-decl.h:
-
-/usr/include/nlohmann/detail/meta/identity_tag.hpp:
-
-/usr/include/c++/13/debug/assertions.h:
 
 /usr/include/c++/13/bits/stl_algobase.h:
 
 /usr/include/c++/13/bits/stl_vector.h:
 
 /usr/include/c++/13/bits/stl_tempbuf.h:
-
-/usr/include/c++/13/bits/refwrap.h:
-
-/usr/include/c++/13/bits/gslice.h:
 
 /usr/include/c++/13/condition_variable:
 
@@ -1220,12 +1187,6 @@ _deps/raylib-src/src/raylib.h:
 /usr/include/c++/13/bits/exception.h:
 
 /usr/include/x86_64-linux-gnu/bits/uintn-identity.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/clockid_t.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h:
-
-/usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h:
 
 /usr/include/c++/13/bits/streambuf.tcc:
 
@@ -1236,12 +1197,6 @@ _deps/raylib-src/src/raylib.h:
 /usr/include/x86_64-linux-gnu/c++/13/bits/c++allocator.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h:
-
-/usr/include/x86_64-linux-gnu/c++/13/bits/ctype_inline.h:
-
-/usr/include/c++/13/bits/char_traits.h:
-
-/usr/include/c++/13/bits/std_function.h:
 
 /usr/include/nlohmann/detail/meta/cpp_future.hpp:
 
@@ -1273,11 +1228,23 @@ _deps/raylib-src/src/raylib.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h:
 
-/usr/include/nlohmann/detail/json_ref.hpp:
+/usr/include/c++/13/bits/hashtable_policy.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
+/usr/include/x86_64-linux-gnu/bits/types/clock_t.h:
 
-/usr/include/c++/13/bits/charconv.h:
+/usr/include/x86_64-linux-gnu/c++/13/bits/ctype_inline.h:
+
+/usr/include/c++/13/bits/std_function.h:
+
+/usr/include/c++/13/bits/char_traits.h:
+
+/usr/include/nlohmann/detail/input/parser.hpp:
+
+/usr/include/c++/13/cstdio:
+
+/usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
 
 /usr/include/c++/13/bits/fs_path.h:
 
@@ -1285,23 +1252,57 @@ _deps/raylib-src/src/raylib.h:
 
 /usr/include/c++/13/bits/stringfwd.h:
 
-/usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
-
 /home/carter/Desktop/Farout/src/MarchingCubes.cpp:
 
 /usr/include/c++/13/vector:
 
-/usr/include/x86_64-linux-gnu/bits/wchar2-decl.h:
-
 /usr/include/c++/13/bits/erase_if.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h:
+
+/usr/include/nlohmann/detail/meta/identity_tag.hpp:
+
+/usr/include/c++/13/debug/assertions.h:
+
+/usr/include/nlohmann/detail/iterators/primitive_iterator.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:
+
+/usr/include/nlohmann/detail/json_ref.hpp:
+
+/usr/include/c++/13/bits/charconv.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/clockid_t.h:
+
+/usr/include/c++/13/sstream:
+
+/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:
+
+/usr/include/x86_64-linux-gnu/bits/wchar.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/locale_t.h:
 
 /usr/include/c++/13/pstl/execution_defs.h:
 
 /home/carter/Desktop/Farout/src/Planet.h:
+
+/usr/include/c++/13/ext/numeric_traits.h:
+
+/usr/include/c++/13/bits/stl_iterator.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
+
+/usr/include/nlohmann/detail/meta/type_traits.hpp:
+
+/usr/include/x86_64-linux-gnu/asm/errno.h:
+
+/usr/include/c++/13/bits/valarray_array.h:
+
+/usr/include/c++/13/bits/atomic_lockfree_defines.h:
 
 /usr/include/nlohmann/detail/input/binary_reader.hpp:
 
@@ -1336,6 +1337,12 @@ _deps/raylib-src/src/raylib.h:
 /usr/include/x86_64-linux-gnu/sys/cdefs.h:
 
 /usr/include/x86_64-linux-gnu/sys/types.h:
+
+_deps/raylib-src/src/raymath.h:
+
+/usr/include/c++/13/numeric:
+
+/usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
 
 /usr/include/c++/13/tr1/hypergeometric.tcc:
 
@@ -1376,6 +1383,8 @@ _deps/raylib-src/src/raylib.h:
 /usr/include/c++/13/bits/std_thread.h:
 
 /usr/include/c++/13/bits/stl_deque.h:
+
+/usr/include/c++/13/math.h:
 
 /usr/include/c++/13/bits/unique_lock.h:
 
@@ -1433,33 +1442,13 @@ _deps/raylib-src/src/raylib.h:
 
 /usr/include/x86_64-linux-gnu/bits/sched.h:
 
-/usr/include/time.h:
-
-/usr/include/x86_64-linux-gnu/bits/setjmp.h:
-
 /usr/include/x86_64-linux-gnu/bits/select.h:
 
 /usr/include/x86_64-linux-gnu/bits/time.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/FILE.h:
-
-/usr/include/math.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/__FILE.h:
-
-/usr/include/nlohmann/detail/iterators/primitive_iterator.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:
-
 /usr/include/c++/13/ext/atomicity.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h:
-
-/usr/include/x86_64-linux-gnu/bits/wchar.h:
-
-/usr/include/x86_64-linux-gnu/bits/fp-logb.h:
-
-/usr/include/x86_64-linux-gnu/bits/wchar2.h:
 
 /usr/include/x86_64-linux-gnu/bits/wordsize.h:
 
@@ -1474,10 +1463,6 @@ _deps/raylib-src/src/raylib.h:
 /usr/include/x86_64-linux-gnu/c++/13/bits/gthr.h:
 
 /usr/include/c++/13/bits/basic_ios.tcc:
-
-/usr/include/c++/13/numeric:
-
-/usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h:
 
@@ -1494,8 +1479,6 @@ _deps/raylib-src/src/raylib.h:
 /usr/include/c++/13/bits/stl_tree.h:
 
 /usr/include/c++/13/bits/codecvt.h:
-
-/usr/include/x86_64-linux-gnu/bits/stdio.h:
 
 /usr/include/c++/13/bits/forward_list.h:
 
@@ -1526,5 +1509,3 @@ _deps/raylib-src/src/raylib.h:
 /home/carter/Desktop/Farout/src/MarchingCubes.h:
 
 /usr/include/c++/13/bits/locale_facets.h:
-
-/usr/include/c++/13/bits/locale_facets_nonio.h:

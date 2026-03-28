@@ -369,11 +369,15 @@ MeshData MarchingCubes::GenerateChunk(
                 }
                 
                 // Generate triangles using triangle table
-                for (int i = 0; triTable[cubeIndex][i] != -1; i += 3) {
-                    AddTriangle(mesh, 
-                               vertices[triTable[cubeIndex][i]],
-                               vertices[triTable[cubeIndex][i + 1]],
-                               vertices[triTable[cubeIndex][i + 2]]);
+                for (int i = 0; i < 16 && triTable[cubeIndex][i] != -1; i += 3) {
+                    // Make sure we don't go out of bounds
+                    if (i + 2 < 16 && triTable[cubeIndex][i] != -1 && 
+                        triTable[cubeIndex][i + 1] != -1 && triTable[cubeIndex][i + 2] != -1) {
+                        AddTriangle(mesh, 
+                                   vertices[triTable[cubeIndex][i]],
+                                   vertices[triTable[cubeIndex][i + 1]],
+                                   vertices[triTable[cubeIndex][i + 2]]);
+                    }
                 }
             }
         }

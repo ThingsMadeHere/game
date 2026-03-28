@@ -5,7 +5,6 @@
 #include "ThreadPool.h"
 #include <vector>
 #include <mutex>
-#include <functional>
 
 struct Chunk {
     int chunkX, chunkY, chunkZ;
@@ -21,7 +20,7 @@ public:
     ~Planet();
 
     void Update(Vector3 playerPosition);
-    void Draw(Shader shader, Matrix lightSpaceMatrix);
+    void Draw(Shader shader);
     
     // Make shadow map accessible
     RenderTexture2D GetShadowMap() const { return shadowMap; }

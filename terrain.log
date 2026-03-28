@@ -1,0 +1,41 @@
+[2026-03-28 16:27:39] Planet constructor started
+[2026-03-28 16:27:39] Generating chunk at (-10,0,-10)
+Chunk [-10,-10] - 375 vertices, 125 triangles
+[2026-03-28 16:27:39] Generating chunk at (-10,0,10)
+Chunk [-10,10] - 477 vertices, 159 triangles
+[2026-03-28 16:27:39] Generating chunk at (10,0,-10)
+Chunk [10,-10] - 0 vertices, 0 triangles
+[2026-03-28 16:27:39] Generating chunk at (10,0,10)
+Chunk [10,10] - 36 vertices, 12 triangles
+[2026-03-28 16:27:39] Planet constructor completed
+[2026-03-28 16:27:39] Generating chunk at (-20,0,-20)
+Chunk [-20,-20] - 810 vertices, 270 triangles
+[2026-03-28 16:27:39] Generated grid chunk at (-20,-20)
+[2026-03-28 16:27:40] Generating chunk at (-10,0,-20)
+Chunk [-10,-20] - 0 vertices, 0 triangles
+[2026-03-28 16:27:40] Generated grid chunk at (-10,-20)
+[2026-03-28 16:27:41] Generating chunk at (0,0,-20)
+Chunk [0,-20] - 0 vertices, 0 triangles
+[2026-03-28 16:27:41] Generated grid chunk at (0,-20)
+[2026-03-28 16:27:42] Generating chunk at (10,0,-20)
+Chunk [10,-20] - 0 vertices, 0 triangles
+[2026-03-28 16:27:42] Generated grid chunk at (10,-20)
+[2026-03-28 16:27:43] Generating chunk at (20,0,-20)
+Chunk [20,-20] - 0 vertices, 0 triangles
+[2026-03-28 16:27:43] Generated grid chunk at (20,-20)
+[2026-03-28 16:27:44] Drew 2 chunks, total chunks: 2
+[2026-03-28 16:27:44] Generating chunk at (-20,0,-10)
+Chunk [-20,-10] - 714 vertices, 238 triangles
+[2026-03-28 16:27:44] Generated grid chunk at (-20,-10)
+[2026-03-28 16:27:45] Generating chunk at (-10,0,-10)
+Chunk [-10,-10] - 375 vertices, 125 triangles
+[2026-03-28 16:27:45] Generated grid chunk at (-10,-10)
+[2026-03-28 16:27:46] Generating chunk at (0,0,-10)
+Chunk [0,-10] - 0 vertices, 0 triangles
+[2026-03-28 16:27:46] Generated grid chunk at (0,-10)
+[2026-03-28 16:27:47] Generating chunk at (10,0,-10)
+Chunk [10,-10] - 0 vertices, 0 triangles
+[2026-03-28 16:27:47] Generated grid chunk at (10,-10)
+[2026-03-28 16:27:48] Generating chunk at (20,0,-10)
+Chunk [20,-10] - 0 vertices, 0 triangles
+[2026-03-28 16:27:48] Generated grid chunk at (20,-10)

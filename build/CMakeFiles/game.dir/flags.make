@@ -6,5 +6,5 @@ CXX_DEFINES = -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP
 
 CXX_INCLUDES = -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src/external/glfw/include
 
-CXX_FLAGS = -O3 -DNDEBUG -std=gnu++17 -O3 -march=native
+CXX_FLAGS = -std=gnu++17
 

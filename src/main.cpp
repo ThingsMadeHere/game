@@ -1,5 +1,6 @@
 // src/main.cpp
 #include "raylib.h"
+#include "raymath.h"
 #include "Planet.h"
 #include "nlohmann/json.hpp"
 #include <fstream>
@@ -24,26 +25,71 @@ int main() {
 
     RenderTexture2D gameBuffer = LoadRenderTexture(INTERNAL_WIDTH, INTERNAL_HEIGHT);
     
-    // Create sky texture manually
-    Image skyImage = GenImageColor(512, 512, BLANK);
-    for (int y = 0; y < 512; y++) {
-        float t = (float)y / 511.0f;
-        Color color = {
-            (unsigned char)(0 + t * 135),      // R: 0 to 135
-            (unsigned char)(0 + t * 206),      // G: 0 to 206  
-            (unsigned char)(0 + t * 250),      // B: 0 to 250
-            255
-        };
-        for (int x = 0; x < 512; x++) {
-            ImageDrawPixel(&skyImage, x, y, color);
+    // Create sky cubemap textures
+    Image skyImages[6];
+    Texture2D skyTextures[6];
+    
+    // Generate cubemap faces with gradient
+    for (int face = 0; face < 6; face++) {
+        skyImages[face] = GenImageColor(512, 512, BLANK);
+        
+        for (int y = 0; y < 512; y++) {
+            float t = (float)y / 511.0f;
+            Color color;
+            
+            // Different color for top face (face 4)
+            if (face == 4) {
+                color = {
+                    (unsigned char)(100 + t * 155),    // R: 100 to 255
+                    (unsigned char)(50 + t * 100),     // G: 50 to 150  
+                    (unsigned char)(200 + t * 55),     // B: 200 to 255
+                    255
+                };
+            } else {
+                color = {
+                    (unsigned char)(0 + t * 135),      // R: 0 to 135
+                    (unsigned char)(0 + t * 206),      // G: 0 to 206  
+                    (unsigned char)(0 + t * 250),      // B: 0 to 250
+                    255
+                };
+            }
+            
+            for (int x = 0; x < 512; x++) {
+                ImageDrawPixel(&skyImages[face], x, y, color);
+            }
         }
+        
+        // Add white circle to top face (face index 4 or 5 depending on convention)
+        if (face == 4) { // Top face
+            int centerX = 256;
+            int centerY = 256;
+            int radius = 80;
+            
+            for (int y = centerY - radius; y <= centerY + radius; y++) {
+                for (int x = centerX - radius; x <= centerX + radius; x++) {
+                    int dx = x - centerX;
+                    int dy = y - centerY;
+                    if (dx*dx + dy*dy <= radius*radius) {
+                        if (x >= 0 && x < 512 && y >= 0 && y < 512) {
+                            ImageDrawPixel(&skyImages[face], x, y, WHITE);
+                        }
+                    }
+                }
+            }
+        }
+        
+        skyTextures[face] = LoadTextureFromImage(skyImages[face]);
     }
-    Texture2D skyTexture = LoadTextureFromImage(skyImage);
-    UnloadImage(skyImage);
+
+    // Create skybox model once
+    float skySize = 200.0f;
+    Mesh skyMesh = GenMeshCube(skySize, skySize, 10.0f);
+    Model skyModel = LoadModelFromMesh(skyMesh);
+    skyModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = skyTextures[0]; // Use first face
 
     Camera3D camera = {0};
-    camera.position = (Vector3){0, 20, 60};  // Moved closer and higher
-    camera.target = (Vector3){0, 0, 0};
+    camera.position = (Vector3){0, 25, 25};  // Position to see the chunks at origin
+    camera.target = (Vector3){0, 0, 0};     // Look at origin where chunks are
     camera.up = (Vector3){0, 1, 0};
     camera.fovy = 45.0f;
     camera.projection = CAMERA_PERSPECTIVE;
@@ -56,12 +102,14 @@ int main() {
     Vector3 sunColor = (Vector3){1.0f, 0.95f, 0.8f};
     Vector3 ambientColor = (Vector3){0.3f, 0.3f, 0.35f};
 
-    // Create light space matrix (simplified for now)
-    Matrix lightSpaceMatrix = { 0 };
-    lightSpaceMatrix.m0 = 1.0f;
-    lightSpaceMatrix.m5 = 1.0f; 
-    lightSpaceMatrix.m10 = 1.0f;
-    lightSpaceMatrix.m15 = 1.0f;
+    // Create proper light space matrix for shadow mapping
+    Vector3 lightPos = {-sunDir.x * 100, -sunDir.y * 100, -sunDir.z * 100};
+    Vector3 lightTarget = {0, 0, 0};
+    Vector3 lightUp = {0, 1, 0};
+    
+    Matrix lightView = MatrixLookAt(lightPos, lightTarget, lightUp);
+    Matrix lightProj = MatrixOrtho(-100.0f, 100.0f, -100.0f, 100.0f, -100.0f, 100.0f);
+    Matrix lightSpaceMatrix = MatrixMultiply(lightView, lightProj);
 
     // Set shader uniforms (Raylib uses SHADER_UNIFORM_*)
     int shadowMapLoc = GetShaderLocation(shader, "shadowMap");
@@ -76,7 +124,7 @@ int main() {
     SetShaderValue(shader, sunDirLoc, &sunDir, SHADER_UNIFORM_VEC3);
     SetShaderValue(shader, sunColorLoc, &sunColor, SHADER_UNIFORM_VEC3);
     SetShaderValue(shader, ambientLoc, &ambientColor, SHADER_UNIFORM_VEC3);
-    SetShaderValue(shader, lightSpaceLoc, &lightSpaceMatrix, SHADER_UNIFORM_FLOAT);
+    SetShaderValueMatrix(shader, lightSpaceLoc, lightSpaceMatrix);
 
     // Camera rotation variables
     float cameraYaw = 0.0f;
@@ -98,6 +146,11 @@ int main() {
         Vector2 mouseDelta = GetMouseDelta();
         cameraYaw -= mouseDelta.x * 0.003f;
         cameraPitch += mouseDelta.y * 0.003f; // Inverted Y axis
+        
+        // Wrap yaw to prevent trigonometric issues
+        while (cameraYaw > PI * 2.0f) cameraYaw -= PI * 2.0f;
+        while (cameraYaw < -PI * 2.0f) cameraYaw += PI * 2.0f;
+        
         if (cameraPitch > 1.5f) cameraPitch = 1.5f;
         if (cameraPitch < -1.5f) cameraPitch = -1.5f;
         
@@ -139,31 +192,17 @@ int main() {
             ClearBackground((Color){135, 206, 250, 255});
             
             BeginMode3D(camera);
-                // Set shader uniforms for this frame
+                // Set shader uniforms once per frame
                 Matrix viewProj = GetCameraMatrix(camera);
-                SetShaderValueMatrix(shader, GetShaderLocation(shader, "mvp"), viewProj);
+                SetShaderValueMatrix(shader, mvpLoc, viewProj);
+                SetShaderValueMatrix(shader, lightSpaceLoc, lightSpaceMatrix);
                 
-                // Draw skybox with texture - using model approach
-                float skySize = 200.0f;
+                // Draw skybox - reuse pre-created model
                 Vector3 skyPos = {camera.position.x, 50.0f, camera.position.z}; // Position at Y=50
-                
-                // Create and draw skybox model once per frame
-                Mesh skyMesh = GenMeshCube(skySize, skySize, 10.0f);
-                Model skyModel = LoadModelFromMesh(skyMesh);
-                skyModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = skyTexture;
-                
-                // Draw sky without depth writing
                 DrawModel(skyModel, skyPos, 1.0f, WHITE);
                 
-                // Clean up sky model
-                UnloadModel(skyModel);
-                
-                // Draw sun as a simple cube
-                Vector3 sunPos = {-sunDir.x * 50, -sunDir.y * 50, -sunDir.z * 50};
-                DrawCube(sunPos, 10.0f, 10.0f, 10.0f, (Color){255, 255, 200, 255});
-                
                 // Draw planet with marching cubes terrain
-                planet.Draw(shader, lightSpaceMatrix);
+                planet.Draw(shader);
             EndMode3D();
         EndTextureMode();
 
@@ -188,12 +227,27 @@ int main() {
             snprintf(camPos, sizeof(camPos), "Camera: (%.1f, %.1f, %.1f)", 
                      camera.position.x, camera.position.y, camera.position.z);
             DrawText(camPos, 10, 40, 20, WHITE);
+            
+            // Display camera rotation for debugging
+            char camRot[100];
+            snprintf(camRot, sizeof(camRot), "Pitch: %.3f, Yaw: %.3f", 
+                     cameraPitch, cameraYaw);
+            DrawText(camRot, 10, 70, 20, WHITE);
         EndDrawing();
     }
 
     UnloadShader(shader);
     UnloadRenderTexture(gameBuffer);
-    UnloadTexture(skyTexture);
+    
+    // Unload skybox model
+    UnloadModel(skyModel);
+    
+    // Unload sky textures
+    for (int i = 0; i < 6; i++) {
+        UnloadTexture(skyTextures[i]);
+        UnloadImage(skyImages[i]);
+    }
+    
     CloseWindow();
 
     return 0;

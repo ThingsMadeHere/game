@@ -6,5 +6,5 @@ C_DEFINES = -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP
 
 C_INCLUDES = -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src -isystem /home/carter/Desktop/Farout/build/_deps/raylib-src/src/external/glfw/include
 
-C_FLAGS = -fno-strict-aliasing -Werror=implicit-function-declaration -Werror=pointer-arith  -O3 -DNDEBUG -std=gnu99
+C_FLAGS = -fno-strict-aliasing -Werror=implicit-function-declaration -Werror=pointer-arith  -std=gnu99
 

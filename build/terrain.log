@@ -1,0 +1,291 @@
+[2026-03-28 16:26:39] Planet constructor started
+[2026-03-28 16:26:39] Generating chunk at (-10,0,-10)
+Chunk [-10,-10] - 375 vertices, 125 triangles
+[2026-03-28 16:26:39] Generating chunk at (-10,0,10)
+Chunk [-10,10] - 477 vertices, 159 triangles
+[2026-03-28 16:26:39] Generating chunk at (10,0,-10)
+Chunk [10,-10] - 0 vertices, 0 triangles
+[2026-03-28 16:26:39] Generating chunk at (10,0,10)
+Chunk [10,10] - 36 vertices, 12 triangles
+[2026-03-28 16:26:39] Planet constructor completed
+[2026-03-28 16:26:39] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:39] Generated new chunk at (-20,0)
+[2026-03-28 16:26:40] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:40] Generated new chunk at (-20,0)
+[2026-03-28 16:26:41] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:41] Generated new chunk at (-20,0)
+[2026-03-28 16:26:42] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:42] Generated new chunk at (-20,0)
+[2026-03-28 16:26:43] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:43] Generated new chunk at (-20,0)
+[2026-03-28 16:26:44] Drew 2 chunks, total chunks: 2
+[2026-03-28 16:26:44] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:44] Generated new chunk at (-20,0)
+[2026-03-28 16:26:45] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:45] Generated new chunk at (-20,0)
+[2026-03-28 16:26:46] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:46] Generated new chunk at (-20,0)
+[2026-03-28 16:26:47] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:47] Generated new chunk at (-20,0)
+[2026-03-28 16:26:48] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:48] Generated new chunk at (-20,0)
+[2026-03-28 16:26:49] Drew 2 chunks, total chunks: 2
+[2026-03-28 16:26:49] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:49] Generated new chunk at (-20,0)
+[2026-03-28 16:26:50] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:50] Generated new chunk at (-20,0)
+[2026-03-28 16:26:51] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:51] Generated new chunk at (-20,0)
+[2026-03-28 16:26:52] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:52] Generated new chunk at (-20,0)
+[2026-03-28 16:26:53] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:53] Generated new chunk at (-20,0)
+[2026-03-28 16:26:54] Drew 2 chunks, total chunks: 2
+[2026-03-28 16:26:54] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:54] Generated new chunk at (-20,0)
+[2026-03-28 16:26:55] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:55] Generated new chunk at (-20,0)
+[2026-03-28 16:26:56] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:56] Generated new chunk at (-20,0)
+[2026-03-28 16:26:57] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:57] Generated new chunk at (-20,0)
+[2026-03-28 16:26:58] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:58] Generated new chunk at (-20,0)
+[2026-03-28 16:26:59] Drew 2 chunks, total chunks: 2
+[2026-03-28 16:26:59] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:26:59] Generated new chunk at (-20,0)
+[2026-03-28 16:27:00] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:00] Generated new chunk at (-20,0)
+[2026-03-28 16:27:01] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:01] Generated new chunk at (-20,0)
+[2026-03-28 16:27:02] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:02] Generated new chunk at (-20,0)
+[2026-03-28 16:27:03] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:03] Generated new chunk at (-20,0)
+[2026-03-28 16:27:04] Drew 2 chunks, total chunks: 2
+[2026-03-28 16:27:04] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:04] Generated new chunk at (-20,0)
+[2026-03-28 16:27:05] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:05] Generated new chunk at (-20,0)
+[2026-03-28 16:27:06] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:06] Generated new chunk at (-20,0)
+[2026-03-28 16:27:07] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:07] Generated new chunk at (-20,0)
+[2026-03-28 16:27:08] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:08] Generated new chunk at (-20,0)
+[2026-03-28 16:27:09] Drew 2 chunks, total chunks: 2
+[2026-03-28 16:27:09] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:09] Generated new chunk at (-20,0)
+[2026-03-28 16:27:10] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:10] Generated new chunk at (-20,0)
+[2026-03-28 16:27:11] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:11] Generated new chunk at (-20,0)
+[2026-03-28 16:27:12] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:12] Generated new chunk at (-20,0)
+[2026-03-28 16:27:13] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:13] Generated new chunk at (-20,0)
+[2026-03-28 16:27:14] Drew 2 chunks, total chunks: 2
+[2026-03-28 16:27:14] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:14] Generated new chunk at (-20,0)
+[2026-03-28 16:27:15] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:15] Generated new chunk at (-20,0)
+[2026-03-28 16:27:16] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:16] Generated new chunk at (-20,0)
+[2026-03-28 16:27:17] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:17] Generated new chunk at (-20,0)
+[2026-03-28 16:27:18] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:18] Generated new chunk at (-20,0)
+[2026-03-28 16:27:19] Drew 2 chunks, total chunks: 2
+[2026-03-28 16:27:19] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:19] Generated new chunk at (-20,0)
+[2026-03-28 16:27:20] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:20] Generated new chunk at (-20,0)
+[2026-03-28 16:27:21] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:21] Generated new chunk at (-20,0)
+[2026-03-28 16:27:22] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:22] Generated new chunk at (-20,0)
+[2026-03-28 16:27:23] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:23] Generated new chunk at (-20,0)
+[2026-03-28 16:27:24] Drew 2 chunks, total chunks: 2
+[2026-03-28 16:27:24] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:24] Generated new chunk at (-20,0)
+[2026-03-28 16:27:25] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:25] Generated new chunk at (-20,0)
+[2026-03-28 16:27:26] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:26] Generated new chunk at (-20,0)
+[2026-03-28 16:27:27] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:27] Generated new chunk at (-20,0)
+[2026-03-28 16:27:28] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:28] Generated new chunk at (-20,0)
+[2026-03-28 16:27:29] Drew 2 chunks, total chunks: 2
+[2026-03-28 16:27:29] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:29] Generated new chunk at (-20,0)
+[2026-03-28 16:27:30] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:30] Generated new chunk at (-20,0)
+[2026-03-28 16:27:31] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:31] Generated new chunk at (-20,0)
+[2026-03-28 16:27:32] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:32] Generated new chunk at (-20,0)
+[2026-03-28 16:27:33] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:33] Generated new chunk at (-20,0)
+[2026-03-28 16:27:34] Drew 2 chunks, total chunks: 2
+[2026-03-28 16:27:34] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:34] Generated new chunk at (-20,0)
+[2026-03-28 16:27:35] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:35] Generated new chunk at (-20,0)
+[2026-03-28 16:27:36] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:36] Generated new chunk at (-20,0)
+[2026-03-28 16:27:37] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:37] Generated new chunk at (-20,0)
+[2026-03-28 16:27:38] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:38] Generated new chunk at (-20,0)
+[2026-03-28 16:27:39] Drew 2 chunks, total chunks: 2
+[2026-03-28 16:27:39] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:39] Generated new chunk at (-20,0)
+[2026-03-28 16:27:40] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:40] Generated new chunk at (-20,0)
+[2026-03-28 16:27:41] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:41] Generated new chunk at (-20,0)
+[2026-03-28 16:27:42] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:42] Generated new chunk at (-20,0)
+[2026-03-28 16:27:43] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:43] Generated new chunk at (-20,0)
+[2026-03-28 16:27:44] Drew 2 chunks, total chunks: 2
+[2026-03-28 16:27:44] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:44] Generated new chunk at (-20,0)
+[2026-03-28 16:27:45] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:45] Generated new chunk at (-20,0)
+[2026-03-28 16:27:46] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:46] Generated new chunk at (-20,0)
+[2026-03-28 16:27:47] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:47] Generated new chunk at (-20,0)
+[2026-03-28 16:27:48] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:48] Generated new chunk at (-20,0)
+[2026-03-28 16:27:49] Drew 2 chunks, total chunks: 2
+[2026-03-28 16:27:49] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:49] Generated new chunk at (-20,0)
+[2026-03-28 16:27:50] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:50] Generated new chunk at (-20,0)
+[2026-03-28 16:27:51] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:51] Generated new chunk at (-20,0)
+[2026-03-28 16:27:52] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:52] Generated new chunk at (-20,0)
+[2026-03-28 16:27:53] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:53] Generated new chunk at (-20,0)
+[2026-03-28 16:27:54] Drew 2 chunks, total chunks: 2
+[2026-03-28 16:27:54] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:54] Generated new chunk at (-20,0)
+[2026-03-28 16:27:55] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:55] Generated new chunk at (-20,0)
+[2026-03-28 16:27:56] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:56] Generated new chunk at (-20,0)
+[2026-03-28 16:27:57] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:57] Generated new chunk at (-20,0)
+[2026-03-28 16:27:58] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:58] Generated new chunk at (-20,0)
+[2026-03-28 16:27:59] Drew 2 chunks, total chunks: 2
+[2026-03-28 16:27:59] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:27:59] Generated new chunk at (-20,0)
+[2026-03-28 16:28:00] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:28:00] Generated new chunk at (-20,0)
+[2026-03-28 16:28:01] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:28:01] Generated new chunk at (-20,0)
+[2026-03-28 16:28:02] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:28:02] Generated new chunk at (-20,0)
+[2026-03-28 16:28:03] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:28:03] Generated new chunk at (-20,0)
+[2026-03-28 16:28:04] Drew 2 chunks, total chunks: 2
+[2026-03-28 16:28:04] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:28:04] Generated new chunk at (-20,0)
+[2026-03-28 16:28:05] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:28:05] Generated new chunk at (-20,0)
+[2026-03-28 16:28:06] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 168 vertices, 56 triangles
+[2026-03-28 16:28:06] Generated new chunk at (-20,0)

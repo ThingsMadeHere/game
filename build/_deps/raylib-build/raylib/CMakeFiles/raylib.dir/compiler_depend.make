@@ -64,7 +64,6 @@ _deps/raylib-build/raylib/CMakeFiles/raylib.dir/raudio.c.o: _deps/raylib-src/src
   /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
   /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
   /usr/include/x86_64-linux-gnu/bits/poll.h \
-  /usr/include/x86_64-linux-gnu/bits/poll2.h \
   /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
   /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
   /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
@@ -73,23 +72,14 @@ _deps/raylib-build/raylib/CMakeFiles/raylib.dir/raudio.c.o: _deps/raylib-src/src
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/sched.h \
-  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
-  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/setjmp.h \
   /usr/include/x86_64-linux-gnu/bits/stat.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
-  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
@@ -123,14 +113,10 @@ _deps/raylib-build/raylib/CMakeFiles/raylib.dir/raudio.c.o: _deps/raylib-src/src
   /usr/include/x86_64-linux-gnu/bits/types/wint_t.h \
   /usr/include/x86_64-linux-gnu/bits/typesizes.h \
   /usr/include/x86_64-linux-gnu/bits/uintn-identity.h \
-  /usr/include/x86_64-linux-gnu/bits/unistd-decl.h \
-  /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
   /usr/include/x86_64-linux-gnu/bits/wchar.h \
-  /usr/include/x86_64-linux-gnu/bits/wchar2-decl.h \
-  /usr/include/x86_64-linux-gnu/bits/wchar2.h \
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
   /usr/include/x86_64-linux-gnu/gnu/stubs.h \
@@ -214,22 +200,13 @@ _deps/raylib-build/raylib/CMakeFiles/raylib.dir/rcore.c.o: _deps/raylib-src/src/
   /usr/include/x86_64-linux-gnu/bits/pthread_stack_min.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
-  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
-  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/stat.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
-  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
@@ -259,8 +236,6 @@ _deps/raylib-build/raylib/CMakeFiles/raylib.dir/rcore.c.o: _deps/raylib-src/src/
   /usr/include/x86_64-linux-gnu/bits/types/timer_t.h \
   /usr/include/x86_64-linux-gnu/bits/typesizes.h \
   /usr/include/x86_64-linux-gnu/bits/uintn-identity.h \
-  /usr/include/x86_64-linux-gnu/bits/unistd-decl.h \
-  /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
@@ -343,21 +318,12 @@ _deps/raylib-build/raylib/CMakeFiles/raylib.dir/rmodels.c.o: _deps/raylib-src/sr
   /usr/include/x86_64-linux-gnu/bits/pthread_stack_min.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
-  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
-  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
-  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
@@ -383,8 +349,6 @@ _deps/raylib-build/raylib/CMakeFiles/raylib.dir/rmodels.c.o: _deps/raylib-src/sr
   /usr/include/x86_64-linux-gnu/bits/types/timer_t.h \
   /usr/include/x86_64-linux-gnu/bits/typesizes.h \
   /usr/include/x86_64-linux-gnu/bits/uintn-identity.h \
-  /usr/include/x86_64-linux-gnu/bits/unistd-decl.h \
-  /usr/include/x86_64-linux-gnu/bits/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
   /usr/include/x86_64-linux-gnu/bits/waitflags.h \
   /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
@@ -431,13 +395,9 @@ _deps/raylib-build/raylib/CMakeFiles/raylib.dir/rshapes.c.o: _deps/raylib-src/sr
   /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
-  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
-  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
@@ -503,19 +463,10 @@ _deps/raylib-build/raylib/CMakeFiles/raylib.dir/rtext.c.o: _deps/raylib-src/src/
   /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
-  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
-  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
-  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
@@ -600,21 +551,12 @@ _deps/raylib-build/raylib/CMakeFiles/raylib.dir/rtextures.c.o: _deps/raylib-src/
   /usr/include/x86_64-linux-gnu/bits/pthread_stack_min.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
-  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
-  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
-  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
@@ -683,19 +625,10 @@ _deps/raylib-build/raylib/CMakeFiles/raylib.dir/utils.c.o: _deps/raylib-src/src/
   /usr/include/x86_64-linux-gnu/bits/long-double.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h \
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
-  /usr/include/x86_64-linux-gnu/bits/select-decl.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
-  /usr/include/x86_64-linux-gnu/bits/select2.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio2-decl.h \
-  /usr/include/x86_64-linux-gnu/bits/stdio2.h \
   /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
-  /usr/include/x86_64-linux-gnu/bits/stdlib.h \
-  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
-  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
   /usr/include/x86_64-linux-gnu/bits/struct_mutex.h \
   /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h \
   /usr/include/x86_64-linux-gnu/bits/thread-shared-types.h \
@@ -748,6 +681,8 @@ _deps/raylib-src/src/external/stb_truetype.h:
 
 _deps/raylib-src/src/external/stb_rect_pack.h:
 
+_deps/raylib-src/src/rshapes.c:
+
 _deps/raylib-src/src/external/qoi.h:
 
 _deps/raylib-src/src/external/tinyobj_loader_c.h:
@@ -781,28 +716,6 @@ _deps/raylib-src/src/rcore.c:
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/13/include/mmintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/13/include/emmintrin.h:
-
-_deps/raylib-src/src/raymath.h:
-
-/usr/include/x86_64-linux-gnu/sys/types.h:
-
-/usr/include/x86_64-linux-gnu/sys/time.h:
-
-/usr/include/x86_64-linux-gnu/sys/cdefs.h:
-
-/usr/include/x86_64-linux-gnu/sys/stat.h:
-
-/usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
-
-_deps/raylib-src/src/external/glfw/include/GLFW/glfw3native.h:
-
-/usr/include/x86_64-linux-gnu/bits/wordsize.h:
-
-/usr/include/x86_64-linux-gnu/bits/wchar2.h:
-
-/usr/include/x86_64-linux-gnu/bits/wchar2-decl.h:
 
 /usr/include/x86_64-linux-gnu/bits/getopt_posix.h:
 
@@ -846,11 +759,7 @@ _deps/raylib-src/src/external/stb_vorbis.c:
 
 /usr/include/x86_64-linux-gnu/bits/stat.h:
 
-_deps/raylib-src/src/external/stb_image_write.h:
-
-/usr/include/x86_64-linux-gnu/gnu/stubs.h:
-
-/usr/include/x86_64-linux-gnu/bits/endian.h:
+/usr/include/string.h:
 
 /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
 
@@ -861,8 +770,6 @@ _deps/raylib-src/src/external/stb_image_write.h:
 _deps/raylib-src/src/external/qoa.h:
 
 /usr/include/x86_64-linux-gnu/bits/errno.h:
-
-/usr/include/x86_64-linux-gnu/bits/string_fortified.h:
 
 /usr/include/x86_64-linux-gnu/bits/fp-logb.h:
 
@@ -880,13 +787,9 @@ _deps/raylib-src/src/utils.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h:
 
-/usr/include/x86_64-linux-gnu/bits/wchar.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:
-
-/usr/include/x86_64-linux-gnu/bits/local_lim.h:
-
 /usr/include/x86_64-linux-gnu/bits/dlfcn.h:
+
+/usr/include/x86_64-linux-gnu/sys/eventfd.h:
 
 /usr/include/alloca.h:
 
@@ -904,7 +807,7 @@ _deps/raylib-src/src/rtext.c:
 
 _deps/raylib-src/src/config.h:
 
-/usr/include/x86_64-linux-gnu/bits/select-decl.h:
+/usr/include/x86_64-linux-gnu/sys/time.h:
 
 _deps/raylib-src/src/raudio.c:
 
@@ -924,6 +827,12 @@ _deps/raylib-src/src/rgestures.h:
 
 _deps/raylib-src/src/raylib.h:
 
+/usr/include/x86_64-linux-gnu/asm/errno.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
+
+/usr/include/x86_64-linux-gnu/sys/cdefs.h:
+
 /usr/include/assert.h:
 
 /usr/include/dlfcn.h:
@@ -933,10 +842,6 @@ _deps/raylib-src/src/raylib.h:
 _deps/raylib-src/src/external/miniaudio.h:
 
 /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
-
-/usr/include/x86_64-linux-gnu/sys/eventfd.h:
-
-/usr/include/x86_64-linux-gnu/bits/stdio2.h:
 
 /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h:
 
@@ -956,6 +861,8 @@ _deps/raylib-src/src/external/rl_gputex.h:
 
 /usr/include/endian.h:
 
+/usr/include/x86_64-linux-gnu/bits/types/timer_t.h:
+
 /usr/include/math.h:
 
 _deps/raylib-src/src/platforms/rcore_desktop.c:
@@ -965,8 +872,6 @@ _deps/raylib-src/src/platforms/rcore_desktop.c:
 /usr/include/sched.h:
 
 /usr/include/stdc-predef.h:
-
-/usr/include/x86_64-linux-gnu/bits/stdlib-bsearch.h:
 
 /usr/include/x86_64-linux-gnu/bits/uintn-identity.h:
 
@@ -983,8 +888,6 @@ _deps/raylib-src/src/external/cgltf.h:
 /usr/include/x86_64-linux-gnu/bits/struct_mutex.h:
 
 /usr/include/x86_64-linux-gnu/bits/poll.h:
-
-/usr/include/x86_64-linux-gnu/bits/poll2.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/13/include/float.h:
 
@@ -1016,14 +919,6 @@ _deps/raylib-src/src/external/cgltf.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h:
 
-/usr/include/x86_64-linux-gnu/bits/select2.h:
-
-/usr/include/x86_64-linux-gnu/bits/floatn-common.h:
-
-_deps/raylib-src/src/external/dr_wav.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/wint_t.h:
-
 /usr/include/x86_64-linux-gnu/bits/types.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:
@@ -1034,28 +929,6 @@ _deps/raylib-src/src/external/dr_wav.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h:
 
-/usr/include/string.h:
-
-/usr/include/x86_64-linux-gnu/bits/stdio.h:
-
-_deps/raylib-src/src/rlgl.h:
-
-/usr/include/x86_64-linux-gnu/bits/stdio_lim.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/FILE.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/struct_tm.h:
-
-_deps/raylib-src/src/rshapes.c:
-
-/usr/include/x86_64-linux-gnu/bits/stdio2-decl.h:
-
-/usr/include/x86_64-linux-gnu/asm/errno.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
-
-/usr/include/x86_64-linux-gnu/bits/stdlib.h:
-
 /usr/include/strings.h:
 
 /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
@@ -1063,10 +936,6 @@ _deps/raylib-src/src/rshapes.c:
 /usr/include/x86_64-linux-gnu/bits/select.h:
 
 /usr/include/x86_64-linux-gnu/bits/struct_stat.h:
-
-/usr/include/x86_64-linux-gnu/sys/poll.h:
-
-/usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
 
 _deps/raylib-src/src/rmodels.c:
 
@@ -1076,6 +945,14 @@ _deps/raylib-src/src/rmodels.c:
 
 /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h:
 
+_deps/raylib-src/src/rlgl.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdio_lim.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/FILE.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct_tm.h:
+
 /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:
 
 _deps/raylib-src/src/external/glad.h:
@@ -1084,24 +961,52 @@ _deps/raylib-src/src/external/glad.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdint-least.h:
 
-/usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
-
 /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
 
+/usr/include/x86_64-linux-gnu/bits/floatn-common.h:
+
+_deps/raylib-src/src/external/dr_wav.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/wint_t.h:
+
 /usr/lib/gcc/x86_64-linux-gnu/13/include/limits.h:
 
 /usr/include/x86_64-linux-gnu/bits/typesizes.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/timer_t.h:
-
-/usr/include/x86_64-linux-gnu/bits/unistd-decl.h:
-
-/usr/include/x86_64-linux-gnu/bits/unistd.h:
 
 /usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
 
 /usr/include/x86_64-linux-gnu/bits/waitflags.h:
 
 /usr/include/x86_64-linux-gnu/bits/waitstatus.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:
+
+/usr/include/x86_64-linux-gnu/bits/local_lim.h:
+
+/usr/include/x86_64-linux-gnu/bits/wchar.h:
+
+_deps/raylib-src/src/external/glfw/include/GLFW/glfw3native.h:
+
+/usr/include/x86_64-linux-gnu/bits/wordsize.h:
+
+/usr/include/x86_64-linux-gnu/sys/stat.h:
+
+/usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
+
+_deps/raylib-src/src/external/stb_image_write.h:
+
+/usr/include/x86_64-linux-gnu/bits/endian.h:
+
+/usr/include/x86_64-linux-gnu/gnu/stubs.h:
+
+/usr/include/x86_64-linux-gnu/bits/thread-shared-types.h:
+
+/usr/include/x86_64-linux-gnu/sys/poll.h:
+
+_deps/raylib-src/src/raymath.h:
+
+/usr/include/x86_64-linux-gnu/sys/types.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/13/include/emmintrin.h:

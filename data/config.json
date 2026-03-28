@@ -1,6 +1,6 @@
 {
     "planetRadius": 50.0,
-    "chunkResolution": 32,
+    "chunkResolution": 16,
     "gridSize": 0.5,
     "shadowMapResolution": 2048,
     "internalRenderWidth": 960,
