@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(PlanetDemo)
+project(ModernTerrain)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -16,30 +16,29 @@ if(NOT raylib_FOUND)
     FetchContent_MakeAvailable(raylib)
 endif()
 
-# Find JSON and Threads
-find_package(nlohmann_json REQUIRED)
-find_package(Threads REQUIRED)
+# Get raylib include directories
+if(raylib_FOUND)
+    get_target_property(RAYLIB_INCLUDES raylib::raylib INTERFACE_INCLUDE_DIRECTORIES)
+endif()
 
 # Add Executable
-add_executable(game
-    src/main.cpp
-    src/Planet.cpp
-    src/MarchingCubes.cpp
-)
+add_executable(game src/main.cpp)
 
-# Link Libraries
+# Include raylib headers explicitly
+if(RAYLIB_INCLUDES)
+    target_include_directories(game PRIVATE ${RAYLIB_INCLUDES})
+endif()
+
+# Link Libraries (this will also include the necessary headers)
 target_link_libraries(game PRIVATE 
     raylib 
-    nlohmann_json::nlohmann_json 
-    Threads::Threads
     m  # Math library for Linux
 )
 
-# Optimizations for 2017 hardware
+# Optimizations
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
     target_compile_options(game PRIVATE -O3 -march=native)
 endif()
 
 # Copy shaders to build directory
 file(COPY ${CMAKE_SOURCE_DIR}/shaders DESTINATION ${CMAKE_BINARY_DIR})
-file(COPY ${CMAKE_SOURCE_DIR}/data DESTINATION ${CMAKE_BINARY_DIR})

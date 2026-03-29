@@ -1,41 +1,75 @@
-[2026-03-28 16:27:39] Planet constructor started
-[2026-03-28 16:27:39] Generating chunk at (-10,0,-10)
-Chunk [-10,-10] - 375 vertices, 125 triangles
-[2026-03-28 16:27:39] Generating chunk at (-10,0,10)
-Chunk [-10,10] - 477 vertices, 159 triangles
-[2026-03-28 16:27:39] Generating chunk at (10,0,-10)
-Chunk [10,-10] - 0 vertices, 0 triangles
-[2026-03-28 16:27:39] Generating chunk at (10,0,10)
-Chunk [10,10] - 36 vertices, 12 triangles
-[2026-03-28 16:27:39] Planet constructor completed
-[2026-03-28 16:27:39] Generating chunk at (-20,0,-20)
-Chunk [-20,-20] - 810 vertices, 270 triangles
-[2026-03-28 16:27:39] Generated grid chunk at (-20,-20)
-[2026-03-28 16:27:40] Generating chunk at (-10,0,-20)
-Chunk [-10,-20] - 0 vertices, 0 triangles
-[2026-03-28 16:27:40] Generated grid chunk at (-10,-20)
-[2026-03-28 16:27:41] Generating chunk at (0,0,-20)
-Chunk [0,-20] - 0 vertices, 0 triangles
-[2026-03-28 16:27:41] Generated grid chunk at (0,-20)
-[2026-03-28 16:27:42] Generating chunk at (10,0,-20)
+[2026-03-28 17:08:06] Planet constructor started
+[2026-03-28 17:08:06] Generated heightmap texture
+[2026-03-28 17:08:06] Generating chunk at (-10,0,-10)
+Chunk [-10,-10] - 1029 vertices, 343 triangles
+[2026-03-28 17:08:07] Generating chunk at (-10,0,10)
+Chunk [-10,10] - 339 vertices, 113 triangles
+[2026-03-28 17:08:07] Generating chunk at (10,0,-10)
+Chunk [10,-10] - 75 vertices, 25 triangles
+[2026-03-28 17:08:07] Generating chunk at (10,0,10)
+Chunk [10,10] - 660 vertices, 220 triangles
+[2026-03-28 17:08:08] Planet constructor completed
+[2026-03-28 17:08:08] Generating chunk at (-20,0,-20)
+Chunk [-20,-20] - 498 vertices, 166 triangles
+[2026-03-28 17:08:08] Generated grid chunk at (-20,-20)
+[2026-03-28 17:08:09] Generating chunk at (-10,0,-20)
+Chunk [-10,-20] - 1518 vertices, 506 triangles
+[2026-03-28 17:08:10] Generated grid chunk at (-10,-20)
+[2026-03-28 17:08:35] Planet constructor started
+[2026-03-28 17:08:35] Generated heightmap texture
+[2026-03-28 17:08:35] Generating chunk at (-10,0,-10)
+Chunk [-10,-10] - 1023 vertices, 341 triangles
+[2026-03-28 17:08:35] Generating chunk at (-10,0,10)
+Chunk [-10,10] - 360 vertices, 120 triangles
+[2026-03-28 17:08:35] Generating chunk at (10,0,-10)
+Chunk [10,-10] - 78 vertices, 26 triangles
+[2026-03-28 17:08:35] Generating chunk at (10,0,10)
+Chunk [10,10] - 624 vertices, 208 triangles
+[2026-03-28 17:08:35] Planet constructor completed
+[2026-03-28 17:08:35] Generating chunk at (-20,0,-20)
+Chunk [-20,-20] - 441 vertices, 147 triangles
+[2026-03-28 17:08:35] Generated grid chunk at (-20,-20)
+[2026-03-28 17:08:36] Generating chunk at (-10,0,-20)
+Chunk [-10,-20] - 1536 vertices, 512 triangles
+[2026-03-28 17:08:36] Generated grid chunk at (-10,-20)
+[2026-03-28 17:08:37] Generating chunk at (0,0,-20)
+Chunk [0,-20] - 198 vertices, 66 triangles
+[2026-03-28 17:08:37] Generated grid chunk at (0,-20)
+[2026-03-28 17:08:38] Generating chunk at (10,0,-20)
 Chunk [10,-20] - 0 vertices, 0 triangles
-[2026-03-28 16:27:42] Generated grid chunk at (10,-20)
-[2026-03-28 16:27:43] Generating chunk at (20,0,-20)
+[2026-03-28 17:08:38] Generated grid chunk at (10,-20)
+[2026-03-28 17:08:39] Generating chunk at (20,0,-20)
 Chunk [20,-20] - 0 vertices, 0 triangles
-[2026-03-28 16:27:43] Generated grid chunk at (20,-20)
-[2026-03-28 16:27:44] Drew 2 chunks, total chunks: 2
-[2026-03-28 16:27:44] Generating chunk at (-20,0,-10)
-Chunk [-20,-10] - 714 vertices, 238 triangles
-[2026-03-28 16:27:44] Generated grid chunk at (-20,-10)
-[2026-03-28 16:27:45] Generating chunk at (-10,0,-10)
-Chunk [-10,-10] - 375 vertices, 125 triangles
-[2026-03-28 16:27:45] Generated grid chunk at (-10,-10)
-[2026-03-28 16:27:46] Generating chunk at (0,0,-10)
-Chunk [0,-10] - 0 vertices, 0 triangles
-[2026-03-28 16:27:46] Generated grid chunk at (0,-10)
-[2026-03-28 16:27:47] Generating chunk at (10,0,-10)
-Chunk [10,-10] - 0 vertices, 0 triangles
-[2026-03-28 16:27:47] Generated grid chunk at (10,-10)
-[2026-03-28 16:27:48] Generating chunk at (20,0,-10)
+[2026-03-28 17:08:39] Generated grid chunk at (20,-20)
+[2026-03-28 17:08:40] Drew 2 chunks, total chunks: 2
+[2026-03-28 17:08:40] Generating chunk at (-20,0,-10)
+Chunk [-20,-10] - 564 vertices, 188 triangles
+[2026-03-28 17:08:40] Generated grid chunk at (-20,-10)
+[2026-03-28 17:08:41] Generating chunk at (-10,0,-10)
+Chunk [-10,-10] - 1023 vertices, 341 triangles
+[2026-03-28 17:08:41] Generated grid chunk at (-10,-10)
+[2026-03-28 17:08:42] Generating chunk at (0,0,-10)
+Chunk [0,-10] - 933 vertices, 311 triangles
+[2026-03-28 17:08:42] Generated grid chunk at (0,-10)
+[2026-03-28 17:08:43] Generating chunk at (10,0,-10)
+Chunk [10,-10] - 78 vertices, 26 triangles
+[2026-03-28 17:08:43] Generated grid chunk at (10,-10)
+[2026-03-28 17:08:44] Generating chunk at (20,0,-10)
 Chunk [20,-10] - 0 vertices, 0 triangles
-[2026-03-28 16:27:48] Generated grid chunk at (20,-10)
+[2026-03-28 17:08:44] Generated grid chunk at (20,-10)
+[2026-03-28 17:08:45] Drew 3 chunks, total chunks: 3
+[2026-03-28 17:08:45] Generating chunk at (-20,0,0)
+Chunk [-20,0] - 471 vertices, 157 triangles
+[2026-03-28 17:08:45] Generated grid chunk at (-20,0)
+[2026-03-28 17:08:46] Generating chunk at (-10,0,0)
+Chunk [-10,0] - 279 vertices, 93 triangles
+[2026-03-28 17:08:46] Generated grid chunk at (-10,0)
+[2026-03-28 17:08:47] Generating chunk at (0,0,0)
+Chunk [0,0] - 822 vertices, 274 triangles
+[2026-03-28 17:08:47] Generated grid chunk at (0,0)
+[2026-03-28 17:08:48] Generating chunk at (10,0,0)
+Chunk [10,0] - 834 vertices, 278 triangles
+[2026-03-28 17:08:48] Generated grid chunk at (10,0)
+[2026-03-28 17:08:49] Generating chunk at (20,0,0)
+Chunk [20,0] - 0 vertices, 0 triangles
+[2026-03-28 17:08:49] Generated grid chunk at (20,0)

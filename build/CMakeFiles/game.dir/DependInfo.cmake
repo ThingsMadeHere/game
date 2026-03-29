@@ -8,8 +8,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/carter/Desktop/Farout/src/MarchingCubes.cpp" "CMakeFiles/game.dir/src/MarchingCubes.cpp.o" "gcc" "CMakeFiles/game.dir/src/MarchingCubes.cpp.o.d"
-  "/home/carter/Desktop/Farout/src/Planet.cpp" "CMakeFiles/game.dir/src/Planet.cpp.o" "gcc" "CMakeFiles/game.dir/src/Planet.cpp.o.d"
   "/home/carter/Desktop/Farout/src/main.cpp" "CMakeFiles/game.dir/src/main.cpp.o" "gcc" "CMakeFiles/game.dir/src/main.cpp.o.d"
   )
 

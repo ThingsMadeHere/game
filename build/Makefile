@@ -246,54 +246,6 @@ update_mappings/fast:
 	$(MAKE) $(MAKESILENT) -f _deps/raylib-build/raylib/external/glfw/src/CMakeFiles/update_mappings.dir/build.make _deps/raylib-build/raylib/external/glfw/src/CMakeFiles/update_mappings.dir/build
 .PHONY : update_mappings/fast
 
-src/MarchingCubes.o: src/MarchingCubes.cpp.o
-.PHONY : src/MarchingCubes.o
-
-# target to build an object file
-src/MarchingCubes.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/MarchingCubes.cpp.o
-.PHONY : src/MarchingCubes.cpp.o
-
-src/MarchingCubes.i: src/MarchingCubes.cpp.i
-.PHONY : src/MarchingCubes.i
-
-# target to preprocess a source file
-src/MarchingCubes.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/MarchingCubes.cpp.i
-.PHONY : src/MarchingCubes.cpp.i
-
-src/MarchingCubes.s: src/MarchingCubes.cpp.s
-.PHONY : src/MarchingCubes.s
-
-# target to generate assembly for a file
-src/MarchingCubes.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/MarchingCubes.cpp.s
-.PHONY : src/MarchingCubes.cpp.s
-
-src/Planet.o: src/Planet.cpp.o
-.PHONY : src/Planet.o
-
-# target to build an object file
-src/Planet.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/Planet.cpp.o
-.PHONY : src/Planet.cpp.o
-
-src/Planet.i: src/Planet.cpp.i
-.PHONY : src/Planet.i
-
-# target to preprocess a source file
-src/Planet.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/Planet.cpp.i
-.PHONY : src/Planet.cpp.i
-
-src/Planet.s: src/Planet.cpp.s
-.PHONY : src/Planet.s
-
-# target to generate assembly for a file
-src/Planet.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/Planet.cpp.s
-.PHONY : src/Planet.cpp.s
-
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -337,12 +289,6 @@ help:
 	@echo "... game"
 	@echo "... glfw"
 	@echo "... raylib"
-	@echo "... src/MarchingCubes.o"
-	@echo "... src/MarchingCubes.i"
-	@echo "... src/MarchingCubes.s"
-	@echo "... src/Planet.o"
-	@echo "... src/Planet.i"
-	@echo "... src/Planet.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
