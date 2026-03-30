@@ -40,16 +40,17 @@ void ChunkWorker(World* world) {
         Chunk chunk(req.cx, req.cy, req.cz);
         world->GenerateTerrain(chunk);
         
-        // Add to world
+        // Add to world (terrain only, no mesh yet)
         std::lock_guard<std::mutex> lock(world->GetMutex());
         auto result = world->GetChunks().emplace(key, chunk);
         if (result.second) {
-            result.first->second.mesh = world->GetMarchingCubes().GenerateMesh(result.first->second, world->GetChunks());
-            result.first->second.meshGenerated = true;
+            // Mark chunk as having terrain but no mesh yet
+            result.first->second.meshGenerated = false;
             result.first->second.needsUpdate = false;
             
-            // Regenerate neighbor chunks to ensure seamless boundaries
-            world->RegenerateNeighborChunks(req.cx, req.cy, req.cz);
+            // Generate mesh after all chunks in the area are loaded
+            // This ensures neighbors are available for proper boundary handling
+            world->GenerateMesh(result.first->second);
         }
     }
 }
@@ -405,6 +406,24 @@ ChunkRequest World::PopChunkRequest() {
 
 int World::GetGeneratedChunkCount() const {
     return chunks.size();
+}
+
+void World::GenerateMesh(Chunk& chunk) {
+    chunk.mesh = marchingCubes.GenerateMesh(chunk, chunks);
+    chunk.meshGenerated = true;
+    chunk.needsUpdate = false;
+    
+    // Regenerate neighbor chunks to ensure seamless boundaries
+    RegenerateNeighborChunks(chunk.cx, chunk.cy, chunk.cz);
+}
+
+void World::GenerateAllMeshes() {
+    // Generate meshes for all chunks after terrain is loaded
+    for (auto& [key, chunk] : chunks) {
+        if (!chunk.meshGenerated) {
+            GenerateMesh(chunk);
+        }
+    }
 }
 
 void World::RegenerateNeighborChunks(int cx, int cy, int cz) {

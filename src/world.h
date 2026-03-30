@@ -26,6 +26,8 @@ public:
     Chunk& GetChunk(int cx, int cy, int cz);
     Chunk* GetChunkIfExists(int cx, int cy, int cz);
     void GenerateTerrain(Chunk& chunk);
+    void GenerateMesh(Chunk& chunk);
+    void GenerateAllMeshes(); // Generate meshes for all chunks after terrain is loaded
     void UpdateChunk(int cx, int cy, int cz);
     void SetVoxel(int cx, int cy, int cz, int x, int y, int z, float density);
     void Render(const Camera3D& camera);
