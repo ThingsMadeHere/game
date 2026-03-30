@@ -151,7 +151,7 @@ void World::GenerateTerrain(Chunk& chunk) {
     // Generate density texture for this chunk (black=air, white=block)
     chunk.GenerateDensityTexture();
     
-    chunk.mesh = marchingCubes.GenerateMesh(chunk);
+    chunk.mesh = marchingCubes.GenerateMesh(chunk, chunks);
     chunk.meshGenerated = true; // Mark mesh as generated
     chunk.needsUpdate = false;  // Mark as clean
 }
@@ -168,7 +168,7 @@ void World::UpdateChunk(int cx, int cy, int cz) {
                 UnloadMesh(it->second.mesh);
                 it->second.mesh = {0};
             }
-            it->second.mesh = marchingCubes.GenerateMesh(it->second);
+            it->second.mesh = marchingCubes.GenerateMesh(it->second, chunks);
             it->second.meshGenerated = true;
             it->second.needsUpdate = false;
             
@@ -465,7 +465,7 @@ void World::ProcessChunkQueue() {
         // Add to world
         auto result = chunks.emplace(key, chunk);
         if (result.second) {
-            result.first->second.mesh = marchingCubes.GenerateMesh(result.first->second);
+            result.first->second.mesh = marchingCubes.GenerateMesh(result.first->second, chunks);
             result.first->second.meshGenerated = true;
             result.first->second.needsUpdate = false;
         }
