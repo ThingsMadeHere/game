@@ -249,8 +249,14 @@ void World::Render(const Camera3D& camera) {
         
         chunksRendered++;
         
-        // Dynamic LOD based on distance from player
-        int skipFactor = 1;
+        // Use generated mesh if available (MUCH faster than individual voxels)
+        if (chunk.meshGenerated && chunk.mesh.vertexCount > 0) {
+            // Draw the entire chunk mesh in one call - this is the key optimization!
+            gpuRenderer.RenderChunk(chunk, camera);
+        } else {
+            // Fallback to voxel rendering for chunks without meshes
+            // Dynamic LOD based on distance from player
+            int skipFactor = 1;
         if (chunkDist > 4) skipFactor = 2;  // Skip every other voxel
         if (chunkDist > 6) skipFactor = 4;  // Skip every 4th voxel
         
@@ -376,6 +382,7 @@ void World::Render(const Camera3D& camera) {
     }
     
     printf("Detailed rendering: %d chunks, %d voxels\n", chunksRendered, voxelsRendered);
+}
 }
 
 void World::QueueChunkGeneration(int cx, int cy, int cz) {

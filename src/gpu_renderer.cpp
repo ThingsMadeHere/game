@@ -21,29 +21,54 @@ void GPUChunkRenderer::Init() {
 }
 
 void GPUChunkRenderer::RenderChunk(const Chunk& chunk, const Camera3D& camera) {
-    if (voxelShader.id == 0 || chunk.densityTexture.id == 0) {
-        return;
+    // Use generated mesh from marching cubes if available
+    if (chunk.meshGenerated && chunk.mesh.vertexCount > 0) {
+        // Set shader uniforms
+        Shader shader = voxelShader;
+        
+        // Set chunk position
+        Vector3 chunkPos = {
+            (float)chunk.cx * CHUNK_SIZE * VOXEL_SIZE,
+            (float)chunk.cy * CHUNK_HEIGHT * VOXEL_SIZE,
+            (float)chunk.cz * CHUNK_SIZE * VOXEL_SIZE
+        };
+        SetShaderValue(shader, GetShaderLocation(shader, "chunkPosition"), &chunkPos, SHADER_UNIFORM_VEC3);
+        
+        // Draw the mesh as triangles
+        for (int i = 0; i < chunk.mesh.vertexCount; i += 3) {
+            Vector3 v1 = {
+                chunk.mesh.vertices[i*3] + chunk.cx * CHUNK_SIZE * VOXEL_SIZE,
+                chunk.mesh.vertices[i*3+1] + chunk.cy * CHUNK_HEIGHT * VOXEL_SIZE,
+                chunk.mesh.vertices[i*3+2] + chunk.cz * CHUNK_SIZE * VOXEL_SIZE
+            };
+            Vector3 v2 = {
+                chunk.mesh.vertices[(i+1)*3] + chunk.cx * CHUNK_SIZE * VOXEL_SIZE,
+                chunk.mesh.vertices[(i+1)*3+1] + chunk.cy * CHUNK_HEIGHT * VOXEL_SIZE,
+                chunk.mesh.vertices[(i+1)*3+2] + chunk.cz * CHUNK_SIZE * VOXEL_SIZE
+            };
+            Vector3 v3 = {
+                chunk.mesh.vertices[(i+2)*3] + chunk.cx * CHUNK_SIZE * VOXEL_SIZE,
+                chunk.mesh.vertices[(i+2)*3+1] + chunk.cy * CHUNK_HEIGHT * VOXEL_SIZE,
+                chunk.mesh.vertices[(i+2)*3+2] + chunk.cz * CHUNK_SIZE * VOXEL_SIZE
+            };
+            
+            // Draw triangle
+            DrawTriangle3D(v1, v2, v3, LIGHTGRAY);
+        }
+    } else {
+        // Fallback: render chunk boundaries for debugging
+        Vector3 chunkPos = {
+            (float)chunk.cx * CHUNK_SIZE * VOXEL_SIZE,
+            (float)chunk.cy * CHUNK_HEIGHT * VOXEL_SIZE,
+            (float)chunk.cz * CHUNK_SIZE * VOXEL_SIZE
+        };
+        Vector3 chunkSize = {
+            (float)CHUNK_SIZE * VOXEL_SIZE, 
+            (float)CHUNK_HEIGHT * VOXEL_SIZE, 
+            (float)CHUNK_SIZE * VOXEL_SIZE
+        };
+        DrawCubeWires(chunkPos, chunkSize.x, chunkSize.y, chunkSize.z, RED);
     }
-    
-    // Set shader uniforms
-    Shader shader = voxelShader;
-    
-    // Set density texture
-    SetShaderValueTexture(shader, GetShaderLocation(shader, "densityTexture"), chunk.densityTexture);
-    
-    // Set chunk position
-    Vector3 chunkPos = {
-        (float)chunk.cx * CHUNK_SIZE,
-        (float)chunk.cy * CHUNK_HEIGHT,
-        (float)chunk.cz * CHUNK_SIZE
-    };
-    SetShaderValue(shader, GetShaderLocation(shader, "chunkPosition"), &chunkPos, SHADER_UNIFORM_VEC3);
-    
-    // Set voxel size
-    SetShaderValue(shader, GetShaderLocation(shader, "voxelSize"), &VOXEL_SIZE, SHADER_UNIFORM_FLOAT);
-    
-    // Draw the chunk model with the shader
-    DrawModel(chunkModel, chunkPos, 1.0f, WHITE);
 }
 
 void GPUChunkRenderer::Cleanup() {
