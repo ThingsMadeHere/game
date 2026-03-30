@@ -393,6 +393,42 @@ ChunkRequest World::PopChunkRequest() {
     return {-999, -999, -999}; // Empty signal
 }
 
+void World::QueueSpiralGeneration(int centerX, int centerZ, int radius) {
+    // Add center chunk first
+    QueueChunkGeneration(centerX, 0, centerZ);
+    
+    // Generate spiral pattern
+    for (int r = 1; r <= radius; r++) {
+        // Start at top of the ring
+        int x = centerX - r;
+        int z = centerZ + r;
+        
+        // Top edge (left to right)
+        for (int i = 0; i < r * 2; i++) {
+            QueueChunkGeneration(x, 0, z);
+            x++;
+        }
+        
+        // Right edge (top to bottom)
+        for (int i = 0; i < r * 2; i++) {
+            QueueChunkGeneration(x, 0, z);
+            z--;
+        }
+        
+        // Bottom edge (right to left)
+        for (int i = 0; i < r * 2; i++) {
+            QueueChunkGeneration(x, 0, z);
+            x--;
+        }
+        
+        // Left edge (bottom to top)
+        for (int i = 0; i < r * 2; i++) {
+            QueueChunkGeneration(x, 0, z);
+            z++;
+        }
+    }
+}
+
 int World::GetGeneratedChunkCount() const {
     return chunks.size();
 }
