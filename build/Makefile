@@ -246,29 +246,245 @@ update_mappings/fast:
 	$(MAKE) $(MAKESILENT) -f _deps/raylib-build/raylib/external/glfw/src/CMakeFiles/update_mappings.dir/build.make _deps/raylib-build/raylib/external/glfw/src/CMakeFiles/update_mappings.dir/build
 .PHONY : update_mappings/fast
 
-src/main.o: src/main.cpp.o
-.PHONY : src/main.o
+src/camera.o: src/camera.cpp.o
+.PHONY : src/camera.o
 
 # target to build an object file
-src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/main.cpp.o
-.PHONY : src/main.cpp.o
+src/camera.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/camera.cpp.o
+.PHONY : src/camera.cpp.o
 
-src/main.i: src/main.cpp.i
-.PHONY : src/main.i
+src/camera.i: src/camera.cpp.i
+.PHONY : src/camera.i
 
 # target to preprocess a source file
-src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/main.cpp.i
-.PHONY : src/main.cpp.i
+src/camera.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/camera.cpp.i
+.PHONY : src/camera.cpp.i
 
-src/main.s: src/main.cpp.s
-.PHONY : src/main.s
+src/camera.s: src/camera.cpp.s
+.PHONY : src/camera.s
 
 # target to generate assembly for a file
-src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/main.cpp.s
-.PHONY : src/main.cpp.s
+src/camera.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/camera.cpp.s
+.PHONY : src/camera.cpp.s
+
+src/density_texture.o: src/density_texture.cpp.o
+.PHONY : src/density_texture.o
+
+# target to build an object file
+src/density_texture.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/density_texture.cpp.o
+.PHONY : src/density_texture.cpp.o
+
+src/density_texture.i: src/density_texture.cpp.i
+.PHONY : src/density_texture.i
+
+# target to preprocess a source file
+src/density_texture.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/density_texture.cpp.i
+.PHONY : src/density_texture.cpp.i
+
+src/density_texture.s: src/density_texture.cpp.s
+.PHONY : src/density_texture.s
+
+# target to generate assembly for a file
+src/density_texture.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/density_texture.cpp.s
+.PHONY : src/density_texture.cpp.s
+
+src/game_menu.o: src/game_menu.cpp.o
+.PHONY : src/game_menu.o
+
+# target to build an object file
+src/game_menu.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/game_menu.cpp.o
+.PHONY : src/game_menu.cpp.o
+
+src/game_menu.i: src/game_menu.cpp.i
+.PHONY : src/game_menu.i
+
+# target to preprocess a source file
+src/game_menu.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/game_menu.cpp.i
+.PHONY : src/game_menu.cpp.i
+
+src/game_menu.s: src/game_menu.cpp.s
+.PHONY : src/game_menu.s
+
+# target to generate assembly for a file
+src/game_menu.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/game_menu.cpp.s
+.PHONY : src/game_menu.cpp.s
+
+src/gpu_renderer.o: src/gpu_renderer.cpp.o
+.PHONY : src/gpu_renderer.o
+
+# target to build an object file
+src/gpu_renderer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/gpu_renderer.cpp.o
+.PHONY : src/gpu_renderer.cpp.o
+
+src/gpu_renderer.i: src/gpu_renderer.cpp.i
+.PHONY : src/gpu_renderer.i
+
+# target to preprocess a source file
+src/gpu_renderer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/gpu_renderer.cpp.i
+.PHONY : src/gpu_renderer.cpp.i
+
+src/gpu_renderer.s: src/gpu_renderer.cpp.s
+.PHONY : src/gpu_renderer.s
+
+# target to generate assembly for a file
+src/gpu_renderer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/gpu_renderer.cpp.s
+.PHONY : src/gpu_renderer.cpp.s
+
+src/loading_screen.o: src/loading_screen.cpp.o
+.PHONY : src/loading_screen.o
+
+# target to build an object file
+src/loading_screen.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/loading_screen.cpp.o
+.PHONY : src/loading_screen.cpp.o
+
+src/loading_screen.i: src/loading_screen.cpp.i
+.PHONY : src/loading_screen.i
+
+# target to preprocess a source file
+src/loading_screen.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/loading_screen.cpp.i
+.PHONY : src/loading_screen.cpp.i
+
+src/loading_screen.s: src/loading_screen.cpp.s
+.PHONY : src/loading_screen.s
+
+# target to generate assembly for a file
+src/loading_screen.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/loading_screen.cpp.s
+.PHONY : src/loading_screen.cpp.s
+
+src/main_new.o: src/main_new.cpp.o
+.PHONY : src/main_new.o
+
+# target to build an object file
+src/main_new.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/main_new.cpp.o
+.PHONY : src/main_new.cpp.o
+
+src/main_new.i: src/main_new.cpp.i
+.PHONY : src/main_new.i
+
+# target to preprocess a source file
+src/main_new.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/main_new.cpp.i
+.PHONY : src/main_new.cpp.i
+
+src/main_new.s: src/main_new.cpp.s
+.PHONY : src/main_new.s
+
+# target to generate assembly for a file
+src/main_new.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/main_new.cpp.s
+.PHONY : src/main_new.cpp.s
+
+src/marching_cubes.o: src/marching_cubes.cpp.o
+.PHONY : src/marching_cubes.o
+
+# target to build an object file
+src/marching_cubes.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/marching_cubes.cpp.o
+.PHONY : src/marching_cubes.cpp.o
+
+src/marching_cubes.i: src/marching_cubes.cpp.i
+.PHONY : src/marching_cubes.i
+
+# target to preprocess a source file
+src/marching_cubes.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/marching_cubes.cpp.i
+.PHONY : src/marching_cubes.cpp.i
+
+src/marching_cubes.s: src/marching_cubes.cpp.s
+.PHONY : src/marching_cubes.s
+
+# target to generate assembly for a file
+src/marching_cubes.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/marching_cubes.cpp.s
+.PHONY : src/marching_cubes.cpp.s
+
+src/noise.o: src/noise.cpp.o
+.PHONY : src/noise.o
+
+# target to build an object file
+src/noise.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/noise.cpp.o
+.PHONY : src/noise.cpp.o
+
+src/noise.i: src/noise.cpp.i
+.PHONY : src/noise.i
+
+# target to preprocess a source file
+src/noise.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/noise.cpp.i
+.PHONY : src/noise.cpp.i
+
+src/noise.s: src/noise.cpp.s
+.PHONY : src/noise.s
+
+# target to generate assembly for a file
+src/noise.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/noise.cpp.s
+.PHONY : src/noise.cpp.s
+
+src/voxel_renderer.o: src/voxel_renderer.cpp.o
+.PHONY : src/voxel_renderer.o
+
+# target to build an object file
+src/voxel_renderer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/voxel_renderer.cpp.o
+.PHONY : src/voxel_renderer.cpp.o
+
+src/voxel_renderer.i: src/voxel_renderer.cpp.i
+.PHONY : src/voxel_renderer.i
+
+# target to preprocess a source file
+src/voxel_renderer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/voxel_renderer.cpp.i
+.PHONY : src/voxel_renderer.cpp.i
+
+src/voxel_renderer.s: src/voxel_renderer.cpp.s
+.PHONY : src/voxel_renderer.s
+
+# target to generate assembly for a file
+src/voxel_renderer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/voxel_renderer.cpp.s
+.PHONY : src/voxel_renderer.cpp.s
+
+src/world.o: src/world.cpp.o
+.PHONY : src/world.o
+
+# target to build an object file
+src/world.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/world.cpp.o
+.PHONY : src/world.cpp.o
+
+src/world.i: src/world.cpp.i
+.PHONY : src/world.i
+
+# target to preprocess a source file
+src/world.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/world.cpp.i
+.PHONY : src/world.cpp.i
+
+src/world.s: src/world.cpp.s
+.PHONY : src/world.s
+
+# target to generate assembly for a file
+src/world.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/world.cpp.s
+.PHONY : src/world.cpp.s
 
 # Help Target
 help:
@@ -289,9 +505,36 @@ help:
 	@echo "... game"
 	@echo "... glfw"
 	@echo "... raylib"
-	@echo "... src/main.o"
-	@echo "... src/main.i"
-	@echo "... src/main.s"
+	@echo "... src/camera.o"
+	@echo "... src/camera.i"
+	@echo "... src/camera.s"
+	@echo "... src/density_texture.o"
+	@echo "... src/density_texture.i"
+	@echo "... src/density_texture.s"
+	@echo "... src/game_menu.o"
+	@echo "... src/game_menu.i"
+	@echo "... src/game_menu.s"
+	@echo "... src/gpu_renderer.o"
+	@echo "... src/gpu_renderer.i"
+	@echo "... src/gpu_renderer.s"
+	@echo "... src/loading_screen.o"
+	@echo "... src/loading_screen.i"
+	@echo "... src/loading_screen.s"
+	@echo "... src/main_new.o"
+	@echo "... src/main_new.i"
+	@echo "... src/main_new.s"
+	@echo "... src/marching_cubes.o"
+	@echo "... src/marching_cubes.i"
+	@echo "... src/marching_cubes.s"
+	@echo "... src/noise.o"
+	@echo "... src/noise.i"
+	@echo "... src/noise.s"
+	@echo "... src/voxel_renderer.o"
+	@echo "... src/voxel_renderer.i"
+	@echo "... src/voxel_renderer.s"
+	@echo "... src/world.o"
+	@echo "... src/world.i"
+	@echo "... src/world.s"
 .PHONY : help
 
 

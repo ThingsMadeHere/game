@@ -1,5 +1,7 @@
-#include <raylib.h>
+#include "raylib.h"
+#include <cstdio>
 #include <vector>
+#include <cstring>
 #include <cmath>
 #include <cstdlib>
 #include <unordered_map>
@@ -9,45 +11,56 @@
 const int CHUNK_SIZE = 16;
 const int CHUNK_HEIGHT = 32;
 const int RENDER_DISTANCE = 3;
-const float VOXEL_SIZE = 1.0f;
+const float VOXEL_SIZE = 0.5f; // Decreased from 1.0f for better visualization
 
-// Noise functions
+// Improved Perlin-like noise implementation
 float Hash(float x, float y, float z) {
-    float n = sinf(x * 12.9898f + y * 78.233f + z * 45.164f) * 43758.5453f;
-    return n - floorf(n);
+    // Better hash function for smoother noise
+    int xi = (int)floorf(x) & 255;
+    int yi = (int)floorf(y) & 255;
+    int zi = (int)floorf(z) & 255;
+    
+    // Simple permutation table simulation
+    int hash = (xi * 374761393 + yi * 668265263 + zi * 217460973) % 256;
+    return (float)hash / 256.0f;
 }
 
-float ValueNoise3D(float x, float y, float z) {
+float SmoothNoise3D(float x, float y, float z) {
+    // Get integer coordinates
     int ix = (int)floorf(x);
     int iy = (int)floorf(y);
     int iz = (int)floorf(z);
+    
+    // Get fractional coordinates
     float fx = x - ix;
     float fy = y - iy;
     float fz = z - iz;
-
-    float ux = fx * fx * (3.0f - 2.0f * fx);
-    float uy = fy * fy * (3.0f - 2.0f * fy);
-    float uz = fz * fz * (3.0f - 2.0f * fz);
-
-    float a = Hash(ix, iy, iz);
-    float b = Hash(ix + 1, iy, iz);
-    float c = Hash(ix, iy + 1, iz);
-    float d = Hash(ix + 1, iy + 1, iz);
-    float e = Hash(ix, iy, iz + 1);
-    float f = Hash(ix + 1, iy, iz + 1);
-    float g = Hash(ix, iy + 1, iz + 1);
-    float h = Hash(ix + 1, iy + 1, iz + 1);
-
-    float k0 = a;
-    float k1 = b - a;
-    float k2 = c - a;
-    float k3 = e - a;
-    float k4 = a - b - c + d;
-    float k5 = a - c - e + g;
-    float k6 = a - b - e + f;
-    float k7 = -a + b + c - d + e - f - g + h;
-
-    return k0 + k1*ux + k2*uy + k3*uz + k4*ux*uy + k5*uy*uz + k6*uz*ux + k7*ux*uy*uz;
+    
+    // Get hash values for corners
+    float h000 = Hash(ix, iy, iz);
+    float h001 = Hash(ix, iy, iz + 1);
+    float h010 = Hash(ix, iy + 1, iz);
+    float h011 = Hash(ix, iy + 1, iz + 1);
+    float h100 = Hash(ix + 1, iy, iz);
+    float h101 = Hash(ix + 1, iy, iz + 1);
+    float h110 = Hash(ix + 1, iy + 1, iz);
+    float h111 = Hash(ix + 1, iy + 1, iz + 1);
+    
+    // Smoothstep interpolation
+    float u = fx * fx * (3.0f - 2.0f * fx);
+    float v = fy * fy * (3.0f - 2.0f * fy);
+    float w = fz * fz * (3.0f - 2.0f * fz);
+    
+    // Trilinear interpolation
+    float x00 = h000 * (1.0f - u) + h100 * u;
+    float x01 = h001 * (1.0f - u) + h101 * u;
+    float x10 = h010 * (1.0f - u) + h110 * u;
+    float x11 = h011 * (1.0f - u) + h111 * u;
+    
+    float y0 = x00 * (1.0f - v) + x10 * v;
+    float y1 = x01 * (1.0f - v) + x11 * v;
+    
+    return y0 * (1.0f - w) + y1 * w;
 }
 
 float FBM(float x, float y, float z, int octaves) {
@@ -57,7 +70,7 @@ float FBM(float x, float y, float z, int octaves) {
     float maxValue = 0.0f;
 
     for (int i = 0; i < octaves; i++) {
-        value += ValueNoise3D(x * frequency, y * frequency, z * frequency) * amplitude;
+        value += SmoothNoise3D(x * frequency, y * frequency, z * frequency) * amplitude;
         maxValue += amplitude;
         amplitude *= 0.5f;
         frequency *= 2.0f;
@@ -299,38 +312,35 @@ public:
             }
         }
 
-        if (vertices.empty()) return mesh;
+        if (vertices.empty()) return {0};
 
-        mesh.vertexCount = vertices.size();
-        mesh.triangleCount = vertices.size() / 3;
-
-        // Allocate mesh memory
-        mesh.vertices = (float*)malloc(sizeof(float) * 3 * vertices.size());
-        mesh.normals = (float*)malloc(sizeof(float) * 3 * normals.size());
-        mesh.indices = (unsigned short*)malloc(sizeof(unsigned short) * vertices.size());
-        
-        // Copy vertex data
-        for (size_t i = 0; i < vertices.size(); i++) {
-            mesh.vertices[i * 3] = vertices[i].x;
-            mesh.vertices[i * 3 + 1] = vertices[i].y;
-            mesh.vertices[i * 3 + 2] = vertices[i].z;
-            mesh.normals[i * 3] = normals[i].x;
-            mesh.normals[i * 3 + 1] = normals[i].y;
-            mesh.normals[i * 3 + 2] = normals[i].z;
-            mesh.indices[i] = (unsigned short)i;
+        // Create proper mesh with correct structure
+        Mesh resultMesh = {0};
+        resultMesh.vertexCount = vertices.size() / 3;
+        resultMesh.triangleCount = vertices.size() / 9; // 3 vertices per triangle
+                
+        // Allocate and copy vertex data
+        resultMesh.vertices = (float*)malloc(vertices.size() * sizeof(float));
+        resultMesh.normals = (float*)malloc(normals.size() * sizeof(float));
+        resultMesh.indices = (unsigned short*)malloc(resultMesh.triangleCount * 3 * sizeof(unsigned short));
+                
+        memcpy(resultMesh.vertices, vertices.data(), vertices.size() * sizeof(float));
+        memcpy(resultMesh.normals, normals.data(), normals.size() * sizeof(float));
+                
+        // Create sequential indices
+        for (int i = 0; i < resultMesh.triangleCount * 3; i++) {
+            resultMesh.indices[i] = i;
         }
+                
+        resultMesh.triangleCount = vertices.size() / 3;
         
-        // Set correct mesh properties
-        mesh.vertexCount = vertices.size();
-        mesh.triangleCount = vertices.size() / 3;
-        
-        UploadMesh(&mesh, false);
+        UploadMesh(&resultMesh, false);
         
         // Debug output
         printf("Chunk mesh generated: %d cubes processed, %d with surface, %d vertices\n", 
                cubesProcessed, cubesWithSurface, (int)vertices.size());
         
-        return mesh;
+        return resultMesh;
     }
 
 private:
@@ -367,16 +377,15 @@ public:
     void GenerateTerrain(Chunk& chunk) {
         printf("Generating terrain for chunk (%d, %d, %d)\n", chunk.cx, chunk.cy, chunk.cz);
         
-        for (int z = 0; z < CHUNK_SIZE; z++) {
-            for (int x = 0; x < CHUNK_SIZE; x++) {
-                float worldX = chunk.cx * CHUNK_SIZE + x;
-                float worldZ = chunk.cz * CHUNK_SIZE + z;
-                
-                // Generate proper terrain height - lower base height for more realistic terrain
-                float groundHeight = FBM(worldX * 0.05f, 0, worldZ * 0.05f, 4) * 6.0f + 8.0f;
-
-                for (int y = 0; y < CHUNK_HEIGHT; y++) {
-                    float worldY = chunk.cy * CHUNK_HEIGHT + y;
+        for (int x = 0; x < CHUNK_SIZE; x++) {
+            for (int y = 0; y < CHUNK_HEIGHT; y++) {
+                for (int z = 0; z < CHUNK_SIZE; z++) {
+                    float worldX = (float)(chunk.cx * CHUNK_SIZE + x) * VOXEL_SIZE;
+                    float worldY = (float)(chunk.cy * CHUNK_HEIGHT + y) * VOXEL_SIZE;
+                    float worldZ = (float)(chunk.cz * CHUNK_SIZE + z) * VOXEL_SIZE;
+                    
+                    // Generate proper continuous terrain height
+                    float groundHeight = 8.0f + SmoothNoise3D(worldX * 0.02f, 0, worldZ * 0.02f) * 6.0f;
                     
                     // Create solid ground below height, air above
                     float density = 0.0f;
@@ -385,9 +394,9 @@ public:
                         density = 1.0f; // Solid ground
                         
                         // Add some caves - hollow out areas below surface
-                        if (worldY < groundHeight - 3.0f) {
-                            float caveNoise = FBM(worldX * 0.1f, worldY * 0.1f, worldZ * 0.1f, 2);
-                            if (caveNoise > 0.4f) {
+                        if (worldY < groundHeight - 2.0f) {
+                            float caveNoise = SmoothNoise3D(worldX * 0.05f, worldY * 0.05f, worldZ * 0.05f);
+                            if (caveNoise > 0.6f) {
                                 density = -1.0f; // Cave
                             }
                         }
@@ -422,7 +431,7 @@ public:
         }
     }
 
-    void Render() {
+    void Render(const Camera3D& camera) {
         for (auto& [key, chunk] : chunks) {
             if (chunk.mesh.vertexCount > 0) {
                 Matrix transform = {
@@ -432,16 +441,25 @@ public:
                     (float)chunk.cx * CHUNK_SIZE, (float)chunk.cy * CHUNK_HEIGHT, (float)chunk.cz * CHUNK_SIZE, 1
                 };
                 
-                // Render terrain using mesh with proper material and lighting
-                Material material = LoadMaterialDefault();
-                material.maps[MATERIAL_MAP_DIFFUSE].color = {34, 139, 34, 255}; // Forest green
+                // Render terrain as individual voxels (cubes) with smaller size
+                for (int x = 0; x < CHUNK_SIZE; x++) {
+                    for (int y = 0; y < CHUNK_HEIGHT; y++) {
+                        for (int z = 0; z < CHUNK_SIZE; z++) {
+                            if (chunk.GetDensity(x, y, z) > 0.0f) {
+                                Vector3 pos = {
+                                    (float)chunk.cx * CHUNK_SIZE + x * VOXEL_SIZE,
+                                    (float)chunk.cy * CHUNK_HEIGHT + y * VOXEL_SIZE,
+                                    (float)chunk.cz * CHUNK_SIZE + z * VOXEL_SIZE
+                                };
+                                // Draw smaller cubes for each voxel
+                                DrawCube(pos, VOXEL_SIZE * 0.9f, VOXEL_SIZE * 0.9f, VOXEL_SIZE * 0.9f, {34, 139, 34, 255});
+                            }
+                        }
+                    }
+                }
                 
-                // Try rendering the mesh with proper setup
-                printf("Rendering chunk mesh: %d vertices, %d triangles\n", 
-                       chunk.mesh.vertexCount, chunk.mesh.triangleCount);
-                
-                // Draw the mesh - this should create smooth surfaces from the voxels
-                DrawMesh(chunk.mesh, material, transform);
+                printf("Rendering chunk as voxels: %d voxels\n", 
+                       chunk.mesh.vertexCount);
             }
         }
         
@@ -757,7 +775,7 @@ int main() {
         // Draw world space sky gradient
         DrawSkyGradient(cam.camera);
 
-        world.Render();
+        world.Render(cam.camera);
 
         EndMode3D();
 
@@ -766,6 +784,9 @@ int main() {
         DrawText("WASD: Move | Mouse: Look | Space/Shift: Up/Down", 10, 40, 20, RAYWHITE);
         DrawText("Left Click: Destroy | Right Click: Build | ESC: Toggle Cursor", 10, 70, 20, RAYWHITE);
         DrawFPS(10, 100);
+        
+        // Draw center dot for GUI reference
+        DrawCircle(GetScreenWidth() / 2, GetScreenHeight() / 2, 3, RED);
 
         EndDrawing();
     }

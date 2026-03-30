@@ -1,9 +1,63 @@
 [
 {
   "directory": "/home/carter/Desktop/Farout/build",
-  "command": "/usr/bin/c++ -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src/external/glfw/include -std=gnu++17 -o CMakeFiles/game.dir/src/main.cpp.o -c /home/carter/Desktop/Farout/src/main.cpp",
-  "file": "/home/carter/Desktop/Farout/src/main.cpp",
-  "output": "CMakeFiles/game.dir/src/main.cpp.o"
+  "command": "/usr/bin/c++ -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src/external/glfw/include -std=gnu++17 -o CMakeFiles/game.dir/src/main_new.cpp.o -c /home/carter/Desktop/Farout/src/main_new.cpp",
+  "file": "/home/carter/Desktop/Farout/src/main_new.cpp",
+  "output": "CMakeFiles/game.dir/src/main_new.cpp.o"
+},
+{
+  "directory": "/home/carter/Desktop/Farout/build",
+  "command": "/usr/bin/c++ -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src/external/glfw/include -std=gnu++17 -o CMakeFiles/game.dir/src/camera.cpp.o -c /home/carter/Desktop/Farout/src/camera.cpp",
+  "file": "/home/carter/Desktop/Farout/src/camera.cpp",
+  "output": "CMakeFiles/game.dir/src/camera.cpp.o"
+},
+{
+  "directory": "/home/carter/Desktop/Farout/build",
+  "command": "/usr/bin/c++ -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src/external/glfw/include -std=gnu++17 -o CMakeFiles/game.dir/src/world.cpp.o -c /home/carter/Desktop/Farout/src/world.cpp",
+  "file": "/home/carter/Desktop/Farout/src/world.cpp",
+  "output": "CMakeFiles/game.dir/src/world.cpp.o"
+},
+{
+  "directory": "/home/carter/Desktop/Farout/build",
+  "command": "/usr/bin/c++ -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src/external/glfw/include -std=gnu++17 -o CMakeFiles/game.dir/src/noise.cpp.o -c /home/carter/Desktop/Farout/src/noise.cpp",
+  "file": "/home/carter/Desktop/Farout/src/noise.cpp",
+  "output": "CMakeFiles/game.dir/src/noise.cpp.o"
+},
+{
+  "directory": "/home/carter/Desktop/Farout/build",
+  "command": "/usr/bin/c++ -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src/external/glfw/include -std=gnu++17 -o CMakeFiles/game.dir/src/marching_cubes.cpp.o -c /home/carter/Desktop/Farout/src/marching_cubes.cpp",
+  "file": "/home/carter/Desktop/Farout/src/marching_cubes.cpp",
+  "output": "CMakeFiles/game.dir/src/marching_cubes.cpp.o"
+},
+{
+  "directory": "/home/carter/Desktop/Farout/build",
+  "command": "/usr/bin/c++ -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src/external/glfw/include -std=gnu++17 -o CMakeFiles/game.dir/src/density_texture.cpp.o -c /home/carter/Desktop/Farout/src/density_texture.cpp",
+  "file": "/home/carter/Desktop/Farout/src/density_texture.cpp",
+  "output": "CMakeFiles/game.dir/src/density_texture.cpp.o"
+},
+{
+  "directory": "/home/carter/Desktop/Farout/build",
+  "command": "/usr/bin/c++ -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src/external/glfw/include -std=gnu++17 -o CMakeFiles/game.dir/src/voxel_renderer.cpp.o -c /home/carter/Desktop/Farout/src/voxel_renderer.cpp",
+  "file": "/home/carter/Desktop/Farout/src/voxel_renderer.cpp",
+  "output": "CMakeFiles/game.dir/src/voxel_renderer.cpp.o"
+},
+{
+  "directory": "/home/carter/Desktop/Farout/build",
+  "command": "/usr/bin/c++ -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src/external/glfw/include -std=gnu++17 -o CMakeFiles/game.dir/src/gpu_renderer.cpp.o -c /home/carter/Desktop/Farout/src/gpu_renderer.cpp",
+  "file": "/home/carter/Desktop/Farout/src/gpu_renderer.cpp",
+  "output": "CMakeFiles/game.dir/src/gpu_renderer.cpp.o"
+},
+{
+  "directory": "/home/carter/Desktop/Farout/build",
+  "command": "/usr/bin/c++ -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src/external/glfw/include -std=gnu++17 -o CMakeFiles/game.dir/src/game_menu.cpp.o -c /home/carter/Desktop/Farout/src/game_menu.cpp",
+  "file": "/home/carter/Desktop/Farout/src/game_menu.cpp",
+  "output": "CMakeFiles/game.dir/src/game_menu.cpp.o"
+},
+{
+  "directory": "/home/carter/Desktop/Farout/build",
+  "command": "/usr/bin/c++ -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src/external/glfw/include -std=gnu++17 -o CMakeFiles/game.dir/src/loading_screen.cpp.o -c /home/carter/Desktop/Farout/src/loading_screen.cpp",
+  "file": "/home/carter/Desktop/Farout/src/loading_screen.cpp",
+  "output": "CMakeFiles/game.dir/src/loading_screen.cpp.o"
 },
 {
   "directory": "/home/carter/Desktop/Farout/build/_deps/raylib-build/raylib",

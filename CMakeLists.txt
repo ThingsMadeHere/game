@@ -21,8 +21,19 @@ if(raylib_FOUND)
     get_target_property(RAYLIB_INCLUDES raylib::raylib INTERFACE_INCLUDE_DIRECTORIES)
 endif()
 
-# Add Executable
-add_executable(game src/main.cpp)
+# Add Executable with all source files
+add_executable(game 
+    src/main_new.cpp
+    src/camera.cpp
+    src/world.cpp
+    src/noise.cpp
+    src/marching_cubes.cpp
+    src/density_texture.cpp
+    src/voxel_renderer.cpp
+    src/gpu_renderer.cpp
+    src/game_menu.cpp
+    src/loading_screen.cpp
+)
 
 # Include raylib headers explicitly
 if(RAYLIB_INCLUDES)
