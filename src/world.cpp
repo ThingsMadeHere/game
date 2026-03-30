@@ -44,9 +44,12 @@ void ChunkWorker(World* world) {
         std::lock_guard<std::mutex> lock(world->GetMutex());
         auto result = world->GetChunks().emplace(key, chunk);
         if (result.second) {
-            result.first->second.mesh = world->GetMarchingCubes().GenerateMesh(result.first->second);
+            result.first->second.mesh = world->GetMarchingCubes().GenerateMesh(result.first->second, world->GetChunks());
             result.first->second.meshGenerated = true;
             result.first->second.needsUpdate = false;
+            
+            // Regenerate neighbor chunks to ensure seamless boundaries
+            world->RegenerateNeighborChunks(req.cx, req.cy, req.cz);
         }
     }
 }
@@ -239,8 +242,8 @@ void World::Render(const Camera3D& camera) {
         int chunkDistZ = abs(chunk.cz - playerChunkZ);
         int chunkDist = (int)sqrtf(chunkDistX * chunkDistX + chunkDistZ * chunkDistZ);
         
-        // Skip chunks beyond 8 chunks for performance
-        if (chunkDist > 8) continue;
+        // Skip chunks beyond 4 chunks for performance (REDUCED from 8)
+        if (chunkDist > 4) continue;
         
         // Frustum culling - only render visible chunks
         if (!IsChunkVisible(camera, chunk.cx, chunk.cy, chunk.cz)) {
@@ -402,6 +405,28 @@ ChunkRequest World::PopChunkRequest() {
 
 int World::GetGeneratedChunkCount() const {
     return chunks.size();
+}
+
+void World::RegenerateNeighborChunks(int cx, int cy, int cz) {
+    // Regenerate all neighboring chunks to ensure seamless boundaries
+    int neighbors[6][3] = {
+        {cx-1, cy, cz}, {cx+1, cy, cz},  // X neighbors
+        {cx, cy-1, cz}, {cx, cy+1, cz},  // Y neighbors  
+        {cx, cy, cz-1}, {cx, cy, cz+1}   // Z neighbors
+    };
+    
+    for (int i = 0; i < 6; i++) {
+        int nx = neighbors[i][0];
+        int ny = neighbors[i][1];
+        int nz = neighbors[i][2];
+        
+        ChunkKey neighborKey = {nx, ny, nz};
+        auto it = chunks.find(neighborKey);
+        if (it != chunks.end() && it->second.meshGenerated) {
+            // Regenerate this neighbor's mesh with updated neighbor information
+            it->second.mesh = marchingCubes.GenerateMesh(it->second, chunks);
+        }
+    }
 }
 
 void World::ProcessChunkQueue() {

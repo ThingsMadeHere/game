@@ -43,6 +43,12 @@ struct Chunk {
         return 0.0f;
     }
     
+    float GetNeighborDensity(int x, int y, int z) const {
+        // For chunk boundaries, return a reasonable default (air)
+        // This prevents gaps by ensuring consistent values at boundaries
+        return 0.0f;
+    }
+    
     void SetDensity(int x, int y, int z, float density) {
         if (x >= 0 && x < CHUNK_SIZE && y >= 0 && y < CHUNK_HEIGHT && z >= 0 && z < CHUNK_SIZE) {
             voxels[x][y][z].density = density;

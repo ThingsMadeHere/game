@@ -434,11 +434,12 @@ public:
     void Render(const Camera3D& camera) {
         for (auto& [key, chunk] : chunks) {
             if (chunk.mesh.vertexCount > 0) {
+                // Matrix transformation
                 Matrix transform = {
                     1, 0, 0, 0,
                     0, 1, 0, 0,
                     0, 0, 1, 0,
-                    (float)chunk.cx * CHUNK_SIZE, (float)chunk.cy * CHUNK_HEIGHT, (float)chunk.cz * CHUNK_SIZE, 1
+                    (float)chunk.cx * CHUNK_SIZE * VOXEL_SIZE, (float)chunk.cy * CHUNK_HEIGHT * VOXEL_SIZE, (float)chunk.cz * CHUNK_SIZE * VOXEL_SIZE, 1
                 };
                 
                 // Render terrain as individual voxels (cubes) with smaller size
@@ -447,9 +448,9 @@ public:
                         for (int z = 0; z < CHUNK_SIZE; z++) {
                             if (chunk.GetDensity(x, y, z) > 0.0f) {
                                 Vector3 pos = {
-                                    (float)chunk.cx * CHUNK_SIZE + x * VOXEL_SIZE,
-                                    (float)chunk.cy * CHUNK_HEIGHT + y * VOXEL_SIZE,
-                                    (float)chunk.cz * CHUNK_SIZE + z * VOXEL_SIZE
+                                    (float)chunk.cx * CHUNK_SIZE * VOXEL_SIZE + x * VOXEL_SIZE,
+                                    (float)chunk.cy * CHUNK_HEIGHT * VOXEL_SIZE + y * VOXEL_SIZE,
+                                    (float)chunk.cz * CHUNK_SIZE * VOXEL_SIZE + z * VOXEL_SIZE
                                 };
                                 // Draw smaller cubes for each voxel
                                 DrawCube(pos, VOXEL_SIZE * 0.9f, VOXEL_SIZE * 0.9f, VOXEL_SIZE * 0.9f, {34, 139, 34, 255});
@@ -466,7 +467,7 @@ public:
         // Draw chunk boundaries
         for (int cx = -RENDER_DISTANCE; cx <= RENDER_DISTANCE; cx++) {
             for (int cz = -RENDER_DISTANCE; cz <= RENDER_DISTANCE; cz++) {
-                Vector3 chunkPos = {(float)cx * CHUNK_SIZE, 0, (float)cz * CHUNK_SIZE};
+                Vector3 chunkPos = {(float)cx * CHUNK_SIZE * VOXEL_SIZE, 0, (float)cz * CHUNK_SIZE * VOXEL_SIZE};
                 Vector3 size = {CHUNK_SIZE, 1, CHUNK_SIZE};
                 DrawCubeWires(chunkPos, size.x, size.y, size.z, RED);
             }

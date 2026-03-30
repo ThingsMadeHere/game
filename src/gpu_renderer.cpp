@@ -1,5 +1,7 @@
 #include "gpu_renderer.h"
+#include "terrain.h"
 #include <cstdio>
+#include <algorithm>
 
 void GPUChunkRenderer::Init() {
     // Load the voxel shader
@@ -23,18 +25,10 @@ void GPUChunkRenderer::Init() {
 void GPUChunkRenderer::RenderChunk(const Chunk& chunk, const Camera3D& camera) {
     // Use generated mesh from marching cubes if available
     if (chunk.meshGenerated && chunk.mesh.vertexCount > 0) {
-        // Set shader uniforms
-        Shader shader = voxelShader;
+        printf("Rendering chunk (%d,%d,%d) with %d vertices\n", 
+               chunk.cx, chunk.cy, chunk.cz, chunk.mesh.vertexCount);
         
-        // Set chunk position
-        Vector3 chunkPos = {
-            (float)chunk.cx * CHUNK_SIZE * VOXEL_SIZE,
-            (float)chunk.cy * CHUNK_HEIGHT * VOXEL_SIZE,
-            (float)chunk.cz * CHUNK_SIZE * VOXEL_SIZE
-        };
-        SetShaderValue(shader, GetShaderLocation(shader, "chunkPosition"), &chunkPos, SHADER_UNIFORM_VEC3);
-        
-        // Draw the mesh as triangles
+        // Draw the mesh as triangles with proper shading and lighting
         for (int i = 0; i < chunk.mesh.vertexCount; i += 3) {
             Vector3 v1 = {
                 chunk.mesh.vertices[i*3] + chunk.cx * CHUNK_SIZE * VOXEL_SIZE,
@@ -52,8 +46,35 @@ void GPUChunkRenderer::RenderChunk(const Chunk& chunk, const Camera3D& camera) {
                 chunk.mesh.vertices[(i+2)*3+2] + chunk.cz * CHUNK_SIZE * VOXEL_SIZE
             };
             
-            // Draw triangle
-            DrawTriangle3D(v1, v2, v3, LIGHTGRAY);
+            // Get face normal from mesh data
+            Vector3 normal = {
+                chunk.mesh.normals[i*3],
+                chunk.mesh.normals[i*3+1], 
+                chunk.mesh.normals[i*3+2]
+            };
+            
+            // Calculate lighting based on face normal and sun direction
+            Vector3 sunDirection = {0.7f, 0.7f, 0.2f}; // Sun from top-right
+            float brightness = 0.3f; // Ambient light
+            
+            // Calculate dot product for diffuse lighting
+            float dotProduct = normal.x * sunDirection.x + normal.y * sunDirection.y + normal.z * sunDirection.z;
+            brightness += std::max(0.0f, dotProduct) * 0.7f; // Diffuse lighting
+            
+            // Clamp brightness
+            if (brightness < 0.2f) brightness = 0.2f;
+            if (brightness > 1.0f) brightness = 1.0f;
+            
+            // Apply lighting to base color (green terrain)
+            Color baseColor = {34, 139, 34, 255}; // Forest green
+            Color litColor = {
+                (unsigned char)(baseColor.r * brightness),
+                (unsigned char)(baseColor.g * brightness),
+                (unsigned char)(baseColor.b * brightness),
+                baseColor.a
+            };
+            
+            DrawTriangle3D(v1, v2, v3, litColor);
         }
     } else {
         // Fallback: render chunk boundaries for debugging

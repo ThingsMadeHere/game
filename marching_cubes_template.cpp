@@ -1,5 +1,5 @@
+#include "build/_deps/raylib-src/src/raylib.h"
 #include "marching_cubes.h"
-#include "noise.h"
 #include <cstdio>
 #include <cstring>
 #include <cmath>
@@ -308,77 +308,14 @@ Vector3 MarchingCubes::InterpolateVertex(Vector3 p1, Vector3 p2, float d1, float
     return {p1.x + t * (p2.x - p1.x), p1.y + t * (p2.y - p1.y), p1.z + t * (p2.z - p1.z)};
 }
 
-float MarchingCubes::GetDensityWithNeighbors(const Chunk& chunk, const std::unordered_map<ChunkKey, Chunk>& allChunks, int x, int y, int z) {
-    // First try to get density from current chunk
-    if (x >= 0 && x < CHUNK_SIZE && y >= 0 && y < CHUNK_HEIGHT && z >= 0 && z < CHUNK_SIZE) {
-        return chunk.GetDensity(x, y, z);
-    }
-    
-    // If outside current chunk, try to get from neighbor chunk
-    int neighborCx = chunk.cx;
-    int neighborCy = chunk.cy;
-    int neighborCz = chunk.cz;
-    
-    if (x < 0) { neighborCx--; x += CHUNK_SIZE; }
-    else if (x >= CHUNK_SIZE) { neighborCx++; x -= CHUNK_SIZE; }
-    
-    if (y < 0) { neighborCy--; y += CHUNK_HEIGHT; }
-    else if (y >= CHUNK_HEIGHT) { neighborCy++; y -= CHUNK_HEIGHT; }
-    
-    if (z < 0) { neighborCz--; z += CHUNK_SIZE; }
-    else if (z >= CHUNK_SIZE) { neighborCz++; z -= CHUNK_SIZE; }
-    
-    ChunkKey neighborKey = {neighborCx, neighborCy, neighborCz};
-    auto it = allChunks.find(neighborKey);
-    if (it != allChunks.end()) {
-        return it->second.GetDensity(x, y, z);
-    }
-    
-    // If neighbor doesn't exist, use the EXACT same terrain generation logic
-    // This ensures perfect boundary consistency
-    
-    // Convert to world coordinates (same as terrain generation)
-    float worldX = (float)(neighborCx * CHUNK_SIZE + x) * VOXEL_SIZE;
-    float worldY = (float)(neighborCy * CHUNK_HEIGHT + y) * VOXEL_SIZE;
-    float worldZ = (float)(neighborCz * CHUNK_SIZE + z) * VOXEL_SIZE;
-    
-    // Use the EXACT same ground height calculation
-    float groundHeight = 8.0f + SmoothNoise3D(worldX * 0.02f, 0, worldZ * 0.02f) * 6.0f;
-    
-    // Use the EXACT same density logic
-    float density = 0.0f;
-    
-    if (worldY < groundHeight) {
-        density = 1.0f; // Solid ground
-        
-        // Add caves with EXACT same logic
-        if (worldY < groundHeight - 2.0f) {
-            float caveNoise = SmoothNoise3D(worldX * 0.05f, worldY * 0.05f, worldZ * 0.05f);
-            if (caveNoise > 0.6f) {
-                density = -1.0f; // Cave
-            }
-        }
-    } else {
-        density = -1.0f; // Air
-    }
-    
-    return density;
-}
-
 Mesh MarchingCubes::GenerateMesh(const Chunk& chunk) {
-    // For backward compatibility, call the neighbor-aware version with empty chunks map
-    std::unordered_map<ChunkKey, Chunk> emptyChunks;
-    return GenerateMesh(chunk, emptyChunks);
-}
-
-Mesh MarchingCubes::GenerateMesh(const Chunk& chunk, const std::unordered_map<ChunkKey, Chunk>& allChunks) {
     std::vector<float> vertices;
     std::vector<float> normals;
     
     int cubesProcessed = 0;
     int trianglesGenerated = 0;
     
-    // Marching Cubes implementation with proper boundary handling
+    // Marching Cubes implementation
     for (int x = 0; x < CHUNK_SIZE - 1; x++) {
         for (int y = 0; y < CHUNK_HEIGHT - 1; y++) {
             for (int z = 0; z < CHUNK_SIZE - 1; z++) {
@@ -386,16 +323,15 @@ Mesh MarchingCubes::GenerateMesh(const Chunk& chunk, const std::unordered_map<Ch
                 
                 // Get densities at cube corners with thresholding
                 float densities[8];
-                float threshold = 0.25f; // Slightly lower threshold to fill gaps
-                
-                densities[0] = GetDensityWithNeighbors(chunk, allChunks, x, y, z) > threshold ? 1.0f : -1.0f;
-                densities[1] = GetDensityWithNeighbors(chunk, allChunks, x + 1, y, z) > threshold ? 1.0f : -1.0f;
-                densities[2] = GetDensityWithNeighbors(chunk, allChunks, x + 1, y, z + 1) > threshold ? 1.0f : -1.0f;
-                densities[3] = GetDensityWithNeighbors(chunk, allChunks, x, y, z + 1) > threshold ? 1.0f : -1.0f;
-                densities[4] = GetDensityWithNeighbors(chunk, allChunks, x, y + 1, z) > threshold ? 1.0f : -1.0f;
-                densities[5] = GetDensityWithNeighbors(chunk, allChunks, x + 1, y + 1, z) > threshold ? 1.0f : -1.0f;
-                densities[6] = GetDensityWithNeighbors(chunk, allChunks, x + 1, y + 1, z + 1) > threshold ? 1.0f : -1.0f;
-                densities[7] = GetDensityWithNeighbors(chunk, allChunks, x, y + 1, z + 1) > threshold ? 1.0f : -1.0f;
+                float threshold = 0.3f; // Higher threshold to reduce detail and holes
+                densities[0] = chunk.GetDensity(x, y, z) > threshold ? 1.0f : -1.0f;
+                densities[1] = chunk.GetDensity(x + 1, y, z) > threshold ? 1.0f : -1.0f;
+                densities[2] = chunk.GetDensity(x + 1, y, z + 1) > threshold ? 1.0f : -1.0f;
+                densities[3] = chunk.GetDensity(x, y, z + 1) > threshold ? 1.0f : -1.0f;
+                densities[4] = chunk.GetDensity(x, y + 1, z) > threshold ? 1.0f : -1.0f;
+                densities[5] = chunk.GetDensity(x + 1, y + 1, z) > threshold ? 1.0f : -1.0f;
+                densities[6] = chunk.GetDensity(x + 1, y + 1, z + 1) > threshold ? 1.0f : -1.0f;
+                densities[7] = chunk.GetDensity(x, y + 1, z + 1) > threshold ? 1.0f : -1.0f;
                 
                 // Calculate cube index
                 int cubeIndex = 0;

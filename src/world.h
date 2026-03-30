@@ -44,4 +44,7 @@ public:
     // Garbage collection
     void GarbageCollectChunks(int playerChunkX, int playerChunkZ, int maxDistance);
     int GetGeneratedChunkCount() const;
+    
+    // Boundary synchronization
+    void RegenerateNeighborChunks(int cx, int cy, int cz);
 };

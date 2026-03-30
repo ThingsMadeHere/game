@@ -46,9 +46,9 @@ void VoxelRenderer::RenderChunkFromDensity(const Chunk& chunk) {
                     
                     // Calculate world position
                     Vector3 blockPos = {
-                        (float)chunk.cx * CHUNK_SIZE + x * VOXEL_SIZE,
-                        (float)chunk.cy * CHUNK_HEIGHT + y * VOXEL_SIZE,
-                        (float)chunk.cz * CHUNK_SIZE + z * VOXEL_SIZE
+                        (float)chunk.cx * CHUNK_SIZE * VOXEL_SIZE + x * VOXEL_SIZE,
+                        (float)chunk.cy * CHUNK_HEIGHT * VOXEL_SIZE + y * VOXEL_SIZE,
+                        (float)chunk.cz * CHUNK_SIZE * VOXEL_SIZE + z * VOXEL_SIZE
                     };
                     
                     // Draw the block

@@ -62,7 +62,8 @@ CMakeFiles/game.dir/src/marching_cubes.cpp.o: \
  /usr/include/c++/13/ext/aligned_buffer.h \
  /usr/include/c++/13/bits/enable_special_members.h \
  /usr/include/c++/13/bits/node_handle.h \
- /usr/include/c++/13/bits/erase_if.h /usr/include/c++/13/cstdio \
+ /usr/include/c++/13/bits/erase_if.h \
+ /home/carter/Desktop/Farout/src/noise.h /usr/include/c++/13/cstdio \
  /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/x86_64-linux-gnu/bits/types.h \
