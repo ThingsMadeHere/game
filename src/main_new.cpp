@@ -48,6 +48,19 @@ int main() {
         if (currentMenuState == MenuState::PLAYING) {
             // Handle loading screen
             if (isLoadingWorld) {
+                // Get player position for garbage collection
+                Vector3 playerPos = cameraController.camera.position;
+                int playerChunkX = (int)floorf(playerPos.x / (CHUNK_SIZE * VOXEL_SIZE));
+                int playerChunkZ = (int)floorf(playerPos.z / (CHUNK_SIZE * VOXEL_SIZE));
+                
+                // Process completed chunks from worker threads
+                world.ProcessChunkQueue();
+                
+                // Force process some chunks immediately to show progress
+                for (int i = 0; i < 10; i++) {
+                    world.ProcessChunkQueue();
+                }
+                
                 // Update loading progress
                 loadingScreen.UpdateProgress(world.GetGeneratedChunkCount());
                 
@@ -75,8 +88,41 @@ int main() {
                 int playerChunkX = (int)floorf(playerPos.x / (CHUNK_SIZE * VOXEL_SIZE));
                 int playerChunkZ = (int)floorf(playerPos.z / (CHUNK_SIZE * VOXEL_SIZE));
                 
-                loadingScreen.StartLoading(playerChunkX, playerChunkZ, 8); // 8 chunk radius
-                world.QueueSpiralGeneration(playerChunkX, playerChunkZ, 8);
+                // Generate spiral pattern for loading screen
+                // Add center chunk first
+                world.QueueChunkGeneration(playerChunkX, 0, playerChunkZ);
+                
+                for (int r = 1; r <= 8; r++) {
+                    // Start at top of the ring
+                    int x = playerChunkX - r;
+                    int z = playerChunkZ + r;
+                    
+                    // Top edge (left to right)
+                    for (int i = 0; i < r * 2; i++) {
+                        world.QueueChunkGeneration(x, 0, z);
+                        x++;
+                    }
+                    
+                    // Right edge (top to bottom)
+                    for (int i = 0; i < r * 2; i++) {
+                        world.QueueChunkGeneration(x, 0, z);
+                        z--;
+                    }
+                    
+                    // Bottom edge (right to left)
+                    for (int i = 0; i < r * 2; i++) {
+                        world.QueueChunkGeneration(x, 0, z);
+                        x--;
+                    }
+                    
+                    // Left edge (bottom to top)
+                    for (int i = 0; i < r * 2; i++) {
+                        world.QueueChunkGeneration(x, 0, z);
+                        z++;
+                    }
+                }
+                
+                loadingScreen.StartLoading(playerChunkX, playerChunkZ, 8);
                 isLoadingWorld = true;
                 continue; // Skip to loading screen
             }

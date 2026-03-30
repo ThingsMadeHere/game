@@ -6,7 +6,7 @@
 // Constants
 const int CHUNK_SIZE = 32;        // Balanced size for performance
 const int CHUNK_HEIGHT = 32;      // Balanced height for performance
-const int RENDER_DISTANCE = 32;   // 32 chunk render distance for infinite world
+const int RENDER_DISTANCE = 4;   // Reduced to 4 for immediate performance boost
 const float VOXEL_SIZE = 0.5f;    // Increase voxel size to reduce count
 
 // Voxel data
@@ -67,21 +67,25 @@ struct Chunk {
     void GenerateDensityTexture();
 };
 
-// Chunk key for unordered_map
+// Hash function for chunk keys
 struct ChunkKey {
-    int x, y, z;
+    int cx, cy, cz;
     
     bool operator==(const ChunkKey& other) const {
-        return x == other.x && y == other.y && z == other.z;
+        return cx == other.cx && cy == other.cy && cz == other.cz;
     }
 };
 
-// Hash function for ChunkKey
+// Better hash function to reduce collisions
 namespace std {
-    template<>
-    struct hash<ChunkKey> {
+    template<> struct hash<ChunkKey> {
         size_t operator()(const ChunkKey& key) const {
-            return hash<int>()(key.x) ^ hash<int>()(key.y) ^ hash<int>()(key.z);
+            // Use boost::hash_combine style for better distribution
+            size_t seed = 0;
+            seed ^= hash<int>{}(key.cx) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+            seed ^= hash<int>{}(key.cy) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+            seed ^= hash<int>{}(key.cz) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+            return seed;
         }
     };
 }

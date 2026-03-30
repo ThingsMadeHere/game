@@ -55,12 +55,12 @@ void LoadingScreen::StartLoading(int playerChunkX, int playerChunkZ, int radius)
     
     GenerateSpiralOrder(playerChunkX, playerChunkZ, radius);
     
-    printf("Starting loading: %d chunks in spiral pattern from (%d,%d)\n", 
-           totalChunks.load(), playerChunkX, playerChunkZ);
+    printf("Starting loading: %d chunks in spiral pattern from (%d,%d) radius %d\n", 
+           totalChunks.load(), playerChunkX, playerChunkZ, radius);
 }
 
 void LoadingScreen::UpdateProgress(int chunksDone) {
-    chunksGenerated = chunksDone;
+    chunksGenerated.store(chunksDone);
 }
 
 void LoadingScreen::Render() {

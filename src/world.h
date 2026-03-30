@@ -41,7 +41,7 @@ public:
     std::unordered_map<ChunkKey, Chunk>& GetChunks() { return chunks; }
     MarchingCubes& GetMarchingCubes() { return marchingCubes; }
     
-    // Loading screen support
-    void QueueSpiralGeneration(int centerX, int centerZ, int radius);
+    // Garbage collection
+    void GarbageCollectChunks(int playerChunkX, int playerChunkZ, int maxDistance);
     int GetGeneratedChunkCount() const;
 };
