@@ -29,21 +29,23 @@ void GPUChunkRenderer::RenderChunk(const Chunk& chunk, const Camera3D& camera) {
                chunk.cx, chunk.cy, chunk.cz, chunk.mesh.vertexCount);
         
         // Draw the mesh as triangles with proper shading and lighting
+        // Overlap by exactly 1 voxel (0.5 units) to eliminate 1-voxel gaps
+        const float VOXEL_OVERLAP = VOXEL_SIZE; // 0.5f = exactly 1 voxel overlap
         for (int i = 0; i < chunk.mesh.vertexCount; i += 3) {
             Vector3 v1 = {
-                chunk.mesh.vertices[i*3] + chunk.cx * CHUNK_SIZE * VOXEL_SIZE,
-                chunk.mesh.vertices[i*3+1] + chunk.cy * CHUNK_HEIGHT * VOXEL_SIZE,
-                chunk.mesh.vertices[i*3+2] + chunk.cz * CHUNK_SIZE * VOXEL_SIZE
+                chunk.mesh.vertices[i*3] + chunk.cx * CHUNK_SIZE * VOXEL_SIZE - VOXEL_OVERLAP,
+                chunk.mesh.vertices[i*3+1] + chunk.cy * CHUNK_HEIGHT * VOXEL_SIZE - VOXEL_OVERLAP,
+                chunk.mesh.vertices[i*3+2] + chunk.cz * CHUNK_SIZE * VOXEL_SIZE - VOXEL_OVERLAP
             };
             Vector3 v2 = {
-                chunk.mesh.vertices[(i+1)*3] + chunk.cx * CHUNK_SIZE * VOXEL_SIZE,
-                chunk.mesh.vertices[(i+1)*3+1] + chunk.cy * CHUNK_HEIGHT * VOXEL_SIZE,
-                chunk.mesh.vertices[(i+1)*3+2] + chunk.cz * CHUNK_SIZE * VOXEL_SIZE
+                chunk.mesh.vertices[(i+1)*3] + chunk.cx * CHUNK_SIZE * VOXEL_SIZE - VOXEL_OVERLAP,
+                chunk.mesh.vertices[(i+1)*3+1] + chunk.cy * CHUNK_HEIGHT * VOXEL_SIZE - VOXEL_OVERLAP,
+                chunk.mesh.vertices[(i+1)*3+2] + chunk.cz * CHUNK_SIZE * VOXEL_SIZE - VOXEL_OVERLAP
             };
             Vector3 v3 = {
-                chunk.mesh.vertices[(i+2)*3] + chunk.cx * CHUNK_SIZE * VOXEL_SIZE,
-                chunk.mesh.vertices[(i+2)*3+1] + chunk.cy * CHUNK_HEIGHT * VOXEL_SIZE,
-                chunk.mesh.vertices[(i+2)*3+2] + chunk.cz * CHUNK_SIZE * VOXEL_SIZE
+                chunk.mesh.vertices[(i+2)*3] + chunk.cx * CHUNK_SIZE * VOXEL_SIZE - VOXEL_OVERLAP,
+                chunk.mesh.vertices[(i+2)*3+1] + chunk.cy * CHUNK_HEIGHT * VOXEL_SIZE - VOXEL_OVERLAP,
+                chunk.mesh.vertices[(i+2)*3+2] + chunk.cz * CHUNK_SIZE * VOXEL_SIZE - VOXEL_OVERLAP
             };
             
             // Get face normal from mesh data
@@ -78,10 +80,11 @@ void GPUChunkRenderer::RenderChunk(const Chunk& chunk, const Camera3D& camera) {
         }
     } else {
         // Fallback: render chunk boundaries for debugging
+        const float VOXEL_OVERLAP = VOXEL_SIZE; // 0.5f = exactly 1 voxel overlap
         Vector3 chunkPos = {
-            (float)chunk.cx * CHUNK_SIZE * VOXEL_SIZE,
-            (float)chunk.cy * CHUNK_HEIGHT * VOXEL_SIZE,
-            (float)chunk.cz * CHUNK_SIZE * VOXEL_SIZE
+            (float)chunk.cx * CHUNK_SIZE * VOXEL_SIZE - VOXEL_OVERLAP,
+            (float)chunk.cy * CHUNK_HEIGHT * VOXEL_SIZE - VOXEL_OVERLAP,
+            (float)chunk.cz * CHUNK_SIZE * VOXEL_SIZE - VOXEL_OVERLAP
         };
         Vector3 chunkSize = {
             (float)CHUNK_SIZE * VOXEL_SIZE, 

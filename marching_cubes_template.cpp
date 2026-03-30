@@ -1,4 +1,4 @@
-#include "build/_deps/raylib-src/src/raylib.h"
+#include "raylib.h"
 #include "marching_cubes.h"
 #include <cstdio>
 #include <cstring>
@@ -486,18 +486,29 @@ Mesh MarchingCubes::GenerateMesh(const Chunk& chunk) {
 
     // Create proper mesh with correct structure
     Mesh resultMesh = {0};
-    resultMesh.vertexCount = vertices.size() / 3;
-    resultMesh.triangleCount = vertices.size() / 9; // 3 vertices per triangle
+    resultMesh.vertexCount = vertices.size() / 3;  // 3 vertices per triangle
+    resultMesh.triangleCount = vertices.size() / 3;  // Total triangles from vertices
+    
+    // Check for empty mesh
+    if (vertices.empty() || resultMesh.vertexCount == 0 || resultMesh.triangleCount == 0) {
+        return {0};
+    }
             
     // Allocate and copy vertex data
     resultMesh.vertices = (float*)malloc(vertices.size() * sizeof(float));
     resultMesh.normals = (float*)malloc(normals.size() * sizeof(float));
     resultMesh.indices = (unsigned short*)malloc(resultMesh.triangleCount * 3 * sizeof(unsigned short));
     
+    // Check allocations
+    if (!resultMesh.vertices || !resultMesh.normals || !resultMesh.indices) {
+        printf("ERROR: Failed to allocate mesh memory\n");
+        return {0};
+    }
+    
     memcpy(resultMesh.vertices, vertices.data(), vertices.size() * sizeof(float));
     memcpy(resultMesh.normals, normals.data(), normals.size() * sizeof(float));
     
-    // Generate simple indices (0, 1, 2, 3, 4, 5, ...)
+    // Generate proper triangle indices (sequential)
     for (int i = 0; i < resultMesh.triangleCount * 3; i++) {
         resultMesh.indices[i] = i;
     }

@@ -98,15 +98,15 @@ void GameMenu::ShowSettings() {
     sprintf(renderText, "%d chunks", settings.renderDistance);
     DrawText(renderText, GetScreenWidth()/2 + 120, 255, 16, WHITE);
     
-    // Voxel Size
-    DrawText("Voxel Size", GetScreenWidth()/2 - 200, 305, 16, WHITE);
-    Rectangle voxelSlider = {(float)GetScreenWidth()/2 - 100, 300, 200, 20};
-    DrawRectangleRec(voxelSlider, GRAY);
-    float voxelPos = voxelSlider.x + ((settings.voxelSize - 0.1f) / 0.4f) * voxelSlider.width;
-    DrawCircle(voxelPos, voxelSlider.y + 10, 8, YELLOW);
-    char voxelText[32];
-    sprintf(voxelText, "%.2f", settings.voxelSize);
-    DrawText(voxelText, GetScreenWidth()/2 + 120, 305, 16, WHITE);
+    // Lighting Quality
+    DrawText("Lighting Quality", GetScreenWidth()/2 - 200, 335, 16, WHITE);
+    Rectangle qualitySlider = {(float)GetScreenWidth()/2 - 100, 330, 200, 20};
+    DrawRectangleRec(qualitySlider, GRAY);
+    float qualityPos = qualitySlider.x + ((float)settings.lightingQuality / 2.0f) * qualitySlider.width;
+    DrawCircle(qualityPos, qualitySlider.y + 10, 8, YELLOW);
+    char qualityText[32];
+    sprintf(qualityText, "%d", settings.lightingQuality);
+    DrawText(qualityText, GetScreenWidth()/2 + 120, 335, 16, WHITE);
     
     // Back button
     Rectangle backButton = {50, (float)GetScreenHeight() - 60, 150, 40};
@@ -173,14 +173,6 @@ void GameMenu::HandleSettings() {
             float relativeX = (mouse.x - renderSlider.x) / renderSlider.width;
             settings.renderDistance = (int)(relativeX * 3.0f); // 0 to 3
             settings.renderDistance = fmaxf(0, fminf(3, settings.renderDistance));
-            changed = true;
-        }
-        
-        // Voxel size slider
-        if (CheckCollisionPointRec(mouse, voxelSlider)) {
-            float relativeX = (mouse.x - voxelSlider.x) / voxelSlider.width;
-            settings.voxelSize = 0.1f + relativeX * 0.4f; // 0.1 to 0.5
-            settings.voxelSize = fmaxf(0.1f, fminf(0.5f, settings.voxelSize));
             changed = true;
         }
     }

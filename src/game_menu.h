@@ -11,7 +11,6 @@ enum class MenuState {
 struct Settings {
     float mouseSensitivity = 0.1f;
     int renderDistance = 1;
-    float voxelSize = 0.5f;
     bool showChunkBoundaries = true;
     bool showDebugInfo = true;
     int lightingQuality = 1; // 0=off, 1=low, 2=high

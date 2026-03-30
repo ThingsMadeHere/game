@@ -1,9 +1,13 @@
 #include "world.h"
-#include "noise.h"
-#include "voxel_renderer.h"
+#include "terrain.h"
+#include "marching_cubes.h"
 #include "gpu_renderer.h"
+#include "voxel_renderer.h"
+#include "noise.h"
 #include <cstdio>
 #include <cmath>
+#include <chrono>
+#include <thread>
 
 // Simple frustum culling check
 bool IsChunkVisible(const Camera3D& camera, int cx, int cy, int cz) {
@@ -449,14 +453,23 @@ void World::RegenerateNeighborChunks(int cx, int cy, int cz) {
 }
 
 void World::ProcessChunkQueue() {
-    // Process any pending chunks from the queue
-    while (true) {
+    // Process any pending chunks from queue (limit per frame to prevent stuttering)
+    int chunksProcessedThisFrame = 0;
+    const int MAX_CHUNKS_PER_FRAME = 1; // Very conservative to prevent stuttering
+    const double MAX_PROCESSING_TIME_MS = 8.0; // Max 8ms per frame for chunk processing
+    
+    auto startTime = std::chrono::high_resolution_clock::now();
+    
+    while (chunksProcessedThisFrame < MAX_CHUNKS_PER_FRAME) {
         ChunkRequest req = PopChunkRequest();
         if (req.cx == -999) break;
         
         // Check if chunk already exists
         ChunkKey key = {req.cx, req.cy, req.cz};
-        if (chunks.find(key) != chunks.end()) continue;
+        if (chunks.find(key) != chunks.end()) {
+            chunksProcessedThisFrame++;
+            continue;
+        }
         
         // Generate chunk
         Chunk chunk(req.cx, req.cy, req.cz);
@@ -468,6 +481,15 @@ void World::ProcessChunkQueue() {
             result.first->second.mesh = marchingCubes.GenerateMesh(result.first->second, chunks);
             result.first->second.meshGenerated = true;
             result.first->second.needsUpdate = false;
+        }
+        
+        chunksProcessedThisFrame++;
+        
+        // Check if we've exceeded our time budget
+        auto currentTime = std::chrono::high_resolution_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(currentTime - startTime);
+        if (elapsed.count() > MAX_PROCESSING_TIME_MS * 1000) {
+            break;
         }
     }
 }
