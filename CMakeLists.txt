@@ -28,6 +28,10 @@ add_executable(game
     src/terrain/noise.cpp
     src/rendering/marching_cubes.cpp
     src/rendering/gpu_renderer.cpp
+    src/rendering/deferred_renderer.cpp
+    src/rendering/model.cpp
+    src/rendering/texture_atlas.cpp
+    src/gameplay/inventory.cpp
     src/ui/game_menu.cpp
     src/ui/loading_screen.cpp
 )
@@ -35,6 +39,11 @@ add_executable(game
 # Include raylib headers explicitly
 if(RAYLIB_INCLUDES)
     target_include_directories(game PRIVATE ${RAYLIB_INCLUDES})
+endif()
+
+# Include glad headers from raylib
+if(NOT raylib_FOUND)
+    target_include_directories(game PRIVATE ${CMAKE_BINARY_DIR}/_deps/raylib-src/src/external)
 endif()
 
 # Link Libraries (this will also include the necessary headers)

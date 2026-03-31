@@ -270,6 +270,54 @@ src/core/world.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/core/world.cpp.s
 .PHONY : src/core/world.cpp.s
 
+src/gameplay/inventory.o: src/gameplay/inventory.cpp.o
+.PHONY : src/gameplay/inventory.o
+
+# target to build an object file
+src/gameplay/inventory.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/gameplay/inventory.cpp.o
+.PHONY : src/gameplay/inventory.cpp.o
+
+src/gameplay/inventory.i: src/gameplay/inventory.cpp.i
+.PHONY : src/gameplay/inventory.i
+
+# target to preprocess a source file
+src/gameplay/inventory.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/gameplay/inventory.cpp.i
+.PHONY : src/gameplay/inventory.cpp.i
+
+src/gameplay/inventory.s: src/gameplay/inventory.cpp.s
+.PHONY : src/gameplay/inventory.s
+
+# target to generate assembly for a file
+src/gameplay/inventory.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/gameplay/inventory.cpp.s
+.PHONY : src/gameplay/inventory.cpp.s
+
+src/rendering/deferred_renderer.o: src/rendering/deferred_renderer.cpp.o
+.PHONY : src/rendering/deferred_renderer.o
+
+# target to build an object file
+src/rendering/deferred_renderer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.o
+.PHONY : src/rendering/deferred_renderer.cpp.o
+
+src/rendering/deferred_renderer.i: src/rendering/deferred_renderer.cpp.i
+.PHONY : src/rendering/deferred_renderer.i
+
+# target to preprocess a source file
+src/rendering/deferred_renderer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.i
+.PHONY : src/rendering/deferred_renderer.cpp.i
+
+src/rendering/deferred_renderer.s: src/rendering/deferred_renderer.cpp.s
+.PHONY : src/rendering/deferred_renderer.s
+
+# target to generate assembly for a file
+src/rendering/deferred_renderer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.s
+.PHONY : src/rendering/deferred_renderer.cpp.s
+
 src/rendering/gpu_renderer.o: src/rendering/gpu_renderer.cpp.o
 .PHONY : src/rendering/gpu_renderer.o
 
@@ -317,6 +365,54 @@ src/rendering/marching_cubes.s: src/rendering/marching_cubes.cpp.s
 src/rendering/marching_cubes.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/rendering/marching_cubes.cpp.s
 .PHONY : src/rendering/marching_cubes.cpp.s
+
+src/rendering/model.o: src/rendering/model.cpp.o
+.PHONY : src/rendering/model.o
+
+# target to build an object file
+src/rendering/model.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/rendering/model.cpp.o
+.PHONY : src/rendering/model.cpp.o
+
+src/rendering/model.i: src/rendering/model.cpp.i
+.PHONY : src/rendering/model.i
+
+# target to preprocess a source file
+src/rendering/model.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/rendering/model.cpp.i
+.PHONY : src/rendering/model.cpp.i
+
+src/rendering/model.s: src/rendering/model.cpp.s
+.PHONY : src/rendering/model.s
+
+# target to generate assembly for a file
+src/rendering/model.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/rendering/model.cpp.s
+.PHONY : src/rendering/model.cpp.s
+
+src/rendering/texture_atlas.o: src/rendering/texture_atlas.cpp.o
+.PHONY : src/rendering/texture_atlas.o
+
+# target to build an object file
+src/rendering/texture_atlas.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.o
+.PHONY : src/rendering/texture_atlas.cpp.o
+
+src/rendering/texture_atlas.i: src/rendering/texture_atlas.cpp.i
+.PHONY : src/rendering/texture_atlas.i
+
+# target to preprocess a source file
+src/rendering/texture_atlas.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.i
+.PHONY : src/rendering/texture_atlas.cpp.i
+
+src/rendering/texture_atlas.s: src/rendering/texture_atlas.cpp.s
+.PHONY : src/rendering/texture_atlas.s
+
+# target to generate assembly for a file
+src/rendering/texture_atlas.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/game.dir/build.make CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.s
+.PHONY : src/rendering/texture_atlas.cpp.s
 
 src/terrain/noise.o: src/terrain/noise.cpp.o
 .PHONY : src/terrain/noise.o
@@ -436,12 +532,24 @@ help:
 	@echo "... src/core/world.o"
 	@echo "... src/core/world.i"
 	@echo "... src/core/world.s"
+	@echo "... src/gameplay/inventory.o"
+	@echo "... src/gameplay/inventory.i"
+	@echo "... src/gameplay/inventory.s"
+	@echo "... src/rendering/deferred_renderer.o"
+	@echo "... src/rendering/deferred_renderer.i"
+	@echo "... src/rendering/deferred_renderer.s"
 	@echo "... src/rendering/gpu_renderer.o"
 	@echo "... src/rendering/gpu_renderer.i"
 	@echo "... src/rendering/gpu_renderer.s"
 	@echo "... src/rendering/marching_cubes.o"
 	@echo "... src/rendering/marching_cubes.i"
 	@echo "... src/rendering/marching_cubes.s"
+	@echo "... src/rendering/model.o"
+	@echo "... src/rendering/model.i"
+	@echo "... src/rendering/model.s"
+	@echo "... src/rendering/texture_atlas.o"
+	@echo "... src/rendering/texture_atlas.i"
+	@echo "... src/rendering/texture_atlas.s"
 	@echo "... src/terrain/noise.o"
 	@echo "... src/terrain/noise.i"
 	@echo "... src/terrain/noise.s"

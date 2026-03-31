@@ -1,5 +1,6 @@
 #include "marching_cubes.h"
 #include "../terrain/noise.h"
+#include "texture_atlas.h"
 #include <cstdio>
 #include <cstring>
 #include <cmath>
@@ -345,9 +346,6 @@ float MarchingCubes::GetDensityWithNeighbors(const Chunk& chunk, const std::unor
     // Use the EXACT same ground height calculation
     float groundHeight = 8.0f + SmoothNoise3D(worldX * 0.02f, 0, worldZ * 0.02f) * 6.0f;
     
-    // DEBUG: Force flat ground at y=0 for testing visibility
-    groundHeight = 2.0f;
-    
     // Use the EXACT same density logic
     float density = 0.0f;
     
@@ -377,14 +375,18 @@ Mesh MarchingCubes::GenerateMesh(const Chunk& chunk) {
 Mesh MarchingCubes::GenerateMesh(const Chunk& chunk, const std::unordered_map<ChunkKey, Chunk>& allChunks) {
     std::vector<float> vertices;
     std::vector<float> normals;
+    std::vector<float> texcoords;
     
     int cubesProcessed = 0;
     int trianglesGenerated = 0;
     
+    // Texture atlas cell size (4x4 grid = 1/4 per cell)
+    const float ATLAS_CELL_SIZE = 1.0f / 4.0f;
+    
     // Marching Cubes implementation with proper boundary handling
-    for (int x = 0; x < CHUNK_SIZE - 1; x++) {
-        for (int y = 0; y < CHUNK_HEIGHT - 1; y++) {
-            for (int z = 0; z < CHUNK_SIZE - 1; z++) {
+    for (int x = 0; x < CHUNK_SIZE; x++) {
+        for (int y = 0; y < CHUNK_HEIGHT; y++) {
+            for (int z = 0; z < CHUNK_SIZE; z++) {
                 cubesProcessed++;
                 
                 // Get densities at cube corners with thresholding
@@ -415,6 +417,54 @@ Mesh MarchingCubes::GenerateMesh(const Chunk& chunk, const std::unordered_map<Ch
                 
                 // Get triangle configuration for this cube
                 const int* triConfig = triTable[cubeIndex];
+                
+                // Sample material by checking all 8 corners of this cube
+                // The surface belongs to whichever voxels are solid
+                BlockType cubeMaterial = BlockType::GRASS; // Default
+                int materialCounts[11] = {0}; // Count for each block type 0-10
+                
+                // Check all 8 corners to find which solid voxels contribute
+                for (int dx = 0; dx <= 1; dx++) {
+                    for (int dy = 0; dy <= 1; dy++) {
+                        for (int dz = 0; dz <= 1; dz++) {
+                            int cornerIdx = dx + dy*2 + dz*4;
+                            if (densities[cornerIdx] > 0.0f) {
+                                // This corner is solid, get its material
+                                int vx = x + dx;
+                                int vy = y + dy;
+                                int vz = z + dz;
+                                if (vx >= 0 && vx < CHUNK_SIZE && vy >= 0 && vy < CHUNK_HEIGHT && vz >= 0 && vz < CHUNK_SIZE) {
+                                    unsigned char mat = chunk.GetMaterial(vx, vy, vz);
+                                    if (mat == 0) {
+                                        // Default terrain material based on height
+                                        if (vy < 10) mat = (unsigned char)BlockType::STONE;
+                                        else if (vy < 12) mat = (unsigned char)BlockType::DIRT;
+                                        else mat = (unsigned char)BlockType::GRASS;
+                                    }
+                                    if (mat < 11) materialCounts[mat]++;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // Pick the most common material among solid voxels
+                int bestMat = 1; // Default to grass
+                int bestCount = 0;
+                for (int m = 1; m < 11; m++) {
+                    if (materialCounts[m] > bestCount) {
+                        bestCount = materialCounts[m];
+                        bestMat = m;
+                    }
+                }
+                cubeMaterial = (BlockType)bestMat;
+                
+                // Get atlas offset for this material
+                int matIndex = BlockTextureAtlas::GetBlockIndex(cubeMaterial);
+                int atlasRow = matIndex / 4;
+                int atlasCol = matIndex % 4;
+                float atlasUOffset = atlasCol * ATLAS_CELL_SIZE;
+                float atlasVOffset = atlasRow * ATLAS_CELL_SIZE;
                 
                 // Generate triangles for this cube
                 for (int i = 0; i < 16 && triConfig[i] != -1; i += 3) {
@@ -499,7 +549,61 @@ Mesh MarchingCubes::GenerateMesh(const Chunk& chunk, const std::unordered_map<Ch
                         int edgeIndex = triConfig[i + j];
                         Vector3 v = edgeVerts[edgeIndex];
                         
-                        // Scale by voxel size
+                        // Calculate normal first to determine UV projection
+                        Vector3 v1 = edgeVerts[triConfig[i]];
+                        Vector3 v2 = edgeVerts[triConfig[i+1]];
+                        Vector3 v3 = edgeVerts[triConfig[i+2]];
+                        Vector3 edge1 = {v2.x - v1.x, v2.y - v1.y, v2.z - v1.z};
+                        Vector3 edge2 = {v3.x - v1.x, v3.y - v1.y, v3.z - v1.z};
+                        Vector3 normal = {
+                            edge1.y * edge2.z - edge1.z * edge2.y,
+                            edge1.z * edge2.x - edge1.x * edge2.z,
+                            edge1.x * edge2.y - edge1.y * edge2.x
+                        };
+                        float nlength = sqrtf(normal.x*normal.x + normal.y*normal.y + normal.z*normal.z);
+                        if (nlength > 0.001f) {
+                            normal.x /= nlength; normal.y /= nlength; normal.z /= nlength;
+                        }
+                        
+                        // Calculate UVs based on local position within this specific cube cell
+                        // NOT the world position - this ensures all vertices in triangles from
+                        // the same cube have consistent UVs
+                        float localU, localV;
+                        float absNx = fabsf(normal.x);
+                        float absNy = fabsf(normal.y);
+                        float absNz = fabsf(normal.z);
+                        
+                        // Use position relative to current cube cell (x, y, z)
+                        // This gives consistent UVs for all triangles from this cube
+                        float localX = v.x - (float)x;
+                        float localY = v.y - (float)y;
+                        float localZ = v.z - (float)z;
+                        
+                        if (absNy > absNx && absNy > absNz) {
+                            // Mostly facing up/down - use X and Z
+                            localU = localX;
+                            localV = localZ;
+                        } else if (absNx > absNz) {
+                            // Mostly facing X - use Z and Y
+                            localU = localZ;
+                            localV = localY;
+                        } else {
+                            // Mostly facing Z - use X and Y
+                            localU = localX;
+                            localV = localY;
+                        }
+                        
+                        // Clamp to valid range to avoid edge bleeding
+                        localU = fmaxf(0.01f, fminf(0.99f, localU));
+                        localV = fmaxf(0.01f, fminf(0.99f, localV));
+                        
+                        // Scale to atlas cell size and add offset
+                        float u = atlasUOffset + localU * ATLAS_CELL_SIZE;
+                        float v_coord = atlasVOffset + localV * ATLAS_CELL_SIZE;
+                        texcoords.push_back(u);
+                        texcoords.push_back(v_coord);
+                        
+                        // Scale by voxel size for final vertex position
                         v.x *= VOXEL_SIZE;
                         v.y *= VOXEL_SIZE;
                         v.z *= VOXEL_SIZE;
@@ -509,32 +613,7 @@ Mesh MarchingCubes::GenerateMesh(const Chunk& chunk, const std::unordered_map<Ch
                         vertices.push_back(v.y);
                         vertices.push_back(v.z);
                         
-                        // Calculate proper normal for the triangle
-                        Vector3 v1 = edgeVerts[triConfig[i]];
-                        Vector3 v2 = edgeVerts[triConfig[i+1]];
-                        Vector3 v3 = edgeVerts[triConfig[i+2]];
-                        
-                        // Calculate normal using cross product
-                        Vector3 edge1 = {v2.x - v1.x, v2.y - v1.y, v2.z - v1.z};
-                        Vector3 edge2 = {v3.x - v1.x, v3.y - v1.y, v3.z - v1.z};
-                        
-                        // Cross product for normal
-                        Vector3 normal = {
-                            edge1.y * edge2.z - edge1.z * edge2.y,
-                            edge1.z * edge2.x - edge1.x * edge2.z,
-                            edge1.x * edge2.y - edge1.y * edge2.x
-                        };
-                        
-                        // Normalize the normal vector
-                        float length = sqrtf(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
-                        if (length > 0.001f) {
-                            normal.x /= length;
-                            normal.y /= length;
-                            normal.z /= length;
-                        } else {
-                            normal = {0.0f, 1.0f, 0.0f}; // Default up
-                        }
-                        
+                        // Add normal
                         normals.push_back(normal.x);
                         normals.push_back(normal.y);
                         normals.push_back(normal.z);
@@ -563,15 +642,20 @@ Mesh MarchingCubes::GenerateMesh(const Chunk& chunk, const std::unordered_map<Ch
     // Allocate and copy vertex data
     resultMesh.vertices = (float*)malloc(vertices.size() * sizeof(float));
     resultMesh.normals = (float*)malloc(normals.size() * sizeof(float));
+    resultMesh.texcoords = (float*)malloc(texcoords.size() * sizeof(float));
     resultMesh.indices = (unsigned short*)malloc(resultMesh.triangleCount * 3 * sizeof(unsigned short));
     
     memcpy(resultMesh.vertices, vertices.data(), vertices.size() * sizeof(float));
     memcpy(resultMesh.normals, normals.data(), normals.size() * sizeof(float));
+    memcpy(resultMesh.texcoords, texcoords.data(), texcoords.size() * sizeof(float));
     
     // Generate simple indices (0, 1, 2, 3, 4, 5, ...)
     for (int i = 0; i < resultMesh.triangleCount * 3; i++) {
         resultMesh.indices[i] = i;
     }
+    
+    // Upload mesh to GPU
+    UploadMesh(&resultMesh, false);
     
     return resultMesh;
 }

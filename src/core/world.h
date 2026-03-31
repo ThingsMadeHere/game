@@ -2,6 +2,7 @@
 #include "../terrain/terrain.h"
 #include "../rendering/marching_cubes.h"
 #include "../rendering/gpu_renderer.h"
+#include "../rendering/model.h"
 #include <unordered_map>
 #include <vector>
 #include <queue>
@@ -19,6 +20,7 @@ class World {
 private:
     std::unordered_map<ChunkKey, Chunk> chunks;
     MarchingCubes marchingCubes;
+    ModelManager modelManager; // Separate system for .obj models
     
     // Threading for async chunk generation
     std::queue<ChunkRequest> chunkQueue;
@@ -34,7 +36,9 @@ public:
     void GenerateAllMeshes(); // Generate meshes for all chunks after terrain is loaded
     void UpdateChunk(int cx, int cy, int cz);
     void SetVoxel(int cx, int cy, int cz, int x, int y, int z, float density);
+    float GetVoxel(int cx, int cy, int cz, int x, int y, int z);
     void Render(const Camera3D& camera);
+    void RenderShadows(const Matrix& lightSpaceMatrix, Shader& shadowShader);
     void Init();
     void Cleanup();
     
@@ -50,6 +54,13 @@ public:
     std::mutex& GetMutex() { return queueMutex; }
     std::unordered_map<ChunkKey, Chunk>& GetChunks() { return chunks; }
     MarchingCubes& GetMarchingCubes() { return marchingCubes; }
+    
+    // Model management (separate from voxel terrain)
+    ModelManager& GetModelManager() { return modelManager; }
+    void AddModel(const std::string& name, const std::string& objPath, 
+                  const std::string& texPath, Vector3 position, 
+                  Vector3 rotation = {0,0,0}, float scale = 1.0f);
+    void DrawModels(); // Draw all models (called after voxel rendering)
     
     // Garbage collection
     void GarbageCollectChunks(int playerChunkX, int playerChunkZ, int maxDistance);

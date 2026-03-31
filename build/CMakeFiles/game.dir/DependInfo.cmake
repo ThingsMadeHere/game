@@ -9,8 +9,12 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/carter/Desktop/Farout/src/core/world.cpp" "CMakeFiles/game.dir/src/core/world.cpp.o" "gcc" "CMakeFiles/game.dir/src/core/world.cpp.o.d"
+  "/home/carter/Desktop/Farout/src/gameplay/inventory.cpp" "CMakeFiles/game.dir/src/gameplay/inventory.cpp.o" "gcc" "CMakeFiles/game.dir/src/gameplay/inventory.cpp.o.d"
+  "/home/carter/Desktop/Farout/src/rendering/deferred_renderer.cpp" "CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.o" "gcc" "CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.o.d"
   "/home/carter/Desktop/Farout/src/rendering/gpu_renderer.cpp" "CMakeFiles/game.dir/src/rendering/gpu_renderer.cpp.o" "gcc" "CMakeFiles/game.dir/src/rendering/gpu_renderer.cpp.o.d"
   "/home/carter/Desktop/Farout/src/rendering/marching_cubes.cpp" "CMakeFiles/game.dir/src/rendering/marching_cubes.cpp.o" "gcc" "CMakeFiles/game.dir/src/rendering/marching_cubes.cpp.o.d"
+  "/home/carter/Desktop/Farout/src/rendering/model.cpp" "CMakeFiles/game.dir/src/rendering/model.cpp.o" "gcc" "CMakeFiles/game.dir/src/rendering/model.cpp.o.d"
+  "/home/carter/Desktop/Farout/src/rendering/texture_atlas.cpp" "CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.o" "gcc" "CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.o.d"
   "/home/carter/Desktop/Farout/src/terrain/noise.cpp" "CMakeFiles/game.dir/src/terrain/noise.cpp.o" "gcc" "CMakeFiles/game.dir/src/terrain/noise.cpp.o.d"
   "/home/carter/Desktop/Farout/src/ui/game_menu.cpp" "CMakeFiles/game.dir/src/ui/game_menu.cpp.o" "gcc" "CMakeFiles/game.dir/src/ui/game_menu.cpp.o.d"
   "/home/carter/Desktop/Farout/src/ui/loading_screen.cpp" "CMakeFiles/game.dir/src/ui/loading_screen.cpp.o" "gcc" "CMakeFiles/game.dir/src/ui/loading_screen.cpp.o.d"

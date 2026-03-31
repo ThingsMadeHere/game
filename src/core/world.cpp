@@ -188,6 +188,12 @@ void World::SetVoxel(int cx, int cy, int cz, int x, int y, int z, float density)
     chunk.needsUpdate = true;
 }
 
+float World::GetVoxel(int cx, int cy, int cz, int x, int y, int z) {
+    Chunk* chunk = GetChunkIfExists(cx, cy, cz);
+    if (chunk == nullptr) return -1.0f; // Empty/air if chunk doesn't exist
+    return chunk->GetDensity(x, y, z);
+}
+
 void World::Init() {
     running = true;
     
@@ -313,6 +319,28 @@ void World::Render(const Camera3D& camera) {
     fprintf(stderr,"Player pos: (%.1f, %.1f, %.1f), Player chunk: (%d, %d)\n", 
            playerPos.x, playerPos.y, playerPos.z, playerChunkX, playerChunkZ);
     }
+    
+    // Draw all models (separate from voxel terrain)
+    modelManager.DrawAll();
+}
+
+void World::RenderShadows(const Matrix& lightSpaceMatrix, Shader& shadowShader) {
+    // Render all chunks to shadow map
+    for (auto& [key, chunk] : chunks) {
+        if (chunk.meshGenerated && chunk.mesh.vertexCount > 0) {
+            gpuRenderer.RenderChunkShadow(chunk, lightSpaceMatrix, shadowShader);
+        }
+    }
+}
+
+void World::AddModel(const std::string& name, const std::string& objPath,
+                     const std::string& texPath, Vector3 position,
+                     Vector3 rotation, float scale) {
+    modelManager.AddModel(name, objPath, texPath, position, rotation, scale);
+}
+
+void World::DrawModels() {
+    modelManager.DrawAll();
 }
 
 void World::QueueChunkGeneration(int cx, int cy, int cz) {

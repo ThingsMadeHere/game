@@ -139,10 +139,66 @@ CMakeFiles/game.dir/src/rendering/gpu_renderer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/game.dir/src/rendering/gpu_renderer.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/carter/Desktop/Farout/src/rendering/gpu_renderer.cpp -o CMakeFiles/game.dir/src/rendering/gpu_renderer.cpp.s
 
+CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.o: CMakeFiles/game.dir/flags.make
+CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.o: /home/carter/Desktop/Farout/src/rendering/deferred_renderer.cpp
+CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.o: CMakeFiles/game.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/carter/Desktop/Farout/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.o -MF CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.o.d -o CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.o -c /home/carter/Desktop/Farout/src/rendering/deferred_renderer.cpp
+
+CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/carter/Desktop/Farout/src/rendering/deferred_renderer.cpp > CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.i
+
+CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/carter/Desktop/Farout/src/rendering/deferred_renderer.cpp -o CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.s
+
+CMakeFiles/game.dir/src/rendering/model.cpp.o: CMakeFiles/game.dir/flags.make
+CMakeFiles/game.dir/src/rendering/model.cpp.o: /home/carter/Desktop/Farout/src/rendering/model.cpp
+CMakeFiles/game.dir/src/rendering/model.cpp.o: CMakeFiles/game.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/carter/Desktop/Farout/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/game.dir/src/rendering/model.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/game.dir/src/rendering/model.cpp.o -MF CMakeFiles/game.dir/src/rendering/model.cpp.o.d -o CMakeFiles/game.dir/src/rendering/model.cpp.o -c /home/carter/Desktop/Farout/src/rendering/model.cpp
+
+CMakeFiles/game.dir/src/rendering/model.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/game.dir/src/rendering/model.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/carter/Desktop/Farout/src/rendering/model.cpp > CMakeFiles/game.dir/src/rendering/model.cpp.i
+
+CMakeFiles/game.dir/src/rendering/model.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/game.dir/src/rendering/model.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/carter/Desktop/Farout/src/rendering/model.cpp -o CMakeFiles/game.dir/src/rendering/model.cpp.s
+
+CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.o: CMakeFiles/game.dir/flags.make
+CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.o: /home/carter/Desktop/Farout/src/rendering/texture_atlas.cpp
+CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.o: CMakeFiles/game.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/carter/Desktop/Farout/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.o -MF CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.o.d -o CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.o -c /home/carter/Desktop/Farout/src/rendering/texture_atlas.cpp
+
+CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/carter/Desktop/Farout/src/rendering/texture_atlas.cpp > CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.i
+
+CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/carter/Desktop/Farout/src/rendering/texture_atlas.cpp -o CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.s
+
+CMakeFiles/game.dir/src/gameplay/inventory.cpp.o: CMakeFiles/game.dir/flags.make
+CMakeFiles/game.dir/src/gameplay/inventory.cpp.o: /home/carter/Desktop/Farout/src/gameplay/inventory.cpp
+CMakeFiles/game.dir/src/gameplay/inventory.cpp.o: CMakeFiles/game.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/carter/Desktop/Farout/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/game.dir/src/gameplay/inventory.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/game.dir/src/gameplay/inventory.cpp.o -MF CMakeFiles/game.dir/src/gameplay/inventory.cpp.o.d -o CMakeFiles/game.dir/src/gameplay/inventory.cpp.o -c /home/carter/Desktop/Farout/src/gameplay/inventory.cpp
+
+CMakeFiles/game.dir/src/gameplay/inventory.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/game.dir/src/gameplay/inventory.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/carter/Desktop/Farout/src/gameplay/inventory.cpp > CMakeFiles/game.dir/src/gameplay/inventory.cpp.i
+
+CMakeFiles/game.dir/src/gameplay/inventory.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/game.dir/src/gameplay/inventory.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/carter/Desktop/Farout/src/gameplay/inventory.cpp -o CMakeFiles/game.dir/src/gameplay/inventory.cpp.s
+
 CMakeFiles/game.dir/src/ui/game_menu.cpp.o: CMakeFiles/game.dir/flags.make
 CMakeFiles/game.dir/src/ui/game_menu.cpp.o: /home/carter/Desktop/Farout/src/ui/game_menu.cpp
 CMakeFiles/game.dir/src/ui/game_menu.cpp.o: CMakeFiles/game.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/carter/Desktop/Farout/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/game.dir/src/ui/game_menu.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/carter/Desktop/Farout/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/game.dir/src/ui/game_menu.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/game.dir/src/ui/game_menu.cpp.o -MF CMakeFiles/game.dir/src/ui/game_menu.cpp.o.d -o CMakeFiles/game.dir/src/ui/game_menu.cpp.o -c /home/carter/Desktop/Farout/src/ui/game_menu.cpp
 
 CMakeFiles/game.dir/src/ui/game_menu.cpp.i: cmake_force
@@ -156,7 +212,7 @@ CMakeFiles/game.dir/src/ui/game_menu.cpp.s: cmake_force
 CMakeFiles/game.dir/src/ui/loading_screen.cpp.o: CMakeFiles/game.dir/flags.make
 CMakeFiles/game.dir/src/ui/loading_screen.cpp.o: /home/carter/Desktop/Farout/src/ui/loading_screen.cpp
 CMakeFiles/game.dir/src/ui/loading_screen.cpp.o: CMakeFiles/game.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/carter/Desktop/Farout/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/game.dir/src/ui/loading_screen.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/carter/Desktop/Farout/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/game.dir/src/ui/loading_screen.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/game.dir/src/ui/loading_screen.cpp.o -MF CMakeFiles/game.dir/src/ui/loading_screen.cpp.o.d -o CMakeFiles/game.dir/src/ui/loading_screen.cpp.o -c /home/carter/Desktop/Farout/src/ui/loading_screen.cpp
 
 CMakeFiles/game.dir/src/ui/loading_screen.cpp.i: cmake_force
@@ -174,6 +230,10 @@ game_OBJECTS = \
 "CMakeFiles/game.dir/src/terrain/noise.cpp.o" \
 "CMakeFiles/game.dir/src/rendering/marching_cubes.cpp.o" \
 "CMakeFiles/game.dir/src/rendering/gpu_renderer.cpp.o" \
+"CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.o" \
+"CMakeFiles/game.dir/src/rendering/model.cpp.o" \
+"CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.o" \
+"CMakeFiles/game.dir/src/gameplay/inventory.cpp.o" \
 "CMakeFiles/game.dir/src/ui/game_menu.cpp.o" \
 "CMakeFiles/game.dir/src/ui/loading_screen.cpp.o"
 
@@ -185,6 +245,10 @@ game: CMakeFiles/game.dir/src/core/world.cpp.o
 game: CMakeFiles/game.dir/src/terrain/noise.cpp.o
 game: CMakeFiles/game.dir/src/rendering/marching_cubes.cpp.o
 game: CMakeFiles/game.dir/src/rendering/gpu_renderer.cpp.o
+game: CMakeFiles/game.dir/src/rendering/deferred_renderer.cpp.o
+game: CMakeFiles/game.dir/src/rendering/model.cpp.o
+game: CMakeFiles/game.dir/src/rendering/texture_atlas.cpp.o
+game: CMakeFiles/game.dir/src/gameplay/inventory.cpp.o
 game: CMakeFiles/game.dir/src/ui/game_menu.cpp.o
 game: CMakeFiles/game.dir/src/ui/loading_screen.cpp.o
 game: CMakeFiles/game.dir/build.make
@@ -195,7 +259,7 @@ game: _deps/raylib-build/raylib/external/glfw/src/libglfw3.a
 game: /usr/lib/x86_64-linux-gnu/librt.a
 game: /usr/lib/x86_64-linux-gnu/libm.so
 game: CMakeFiles/game.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/carter/Desktop/Farout/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable game"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/carter/Desktop/Farout/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable game"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/game.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

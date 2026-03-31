@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP
 
-CXX_INCLUDES = -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src/external/glfw/include
+CXX_INCLUDES = -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src/external -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src -I/home/carter/Desktop/Farout/build/_deps/raylib-src/src/external/glfw/include
 
 CXX_FLAGS = -std=gnu++17
 
