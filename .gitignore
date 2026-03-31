@@ -1,4 +1,3 @@
-```
 # Compiled and binary files
 *.o
 *.obj
@@ -45,4 +44,3 @@ htmlcov/
 
 # PyTest
 .pytest_cache/
-```
