@@ -13,11 +13,13 @@ layout (location = 2) out float gDepth;
 uniform sampler2D texture0;
 
 void main() {
-    // DEBUG: Visualize geometry normals as color
-    vec3 normalVisualized = normalize(normal) * 0.5 + 0.5;
-    gColor = vec4(normalVisualized, 1.0);
+    // Sample albedo from texture
+    vec4 albedo = texture(texture0, texCoord);
     
-    // Still output normal to G-Buffer for deferred pass
+    // Output albedo to G-Buffer
+    gColor = albedo;
+    
+    // Output normal to G-Buffer
     gNormal = vec4(normalize(normal), 1.0);
     
     // Output linear depth
