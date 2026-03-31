@@ -12,21 +12,18 @@ void GameMenu::Init() {
 MenuState GameMenu::Update() {
     // Handle ESC key to toggle menu
     if (IsKeyPressed(KEY_ESCAPE)) {
-        if (currentState == MenuState::PLAYING) {
-            currentState = MenuState::MAIN_MENU;
-            EnableCursor(); // Ensure cursor is visible when entering menu
-        } else if (currentState == MenuState::MAIN_MENU) {
-            currentState = MenuState::PLAYING;
-            DisableCursor(); // Hide cursor when returning to game
-        } else if (currentState == MenuState::SETTINGS) {
-            currentState = MenuState::MAIN_MENU;
-        }
+        currentState = MenuState::MAIN_MENU;
     }
     
     if (currentState == MenuState::MAIN_MENU) {
         HandleMainMenu();
     } else if (currentState == MenuState::SETTINGS) {
         HandleSettings();
+    }
+    
+    // Reset save request after handling
+    if (saveRequested) {
+        saveRequested = false;
     }
     
     return currentState;
@@ -55,6 +52,7 @@ void GameMenu::ShowMainMenu() {
     
     Color playColor = CheckCollisionPointRec(GetMousePosition(), playButton) ? YELLOW : WHITE;
     Color settingsColor = CheckCollisionPointRec(GetMousePosition(), settingsButton) ? YELLOW : WHITE;
+    Color saveColor = CheckCollisionPointRec(GetMousePosition(), saveButton) ? YELLOW : WHITE;
     Color exitColor = CheckCollisionPointRec(GetMousePosition(), exitButton) ? YELLOW : WHITE;
     
     DrawRectangleLinesEx(playButton, 3, playColor);
@@ -62,6 +60,9 @@ void GameMenu::ShowMainMenu() {
     
     DrawRectangleLinesEx(settingsButton, 3, settingsColor);
     DrawText("SETTINGS", GetScreenWidth()/2 - 50, 285, 20, settingsColor);
+    
+    DrawRectangleLinesEx(saveButton, 3, saveColor);
+    DrawText("SAVE", GetScreenWidth()/2 - 35, 335, 20, saveColor);
     
     DrawRectangleLinesEx(exitButton, 3, exitColor);
     DrawText("EXIT", GetScreenWidth()/2 - 20, 355, 20, exitColor);
@@ -126,12 +127,15 @@ void GameMenu::HandleMainMenu() {
         // Dynamic button positions
         Rectangle playButton = {(float)GetScreenWidth()/2 - 100, 200, 200, 50};
         Rectangle settingsButton = {(float)GetScreenWidth()/2 - 100, 270, 200, 50};
+        Rectangle saveButton = {(float)GetScreenWidth()/2 - 100, 320, 200, 50};
         Rectangle exitButton = {(float)GetScreenWidth()/2 - 100, 340, 200, 50};
         
         if (CheckCollisionPointRec(mouse, playButton)) {
             currentState = MenuState::PLAYING;
         } else if (CheckCollisionPointRec(mouse, settingsButton)) {
             currentState = MenuState::SETTINGS;
+        } else if (CheckCollisionPointRec(mouse, saveButton)) {
+            saveRequested = true;
         } else if (CheckCollisionPointRec(mouse, exitButton)) {
             // Exit game
             CloseWindow();

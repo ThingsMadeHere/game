@@ -6,6 +6,7 @@
 #include "noise.h"
 #include <cstdio>
 #include <cmath>
+#include <cstdlib>
 #include <chrono>
 #include <thread>
 
@@ -52,9 +53,8 @@ void ChunkWorker(World* world) {
             result.first->second.meshGenerated = false;
             result.first->second.needsUpdate = false;
             
-            // Generate mesh after all chunks in the area are loaded
-            // This ensures neighbors are available for proper boundary handling
-            world->GenerateMesh(result.first->second);
+            // Don't generate mesh here - let main thread handle it
+            // This prevents race conditions with GPU renderer
         }
     }
 }
@@ -217,19 +217,72 @@ void World::Cleanup() {
     // Stop worker threads
     running = false;
     
-    // Send shutdown signals to all workers
-    for (size_t i = 0; i < workerThreads.size(); i++) {
-        QueueChunkGeneration(-999, -999, -999);
+    // Wake up all worker threads
+    for (int i = 0; i < workerThreads.size(); i++) {
+        QueueChunkGeneration(-999, 0, 0); // Shutdown signal
     }
     
     // Wait for all threads to finish
-    for (auto& t : workerThreads) {
-        if (t.joinable()) {
-            t.join();
+    for (auto& thread : workerThreads) {
+        if (thread.joinable()) {
+            thread.join();
         }
     }
     
+    // Cleanup GPU renderer
     gpuRenderer.Cleanup();
+}
+
+void World::SaveWorld(const std::string& filename) {
+    printf("DEBUG: Saving world to %s\n", filename.c_str());
+    
+    std::ofstream file(filename, std::ios::binary);
+    if (!file.is_open()) {
+        printf("ERROR: Could not open file for writing: %s\n", filename.c_str());
+        return;
+    }
+    
+    // Write world seed (using current time as simple seed)
+    auto now = std::chrono::system_clock::now();
+    uint64_t seed = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();
+    file.write(reinterpret_cast<const char*>(&seed), sizeof(seed));
+    
+    // Write modified chunk count
+    int modifiedCount = GetModifiedChunkCount();
+    file.write(reinterpret_cast<const char*>(&modifiedCount), sizeof(modifiedCount));
+    
+    // Write each modified chunk
+    for (const auto& [key, chunk] : chunks) {
+        if (chunk.needsUpdate || chunk.meshGenerated) {
+            // Write chunk key
+            file.write(reinterpret_cast<const char*>(&key.cx), sizeof(key.cx));
+            file.write(reinterpret_cast<const char*>(&key.cy), sizeof(key.cy));
+            file.write(reinterpret_cast<const char*>(&key.cz), sizeof(key.cz));
+            
+            // Write chunk density data (simplified)
+            for (int i = 0; i < CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE; i++) {
+                float density = chunk.GetDensity(i % CHUNK_SIZE, (i / CHUNK_SIZE) % CHUNK_HEIGHT, (i / (CHUNK_SIZE * CHUNK_HEIGHT)) % CHUNK_SIZE);
+                file.write(reinterpret_cast<const char*>(&density), sizeof(density));
+            }
+            
+            // Write chunk state
+            file.write(reinterpret_cast<const char*>(&chunk.meshGenerated), sizeof(chunk.meshGenerated));
+            file.write(reinterpret_cast<const char*>(&chunk.needsUpdate), sizeof(chunk.needsUpdate));
+        }
+    }
+    
+    file.close();
+    printf("DEBUG: Saved %d modified chunks\n", modifiedCount);
+}
+
+int World::GetModifiedChunkCount() {
+    int count = 0;
+    for (const auto& [key, chunk] : chunks) {
+        if (chunk.needsUpdate || chunk.meshGenerated) {
+            count++;
+        }
+    }
+    return count;
 }
 
 void World::Render(const Camera3D& camera) {

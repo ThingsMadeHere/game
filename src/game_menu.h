@@ -21,10 +21,12 @@ private:
     MenuState currentState = MenuState::MAIN_MENU;
     Settings settings;
     bool settingsChanged = false;
+    bool saveRequested = false;
     
     // UI Elements
     Rectangle playButton = {400, 200, 200, 50};
     Rectangle settingsButton = {400, 270, 200, 50};
+    Rectangle saveButton = {400, 320, 200, 50};
     Rectangle exitButton = {400, 340, 200, 50};
     Rectangle backButton = {50, 500, 150, 40};
     
@@ -44,4 +46,5 @@ public:
     bool IsInMenu() const { return currentState != MenuState::PLAYING; }
     Settings GetSettings() const { return settings; }
     bool SettingsWereChanged() { bool changed = settingsChanged; settingsChanged = false; return changed; }
+    bool SaveRequested() { bool requested = saveRequested; saveRequested = false; return requested; }
 };

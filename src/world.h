@@ -6,6 +6,8 @@
 #include <thread>
 #include <mutex>
 #include <atomic>
+#include <string>
+#include <fstream>
 
 struct ChunkRequest {
     int cx, cy, cz;
@@ -33,6 +35,10 @@ public:
     void Render(const Camera3D& camera);
     void Init();
     void Cleanup();
+    
+    // Simple save system
+    void SaveWorld(const std::string& filename);
+    int GetModifiedChunkCount();
     
     // Threading
     void QueueChunkGeneration(int cx, int cy, int cz);

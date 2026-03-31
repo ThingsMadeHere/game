@@ -56,9 +56,11 @@ int main() {
     InitSkyRenderer();
     
     // Game state
-    bool gameInitialized = false;
+    bool gameInitialized = false;  // Make sure this starts as false
     MenuState currentMenuState = MenuState::MAIN_MENU;
     bool isLoadingWorld = false;
+    
+    printf("DEBUG: gameInitialized initialized to: %s\n", gameInitialized ? "TRUE" : "FALSE");
     
     // Initialize systems
     LoadingScreen loadingScreen;
@@ -66,10 +68,13 @@ int main() {
 
     while (!WindowShouldClose()) {
         currentMenuState = menu.Update();
+        printf("DEBUG: Menu state = %d\n", (int)currentMenuState);
         
         if (currentMenuState == MenuState::PLAYING) {
+            printf("DEBUG: Entered PLAYING state\n");
             // Handle loading screen
             if (isLoadingWorld) {
+                printf("DEBUG: In loading screen\n");
                 // Get player position for garbage collection
                 Vector3 playerPos = cameraController.camera.position;
                 int playerChunkX = (int)floorf(playerPos.x / (CHUNK_SIZE * VOXEL_SIZE));
@@ -77,17 +82,23 @@ int main() {
                 
                 // Process completed chunks from worker threads
                 world.ProcessChunkQueue();
+                printf("DEBUG: Processed chunk queue\n");
                 
                 // Force process some chunks immediately to show progress
                 for (int i = 0; i < 10; i++) {
                     world.ProcessChunkQueue();
                 }
+                printf("DEBUG: Force processed chunks\n");
                 
                 // Update loading progress
-                loadingScreen.UpdateProgress(world.GetGeneratedChunkCount());
+                int chunkCount = world.GetGeneratedChunkCount();
+                int totalChunks = loadingScreen.totalChunks;
+                printf("DEBUG: Generated chunks: %d, Total needed: %d\n", chunkCount, totalChunks);
+                loadingScreen.UpdateProgress(chunkCount);
                 
                 // Check if loading is complete
-                if (world.GetGeneratedChunkCount() >= loadingScreen.totalChunks) {
+                if (chunkCount >= totalChunks) {
+                    printf("DEBUG: Loading complete! Setting isLoadingWorld = false\n");
                     loadingScreen.FinishLoading();
                     isLoadingWorld = false;
                 }
@@ -102,6 +113,7 @@ int main() {
             
             // Only disable cursor when actually entering game for first time
             if (!gameInitialized) {
+                printf("DEBUG: First time game initialization - gameInitialized was false\n");
                 gameInitialized = true;
                 DisableCursor();
                 
@@ -144,8 +156,9 @@ int main() {
                     }
                 }
                 
-                loadingScreen.StartLoading(playerChunkX, playerChunkZ, 8);
+                loadingScreen.StartLoading(playerChunkX, playerChunkZ, 2);  // Reduce from 8 to 2 for testing
                 isLoadingWorld = true;
+                printf("DEBUG: Started loading screen, isLoadingWorld = true\n");
                 continue; // Skip to loading screen
             }
             
@@ -178,6 +191,12 @@ int main() {
                 // Apply settings to game systems here
                 printf("Settings applied: Mouse=%.2f, Render=%d\n", 
                        settings.mouseSensitivity, settings.renderDistance);
+            }
+            
+            // Handle save request
+            if (menu.SaveRequested()) {
+                world.SaveWorld("world_save.dat");
+                printf("DEBUG: World saved!\n");
             }
             
             // Update camera (only when cursor is hidden)
