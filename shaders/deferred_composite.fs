@@ -83,8 +83,8 @@ float CalculateShadow(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir) {
 
 void main() {
     // Sample G-Buffer
-    vec4 color = texture(uColorTexture, texCoord);
-    vec3 normal = texture(uNormalTexture, texCoord).xyz;
+    vec4 albedo = texture(uColorTexture, texCoord);
+    vec3 normal = normalize(texture(uNormalTexture, texCoord).xyz);
     float depth = texture(uDepthTexture, texCoord).r;
     
     // Discard if no geometry (background)
@@ -93,7 +93,30 @@ void main() {
         return;
     }
     
-    // Visualize normal map (convert from -1,1 to 0,1 range for display)
-    vec3 normalVisualized = normal * 0.5 + 0.5;
-    fragColor = vec4(normalVisualized, 1.0);
+    // Reconstruct world position from depth
+    vec3 worldPos = ReconstructWorldPosition(texCoord, depth);
+    
+    // Calculate light direction (assuming directional light)
+    vec3 lightDir = normalize(-uLightDir);
+    
+    // Calculate view direction
+    vec3 viewDir = normalize(uViewPos - worldPos);
+    
+    // Ambient lighting
+    vec3 ambient = uAmbientColor * albedo.rgb;
+    
+    // Diffuse lighting (Lambertian)
+    float diff = max(dot(normal, lightDir), 0.0);
+    vec3 diffuse = diff * uLightColor * albedo.rgb;
+    
+    // Specular lighting (Blinn-Phong)
+    vec3 halfwayDir = normalize(lightDir + viewDir);
+    float specAngle = max(dot(normal, halfwayDir), 0.0);
+    float specular = pow(specAngle, 32.0); // Shininess factor
+    vec3 specularColor = specular * uLightColor;
+    
+    // Combine lighting components
+    vec3 result = ambient + diffuse + specularColor;
+    
+    fragColor = vec4(result, albedo.a);
 }
