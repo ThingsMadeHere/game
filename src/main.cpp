@@ -709,67 +709,14 @@ int main() {
         BeginDrawing();
         ClearBackground(BLACK);
         
-        // Test: Just draw UI text to verify 2D rendering works
-        DrawText("UI TEST - Should be visible", 10, 10, 20, WHITE);
-        DrawFPS(10, 50);
-
-        BeginMode3D(cam.camera);
-
-        // Test: Basic rendering verification
-        DrawText("3D RENDERING TEST", 10, 10, 20, GREEN);
-
-        // Test: Draw a simple triangle to verify rendering works
-        Vector3 v1 = {0, 22, 0};
-        Vector3 v2 = {5, 22, 0};
-        Vector3 v3 = {2.5f, 27, 0};
-        DrawTriangle3D(v1, v2, v3, YELLOW);
+        // Draw UI elements first
+        DrawText("3D Voxel Terrain - Marching Cubes", 10, 10, 20, RAYWHITE);
+        DrawText("WASD: Move | Mouse: Look | Space/Shift: Up/Down", 10, 40, 20, RAYWHITE);
+        DrawText("Left Click: Destroy | Right Click: Build | ESC: Toggle Cursor", 10, 70, 20, RAYWHITE);
+        DrawFPS(10, 100);
         
-        // Test: Draw a simple quad to verify mesh rendering works
-        Mesh testMesh = { 0 };
-        testMesh.vertexCount = 4;
-        testMesh.triangleCount = 2;
-        
-        float* testVertices = (float*)malloc(sizeof(float) * 3 * 4);
-        unsigned short* testIndices = (unsigned short*)malloc(sizeof(unsigned short) * 6);
-        
-        // Create quad vertices
-        testVertices[0] = 10; testVertices[1] = 22; testVertices[2] = 0;
-        testVertices[3] = 15; testVertices[4] = 22; testVertices[5] = 0;
-        testVertices[6] = 15; testVertices[7] = 25; testVertices[8] = 0;
-        testVertices[9] = 10; testVertices[10] = 24; testVertices[11] = 0;
-        
-        // Create quad indices (0,1,2, 0,2,3, 1,3)
-        testIndices[0] = 0; testIndices[1] = 1; testIndices[2] = 2;
-        testIndices[3] = 0; testIndices[4] = 2; testIndices[5] = 3;
-        
-        testMesh.vertices = testVertices;
-        testMesh.indices = testIndices;
-        
-        // Initialize mesh properties
-        testMesh.texcoords = NULL;
-        testMesh.texcoords2 = NULL;
-        testMesh.colors = NULL;
-        testMesh.tangents = NULL;
-        testMesh.boneIds = NULL;
-        testMesh.boneWeights = NULL;
-        testMesh.animVertices = NULL;
-        testMesh.animNormals = NULL;
-        testMesh.vaoId = 0;
-        testMesh.vboId = NULL;
-        
-        UploadMesh(&testMesh, false);
-        
-        // Draw test mesh
-        Matrix testTransform = {1,0,0,0, 0,1,0,0, 0,0,1, 5,25,0,1};
-
-        EndMode3D();
-
-        BeginDrawing();
-        ClearBackground(BLACK);
-        
-        // Test: Draw 2D text first to verify basic rendering
-        DrawText("2D TEST - Should be visible", 10, 10, 20, WHITE);
-        DrawFPS(10, 50);
+        // Draw center dot for GUI reference
+        DrawCircle(GetScreenWidth() / 2, GetScreenHeight() / 2, 3, RED);
 
         BeginMode3D(cam.camera);
 
@@ -779,15 +726,6 @@ int main() {
         world.Render(cam.camera);
 
         EndMode3D();
-
-        // Draw UI elements after 3D rendering
-        DrawText("3D Voxel Terrain - Marching Cubes", 10, 10, 20, RAYWHITE);
-        DrawText("WASD: Move | Mouse: Look | Space/Shift: Up/Down", 10, 40, 20, RAYWHITE);
-        DrawText("Left Click: Destroy | Right Click: Build | ESC: Toggle Cursor", 10, 70, 20, RAYWHITE);
-        DrawFPS(10, 100);
-        
-        // Draw center dot for GUI reference
-        DrawCircle(GetScreenWidth() / 2, GetScreenHeight() / 2, 3, RED);
 
         EndDrawing();
     }
