@@ -1,14 +1,15 @@
 #include "world.h"
-#include "terrain.h"
-#include "marching_cubes.h"
-#include "gpu_renderer.h"
-#include "voxel_renderer.h"
-#include "noise.h"
+#include "../rendering/marching_cubes.h"
+#include "../rendering/gpu_renderer.h"
+#include "../terrain/terrain.h"
+#include "../terrain/noise.h"
 #include <cstdio>
 #include <cmath>
-#include <cstdlib>
+#include <algorithm>
 #include <chrono>
 #include <thread>
+#include <fstream>
+#include <iostream>
 
 // Simple frustum culling check
 bool IsChunkVisible(const Camera3D& camera, int cx, int cy, int cz) {
@@ -152,9 +153,7 @@ void World::GenerateTerrain(Chunk& chunk) {
         }
     }
     
-    // Generate density texture for this chunk (black=air, white=block)
-    chunk.GenerateDensityTexture();
-    
+    // Generate mesh using marching cubes
     chunk.mesh = marchingCubes.GenerateMesh(chunk, chunks);
     chunk.meshGenerated = true; // Mark mesh as generated
     chunk.needsUpdate = false;  // Mark as clean
@@ -167,18 +166,11 @@ void World::UpdateChunk(int cx, int cy, int cz) {
         if (it->second.needsUpdate) {
             printf("Updating dirty chunk (%d,%d,%d)\n", cx, cy, cz);
             
-            // Only regenerate mesh if chunk is dirty
-            if (it->second.meshGenerated) {
-                UnloadMesh(it->second.mesh);
-                it->second.mesh = {0};
-            }
-            it->second.mesh = marchingCubes.GenerateMesh(it->second, chunks);
-            it->second.meshGenerated = true;
-            it->second.needsUpdate = false;
-            
-            // Also regenerate density texture if needed
-            if (!it->second.densityTextureGenerated || it->second.needsUpdate) {
-                it->second.GenerateDensityTexture();
+            // Regenerate mesh if needed
+            if (!it->second.meshGenerated || it->second.needsUpdate) {
+                it->second.mesh = marchingCubes.GenerateMesh(it->second, chunks);
+                it->second.meshGenerated = true;
+                it->second.needsUpdate = false;
             }
         } else {
             // Debug: Show that chunk is clean and not being updated
@@ -287,9 +279,8 @@ int World::GetModifiedChunkCount() {
 
 void World::Render(const Camera3D& camera) {
     int chunksRendered = 0;
-    int voxelsRendered = 0;
     
-    // Calculate player position for distance-based LOD
+    // Calculate player position for distance-based culling
     Vector3 playerPos = camera.position;
     int playerChunkX = (int)floorf(playerPos.x / (CHUNK_SIZE * VOXEL_SIZE));
     int playerChunkZ = (int)floorf(playerPos.z / (CHUNK_SIZE * VOXEL_SIZE));
@@ -300,7 +291,7 @@ void World::Render(const Camera3D& camera) {
         int chunkDistZ = abs(chunk.cz - playerChunkZ);
         int chunkDist = (int)sqrtf(chunkDistX * chunkDistX + chunkDistZ * chunkDistZ);
         
-        // Skip chunks beyond 4 chunks for performance (REDUCED from 8)
+        // Skip chunks beyond 4 chunks for performance
         if (chunkDist > 4) continue;
         
         // Frustum culling - only render visible chunks
@@ -308,142 +299,20 @@ void World::Render(const Camera3D& camera) {
             continue;
         }
         
-        chunksRendered++;
-        
-        // Use generated mesh if available (MUCH faster than individual voxels)
+        // ONLY render chunks with generated meshes - no voxel fallback
         if (chunk.meshGenerated && chunk.mesh.vertexCount > 0) {
-            // Draw the entire chunk mesh in one call - this is the key optimization!
             gpuRenderer.RenderChunk(chunk, camera);
-        } else {
-            // Fallback to voxel rendering for chunks without meshes
-            // Dynamic LOD based on distance from player
-            int skipFactor = 1;
-        if (chunkDist > 4) skipFactor = 2;  // Skip every other voxel
-        if (chunkDist > 6) skipFactor = 4;  // Skip every 4th voxel
-        
-        // Render only visible voxels with lighting and shading
-        for (int x = 0; x < CHUNK_SIZE; x += skipFactor) {
-            for (int y = 0; y < CHUNK_HEIGHT; y += skipFactor) {
-                for (int z = 0; z < CHUNK_SIZE; z += skipFactor) {
-                    if (chunk.GetDensity(x, y, z) > 0.0f) {
-                        // Quick visibility check - only check immediate neighbors
-                        bool surrounded = true;
-                        
-                        // Simplified neighbor check (only check within current chunk)
-                        if (x > 0 && chunk.GetDensity(x - 1, y, z) <= 0.0f) surrounded = false;
-                        else if (x < CHUNK_SIZE - 1 && chunk.GetDensity(x + 1, y, z) <= 0.0f) surrounded = false;
-                        else if (y > 0 && chunk.GetDensity(x, y - 1, z) <= 0.0f) surrounded = false;
-                        else if (y < CHUNK_HEIGHT - 1 && chunk.GetDensity(x, y + 1, z) <= 0.0f) surrounded = false;
-                        else if (z > 0 && chunk.GetDensity(x, y, z - 1) <= 0.0f) surrounded = false;
-                        else if (z < CHUNK_SIZE - 1 && chunk.GetDensity(x, y, z + 1) <= 0.0f) surrounded = false;
-                        else surrounded = false; // At chunk edge, assume visible
-                        
-                        // Only render if not completely surrounded
-                        if (!surrounded) {
-                            unsigned char material = chunk.GetMaterial(x, y, z);
-                            Color baseColor = VoxelRenderer::GetBlockColor(material);
-                            
-                            // Calculate lighting based on face normals and sun position
-                            Vector3 sunDirection = {0.7f, 0.7f, 0.2f}; // Sun from top-right
-                            float brightness = 0.3f; // Ambient light
-                            
-                            // Check which faces are exposed and calculate lighting
-                            float faceBrightness = 0.0f;
-                            int exposedFaces = 0;
-                            
-                            // X- face (left)
-                            if (x == 0 || chunk.GetDensity(x - 1, y, z) <= 0.0f) {
-                                Vector3 normal = {-1.0f, 0.0f, 0.0f};
-                                faceBrightness += fmaxf(0.0f, -sunDirection.x) * 0.8f;
-                                exposedFaces++;
-                            }
-                            
-                            // X+ face (right)
-                            if (x == CHUNK_SIZE - 1 || chunk.GetDensity(x + 1, y, z) <= 0.0f) {
-                                Vector3 normal = {1.0f, 0.0f, 0.0f};
-                                faceBrightness += fmaxf(0.0f, sunDirection.x) * 0.8f;
-                                exposedFaces++;
-                            }
-                            
-                            // Y- face (bottom)
-                            if (y == 0 || chunk.GetDensity(x, y - 1, z) <= 0.0f) {
-                                Vector3 normal = {0.0f, -1.0f, 0.0f};
-                                faceBrightness += fmaxf(0.0f, -sunDirection.y) * 0.6f; // Less bright on bottom
-                                exposedFaces++;
-                            }
-                            
-                            // Y+ face (top)
-                            if (y == CHUNK_HEIGHT - 1 || chunk.GetDensity(x, y + 1, z) <= 0.0f) {
-                                Vector3 normal = {0.0f, 1.0f, 0.0f};
-                                faceBrightness += fmaxf(0.0f, sunDirection.y) * 1.0f; // Brightest on top
-                                exposedFaces++;
-                            }
-                            
-                            // Z- face (front)
-                            if (z == 0 || chunk.GetDensity(x, y, z - 1) <= 0.0f) {
-                                Vector3 normal = {0.0f, 0.0f, -1.0f};
-                                faceBrightness += fmaxf(0.0f, -sunDirection.z) * 0.8f;
-                                exposedFaces++;
-                            }
-                            
-                            // Z+ face (back)
-                            if (z == CHUNK_SIZE - 1 || chunk.GetDensity(x, y, z + 1) <= 0.0f) {
-                                Vector3 normal = {0.0f, 0.0f, 1.0f};
-                                faceBrightness += fmaxf(0.0f, sunDirection.z) * 0.8f;
-                                exposedFaces++;
-                            }
-                            
-                            // Average brightness for all exposed faces
-                            if (exposedFaces > 0) {
-                                brightness += faceBrightness / exposedFaces;
-                            }
-                            
-                            // Apply lighting to color
-                            Color litColor = {
-                                (unsigned char)(baseColor.r * brightness),
-                                (unsigned char)(baseColor.g * brightness),
-                                (unsigned char)(baseColor.b * brightness),
-                                baseColor.a
-                            };
-                            
-                            Vector3 pos = {
-                                (float)(chunk.cx * CHUNK_SIZE + x) * VOXEL_SIZE,
-                                (float)(chunk.cy * CHUNK_HEIGHT + y) * VOXEL_SIZE,
-                                (float)(chunk.cz * CHUNK_SIZE + z) * VOXEL_SIZE
-                            };
-                            
-                            // Adjust voxel size based on LOD
-                            float voxelSize = VOXEL_SIZE * skipFactor;
-                            DrawCube(pos, voxelSize, voxelSize, voxelSize, litColor);
-                            voxelsRendered++;
-                        }
-                    }
-                }
-            }
+            chunksRendered++;
         }
     }
     
-    // Draw chunk boundaries only for visible chunks
-    for (int cx = -RENDER_DISTANCE; cx <= RENDER_DISTANCE; cx++) {
-        for (int cz = -RENDER_DISTANCE; cz <= RENDER_DISTANCE; cz++) {
-            if (IsChunkVisible(camera, cx, 0, cz)) {
-                Vector3 chunkPos = {
-                    (float)(cx * CHUNK_SIZE) * VOXEL_SIZE, 
-                    0, 
-                    (float)(cz * CHUNK_SIZE) * VOXEL_SIZE
-                };
-                Vector3 size = {
-                    (float)CHUNK_SIZE * VOXEL_SIZE, 
-                    1, 
-                    (float)CHUNK_SIZE * VOXEL_SIZE
-                };
-                DrawCubeWires(chunkPos, size.x, size.y, size.z, RED);
-            }
-        }
-    }
+    if (chunksRendered > 0) {
+        fprintf(stderr,"Drew %d chunks, total chunks: %d\n", chunksRendered, (int)chunks.size());
     
-    printf("Detailed rendering: %d chunks, %d voxels\n", chunksRendered, voxelsRendered);
-}
+    // Debug: Print player position and nearby chunks
+    fprintf(stderr,"Player pos: (%.1f, %.1f, %.1f), Player chunk: (%d, %d)\n", 
+           playerPos.x, playerPos.y, playerPos.z, playerChunkX, playerChunkZ);
+    }
 }
 
 void World::QueueChunkGeneration(int cx, int cy, int cz) {

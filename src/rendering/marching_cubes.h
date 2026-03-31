@@ -1,5 +1,6 @@
 #pragma once
-#include "terrain.h"
+#include "../terrain/terrain.h"
+#include "raylib.h"
 #include <vector>
 #include <unordered_map>
 

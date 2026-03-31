@@ -1,5 +1,5 @@
 #include "marching_cubes.h"
-#include "noise.h"
+#include "../terrain/noise.h"
 #include <cstdio>
 #include <cstring>
 #include <cmath>
@@ -345,6 +345,9 @@ float MarchingCubes::GetDensityWithNeighbors(const Chunk& chunk, const std::unor
     // Use the EXACT same ground height calculation
     float groundHeight = 8.0f + SmoothNoise3D(worldX * 0.02f, 0, worldZ * 0.02f) * 6.0f;
     
+    // DEBUG: Force flat ground at y=0 for testing visibility
+    groundHeight = 2.0f;
+    
     // Use the EXACT same density logic
     float density = 0.0f;
     
@@ -543,9 +546,13 @@ Mesh MarchingCubes::GenerateMesh(const Chunk& chunk, const std::unordered_map<Ch
         }
     }
     
-    if (vertices.empty()) return {0};
+    if (vertices.empty()) {
+        fprintf(stderr,"Empty mesh generated for chunk (%d,%d,%d) - returning empty mesh\n", 
+               chunk.cx, chunk.cy, chunk.cz);
+        return {0};
+    }
     
-    printf("Marching Cubes: %d cubes, %d triangles, %d vertices\n", 
+    fprintf(stderr,"Marching Cubes: %d cubes, %d triangles, %d vertices\n", 
            cubesProcessed, trianglesGenerated, (int)vertices.size() / 3);
 
     // Create proper mesh with correct structure

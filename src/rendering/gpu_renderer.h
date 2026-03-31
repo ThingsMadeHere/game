@@ -1,6 +1,6 @@
 #pragma once
+#include "../terrain/terrain.h"
 #include "raylib.h"
-#include "terrain.h"
 
 class GPUChunkRenderer {
 private:

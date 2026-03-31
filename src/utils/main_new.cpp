@@ -1,12 +1,13 @@
 #include "raylib.h"
-#include "camera.h"
-#include "world.h"
-#include "voxel_renderer.h"
-#include "game_menu.h"
-#include "loading_screen.h"
-#include "noise.h"
+#include "../ui/game_menu.h"
+#include "../core/world.h"
+#include "../ui/loading_screen.h"
+// #include "../audio/audio_system.h"
+#include "../terrain/noise.h"
 #include <cstdio>
 #include <cmath>
+#include <cstdlib>
+#include <chrono>
 
 // Forward declare functions
 void DrawSkyGradient(Camera3D camera);
@@ -44,13 +45,20 @@ int main() {
     menu.Init();
     
     // Initialize camera
-    CameraController cameraController;
-    cameraController.Init();
+    Camera camera;
+    camera.position = (Vector3){0.0f, 20.0f, 0.0f};
+    camera.target = (Vector3){0.0f, 0.0f, 10.0f};
+    camera.up = (Vector3){0.0f, 1.0f, 0.0f};
+    camera.fovy = 45.0f;
+    camera.projection = CAMERA_PERSPECTIVE;
+    
+    // Initialize audio system
+    // AudioSystem audio;
+    // audio.Init();
     
     // Initialize game systems
     World world;
     world.Init(); // Initialize GPU renderer
-    VoxelRenderer::Init(); // Initialize voxel renderer
     
     // Initialize sky renderer
     InitSkyRenderer();
@@ -60,7 +68,7 @@ int main() {
     MenuState currentMenuState = MenuState::MAIN_MENU;
     bool isLoadingWorld = false;
     
-    printf("DEBUG: gameInitialized initialized to: %s\n", gameInitialized ? "TRUE" : "FALSE");
+    fprintf(stderr,"DEBUG: gameInitialized initialized to: %s\n", gameInitialized ? "TRUE" : "FALSE");
     
     // Initialize systems
     LoadingScreen loadingScreen;
@@ -68,37 +76,37 @@ int main() {
 
     while (!WindowShouldClose()) {
         currentMenuState = menu.Update();
-        printf("DEBUG: Menu state = %d\n", (int)currentMenuState);
+        fprintf(stderr,"DEBUG: Menu state = %d\n", (int)currentMenuState);
         
         if (currentMenuState == MenuState::PLAYING) {
-            printf("DEBUG: Entered PLAYING state\n");
+            fprintf(stderr,"DEBUG: Entered PLAYING state\n");
             // Handle loading screen
             if (isLoadingWorld) {
-                printf("DEBUG: In loading screen\n");
+                fprintf(stderr,"DEBUG: In loading screen\n");
                 // Get player position for garbage collection
-                Vector3 playerPos = cameraController.camera.position;
+                Vector3 playerPos = camera.position;
                 int playerChunkX = (int)floorf(playerPos.x / (CHUNK_SIZE * VOXEL_SIZE));
                 int playerChunkZ = (int)floorf(playerPos.z / (CHUNK_SIZE * VOXEL_SIZE));
                 
                 // Process completed chunks from worker threads
                 world.ProcessChunkQueue();
-                printf("DEBUG: Processed chunk queue\n");
+                fprintf(stderr,"DEBUG: Processed chunk queue\n");
                 
                 // Force process some chunks immediately to show progress
                 for (int i = 0; i < 10; i++) {
                     world.ProcessChunkQueue();
                 }
-                printf("DEBUG: Force processed chunks\n");
+                fprintf(stderr,"DEBUG: Force processed chunks\n");
                 
                 // Update loading progress
                 int chunkCount = world.GetGeneratedChunkCount();
                 int totalChunks = loadingScreen.totalChunks;
-                printf("DEBUG: Generated chunks: %d, Total needed: %d\n", chunkCount, totalChunks);
+                fprintf(stderr,"DEBUG: Generated chunks: %d, Total needed: %d\n", chunkCount, totalChunks);
                 loadingScreen.UpdateProgress(chunkCount);
                 
                 // Check if loading is complete
                 if (chunkCount >= totalChunks) {
-                    printf("DEBUG: Loading complete! Setting isLoadingWorld = false\n");
+                    fprintf(stderr,"DEBUG: Loading complete! Setting isLoadingWorld = false\n");
                     loadingScreen.FinishLoading();
                     isLoadingWorld = false;
                 }
@@ -113,12 +121,12 @@ int main() {
             
             // Only disable cursor when actually entering game for first time
             if (!gameInitialized) {
-                printf("DEBUG: First time game initialization - gameInitialized was false\n");
+                fprintf(stderr,"DEBUG: First time game initialization - gameInitialized was false\n");
                 gameInitialized = true;
                 DisableCursor();
                 
                 // Start spiral loading
-                Vector3 playerPos = cameraController.camera.position;
+                Vector3 playerPos = camera.position;
                 int playerChunkX = (int)floorf(playerPos.x / (CHUNK_SIZE * VOXEL_SIZE));
                 int playerChunkZ = (int)floorf(playerPos.z / (CHUNK_SIZE * VOXEL_SIZE));
                 
@@ -158,12 +166,12 @@ int main() {
                 
                 loadingScreen.StartLoading(playerChunkX, playerChunkZ, 2);  // Reduce from 8 to 2 for testing
                 isLoadingWorld = true;
-                printf("DEBUG: Started loading screen, isLoadingWorld = true\n");
+                fprintf(stderr,"DEBUG: Started loading screen, isLoadingWorld = true\n");
                 continue; // Skip to loading screen
             }
             
             // Get player position for chunk loading
-            Vector3 playerPos = cameraController.camera.position;
+            Vector3 playerPos = camera.position;
             int playerChunkX = (int)floorf(playerPos.x / (CHUNK_SIZE * VOXEL_SIZE));
             int playerChunkZ = (int)floorf(playerPos.z / (CHUNK_SIZE * VOXEL_SIZE));
             
@@ -189,31 +197,31 @@ int main() {
             if (menu.SettingsWereChanged()) {
                 Settings settings = menu.GetSettings();
                 // Apply settings to game systems here
-                printf("Settings applied: Mouse=%.2f, Render=%d\n", 
+                fprintf(stderr,"Settings applied: Mouse=%.2f, Render=%d\n", 
                        settings.mouseSensitivity, settings.renderDistance);
             }
             
             // Handle save request
             if (menu.SaveRequested()) {
                 world.SaveWorld("world_save.dat");
-                printf("DEBUG: World saved!\n");
+                fprintf(stderr,"DEBUG: World saved!\n");
             }
             
             // Update camera (only when cursor is hidden)
             if (IsCursorHidden()) {
                 // Use original camera update - physics is causing freeze
-                cameraController.Update();
+                UpdateCamera(&camera, CAMERA_FIRST_PERSON);
             }
             
             // Voxel interaction (only when cursor is hidden) - TEMPORARILY DISABLED
             /*
             if (IsCursorHidden()) {
                 if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
-                    Vector3 rayOrigin = cameraController.camera.position;
+                    Vector3 rayOrigin = camera.position;
                     Vector3 rayDir = {
-                        cameraController.camera.target.x - cameraController.camera.position.x,
-                        cameraController.camera.target.y - cameraController.camera.position.y,
-                        cameraController.camera.target.z - cameraController.camera.position.z
+                        camera.target.x - camera.position.x,
+                        camera.target.y - camera.position.y,
+                        camera.target.z - camera.position.z
                     };
                     float len = sqrtf(rayDir.x*rayDir.x + rayDir.y*rayDir.y + rayDir.z*rayDir.z);
                     rayDir.x /= len; rayDir.y /= len; rayDir.z /= len;
@@ -239,11 +247,11 @@ int main() {
                 }
 
                 if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON)) {
-                    Vector3 rayOrigin = cameraController.camera.position;
+                    Vector3 rayOrigin = camera.position;
                     Vector3 rayDir = {
-                        cameraController.camera.target.x - cameraController.camera.position.x,
-                        cameraController.camera.target.y - cameraController.camera.position.y,
-                        cameraController.camera.target.z - cameraController.camera.position.z
+                        camera.target.x - camera.position.x,
+                        camera.target.y - camera.position.y,
+                        camera.target.z - camera.position.z
                     };
                     float len = sqrtf(rayDir.x*rayDir.x + rayDir.y*rayDir.y + rayDir.z*rayDir.z);
                     rayDir.x /= len; rayDir.y /= len; rayDir.z /= len;
@@ -274,10 +282,14 @@ int main() {
             ClearBackground({135, 206, 235, 255}); // Sky blue background
             
             // 3D rendering
-            BeginMode3D(cameraController.camera);
+            BeginMode3D(camera);
+            
+            // DEBUG: Draw a simple test cube to verify rendering works
+            DrawCube((Vector3){0.0f, 0.0f, 10.0f}, 2.0f, 2.0f, 2.0f, RED);
+            
             // Draw sky first (behind everything)
-            RenderSky(cameraController.camera);
-            world.Render(cameraController.camera);
+            RenderSky(camera);
+            world.Render(camera);
             EndMode3D();
             
             // 2D UI
@@ -285,6 +297,12 @@ int main() {
             DrawText("ESC: Menu", 10, 40, 20, RAYWHITE);
             DrawText("Basic Camera Mode - No Physics", 10, 70, 10, YELLOW);
             
+            ClearBackground(BLACK);
+            menu.Render();
+            EndDrawing();
+        } else {
+            // Handle main menu rendering
+            BeginDrawing();
             ClearBackground(BLACK);
             menu.Render();
             EndDrawing();

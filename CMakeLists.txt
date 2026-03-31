@@ -23,16 +23,13 @@ endif()
 
 # Add Executable with all source files
 add_executable(game 
-    src/main_new.cpp
-    src/camera.cpp
-    src/world.cpp
-    src/noise.cpp
-    src/marching_cubes.cpp
-    src/density_texture.cpp
-    src/voxel_renderer.cpp
-    src/gpu_renderer.cpp
-    src/game_menu.cpp
-    src/loading_screen.cpp
+    src/utils/main_new.cpp
+    src/core/world.cpp
+    src/terrain/noise.cpp
+    src/rendering/marching_cubes.cpp
+    src/rendering/gpu_renderer.cpp
+    src/ui/game_menu.cpp
+    src/ui/loading_screen.cpp
 )
 
 # Include raylib headers explicitly

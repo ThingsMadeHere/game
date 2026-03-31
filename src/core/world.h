@@ -1,13 +1,15 @@
 #pragma once
-#include "terrain.h"
-#include "marching_cubes.h"
+#include "../terrain/terrain.h"
+#include "../rendering/marching_cubes.h"
+#include "../rendering/gpu_renderer.h"
 #include <unordered_map>
+#include <vector>
 #include <queue>
-#include <thread>
 #include <mutex>
+#include <thread>
 #include <atomic>
+#include <functional>
 #include <string>
-#include <fstream>
 
 struct ChunkRequest {
     int cx, cy, cz;
