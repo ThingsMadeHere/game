@@ -286,10 +286,6 @@ void DeferredRenderer::Composite(const Camera3D& camera, const Vector3& lightDir
                                   const Vector3& lightColor, const Vector3& ambientColor) {
     if (!initialized) return;
     
-    // DEBUG: Just draw raw color G-Buffer instead of running composite shader
-    DebugDrawGBufferColor();
-    return;
-    
     // Use composite shader
     BeginShaderMode(compositeShader);
     
@@ -401,10 +397,6 @@ void DeferredRenderer::EndShadowPass() {
 void DeferredRenderer::CompositeWithShadows(const Camera3D& camera, const Vector3& lightDir, 
                                            const Vector3& lightColor, const Vector3& ambientColor) {
     if (!initialized) return;
-    
-    // DEBUG: Just draw raw color G-Buffer instead of running composite shader
-    DebugDrawGBufferColor();
-    return;
     
     // Use composite shader
     BeginShaderMode(compositeShader);
