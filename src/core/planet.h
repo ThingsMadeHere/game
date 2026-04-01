@@ -1,4 +1,5 @@
 #pragma once
+#include "raylib.h"
 #include "../terrain/noise.h"
 #include <string>
 #include <vector>
@@ -151,9 +152,12 @@ struct TerrainParameters {
     std::vector<SurfaceCompositionEntry> coreComposition;
 };
 
-struct EcosystemObjectReference {
-    std::string objectId = "";
-    std::string requiredBiome = "";
+struct EcosystemObject {
+    std::string id = "";
+    std::string type = "";
+    std::string name = "";
+    std::string modelPath = "";
+    std::string texturePath = "";
     float minAltitude = -1000.0f;
     float maxAltitude = 1000.0f;
     float minTemperature = 0.0f;
@@ -161,9 +165,16 @@ struct EcosystemObjectReference {
     float minMoisture = 0.0f;
     float maxMoisture = 1.0f;
     float density = 1.0f;
+    float baseDensity = 1.0f;
+    float minScale = 0.8f;
+    float maxScale = 1.2f;
     std::vector<std::string> requiredSurfaceChemicals;
     std::vector<std::string> requiredAtmosphericChemicals;
     float minChemicalConcentration = 0.0f;
+    std::vector<std::string> allowedBiomes;
+    std::vector<std::string> requiredBiomes;
+    bool hasCollision = true;
+    bool canBeHarvested = false;
 };
 
 struct AtmosphericParameters {
@@ -192,7 +203,7 @@ struct AtmosphericParameters {
 };
 
 struct EcosystemParameters {
-    std::vector<EcosystemObjectReference> objectReferences;
+    std::vector<EcosystemObject> objects;
     float globalDensityMultiplier = 1.0f;
     int maxObjectsPerChunk = 100;
     bool enableCollisions = true;
@@ -270,7 +281,7 @@ public:
     void UpdateOrbits(float deltaTime);
     void UpdateRotation(float deltaTime);
     void ApplyTerrainNoise(float x, float y, float z, float& outDensity, unsigned char& outMaterial, const std::string& planetId);
-    std::vector<EcosystemObjectReference> GetSpawnableObjectRefs(const std::string& planetId, float altitude, float temperature, float moisture, const std::string& biome) const;
+    std::vector<EcosystemObject> GetSpawnableObjects(const std::string& planetId, float altitude, float temperature, float moisture, const std::string& biome) const;
     const ChemicalDefinition* GetPlanetChemical(const std::string& planetId, const std::string& chemicalId) const;
     std::vector<const ChemicalDefinition*> GetAtmosphericChemicals(const std::string& planetId) const;
     std::vector<const ChemicalDefinition*> GetSurfaceChemicals(const std::string& planetId, float altitude) const;
@@ -283,6 +294,6 @@ namespace PlanetUtils {
     float CalculateSurfaceGravity(float mass, float radius);
     float CalculateEquilibriumTemperature(float distanceFromStar, float albedo, float stellarLuminosity);
     float EvaluateNoiseLayers(const std::vector<NoiseLayer>& layers, float x, float y, float z);
-    bool CanSpawnObject(const EcosystemObjectReference& obj, float altitude, float temperature, float moisture, const std::string& biome);
+    bool CanSpawnObject(const EcosystemObject& obj, float altitude, float temperature, float moisture, const std::string& biome);
     const ChemicalDefinition* FindDominantChemical(const std::vector<SurfaceCompositionEntry>& composition, float altitude, float temperature);
 }

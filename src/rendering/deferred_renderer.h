@@ -113,6 +113,7 @@ private:
     Shader geometryShader = {};
     Shader compositeShader = {};
     Shader shadowShader = {};
+    Shader debugShader = {};
     
     // === COMPOSITE SHADER UNIFORM LOCATIONS ===
     struct CompositeUniforms {

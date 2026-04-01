@@ -71,6 +71,15 @@ bool DeferredRenderer::Init(int width, int height) {
         return false;
     }
     
+    debugShader = LoadShader("shaders/debug_visualize.vs", "shaders/debug_visualize.fs");
+    if (debugShader.id == 0) {
+        fprintf(stderr, "Failed to load debug visualize shader!\n");
+        UnloadShader(geometryShader);
+        UnloadShader(compositeShader);
+        UnloadShader(shadowShader);
+        return false;
+    }
+    
     if (!CreateShadowMap()) {
         fprintf(stderr, "Failed to create shadow map!\n");
         UnloadShader(geometryShader);
@@ -106,6 +115,7 @@ void DeferredRenderer::Cleanup() {
     if (geometryShader.id != 0) { UnloadShader(geometryShader); geometryShader = {}; }
     if (compositeShader.id != 0) { UnloadShader(compositeShader); compositeShader = {}; }
     if (shadowShader.id != 0) { UnloadShader(shadowShader); shadowShader = {}; }
+    if (debugShader.id != 0) { UnloadShader(debugShader); debugShader = {}; }
     
     initialized = false;
 }
@@ -242,10 +252,29 @@ void DeferredRenderer::DebugDrawGBufferColor() {
 
 void DeferredRenderer::DebugDrawGBufferNormals() {
     if (!initialized) return;
+    
+    // Use debug shader to remap [-1,1] normals to [0,1] for visualization
+    BeginShaderMode(debugShader);
+    
+    int texLoc = GetShaderLocation(debugShader, "uTexture");
+    int scaleLoc = GetShaderLocation(debugShader, "uScale");
+    int offsetLoc = GetShaderLocation(debugShader, "uOffset");
+    
+    float scale = 0.5f;   // Remap [-1,1] to [0,1]: value * 0.5 + 0.5
+    float offset = 0.5f;
+    
+    SetShaderValue(debugShader, scaleLoc, &scale, SHADER_UNIFORM_FLOAT);
+    SetShaderValue(debugShader, offsetLoc, &offset, SHADER_UNIFORM_FLOAT);
+    
+    int texUnit = 0;
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, normalTexture);
+    SetShaderValue(debugShader, texLoc, &texUnit, SHADER_UNIFORM_INT);
+    
     DrawFullscreenQuad();
+    
     glBindTexture(GL_TEXTURE_2D, 0);
+    EndShaderMode();
 }
 
 void DeferredRenderer::DrawFullscreenQuad() {
