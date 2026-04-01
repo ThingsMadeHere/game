@@ -25,6 +25,7 @@ endif()
 add_executable(game 
     src/utils/main_new.cpp
     src/core/world.cpp
+    src/core/planet.cpp
     src/terrain/noise.cpp
     src/rendering/marching_cubes.cpp
     src/rendering/gpu_renderer.cpp

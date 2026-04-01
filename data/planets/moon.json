@@ -1,0 +1,126 @@
+{
+    "id": "moon",
+    "name": "Luna",
+    "description": "Earth's natural satellite - a barren rocky body with no atmosphere",
+    "planetType": "dwarf",
+    
+    "semiMajorAxis": 150.0,
+    "eccentricity": 0.0549,
+    "inclination": 5.14,
+    "orbitalPeriod": 27.3,
+    "parentObjectId": "earth",
+    
+    "radius": 15.0,
+    "mass": 0.0123,
+    "surfaceGravity": 1.62,
+    "rotationalPeriod": 655.7,
+    "axialTilt": 1.54,
+    
+    "hasAtmosphere": false,
+    "surfacePressure": 0.0,
+    "skyColorR": 0.0,
+    "skyColorG": 0.0,
+    "skyColorB": 0.0,
+    "averageTemperature": -20.0,
+    "hasWeather": false,
+    
+    "baseHeight": 0.0,
+    "heightScale": 8.0,
+    "waterLevel": 0.0,
+    "cliffThreshold": 0.9,
+    
+    "noiseLayers": [
+        {
+            "name": "maria",
+            "amplitude": 1.0,
+            "frequency": 0.015,
+            "octaves": 3,
+            "blendMode": "add"
+        },
+        {
+            "name": "highlands",
+            "amplitude": 0.6,
+            "frequency": 0.04,
+            "octaves": 5,
+            "blendMode": "add"
+        },
+        {
+            "name": "craters_large",
+            "amplitude": 0.5,
+            "frequency": 0.02,
+            "octaves": 3,
+            "blendMode": "subtract"
+        },
+        {
+            "name": "craters_small",
+            "amplitude": 0.2,
+            "frequency": 0.1,
+            "octaves": 4,
+            "blendMode": "subtract"
+        }
+    ],
+    
+    "baseColorR": 120,
+    "baseColorG": 120,
+    "baseColorB": 125,
+    "oceanColorR": 80,
+    "oceanColorG": 80,
+    "oceanColorB": 85,
+    "specularIntensity": 0.05,
+    "hasRings": false,
+    
+    "isHabitable": false,
+    "hasMagneticField": false,
+    "tidallyLocked": true,
+    
+    "moons": [],
+    
+    "ecosystemObjects": [
+        {
+            "id": "helium3_deposit",
+            "type": "resource",
+            "name": "Helium-3 Deposit",
+            "modelPath": "models/resources/helium3.obj",
+            "texturePath": "textures/resources/helium3.png",
+            "minAltitude": -50.0,
+            "maxAltitude": 100.0,
+            "baseDensity": 0.01,
+            "minScale": 1.0,
+            "maxScale": 2.0,
+            "hasCollision": true,
+            "canBeHarvested": true,
+            "harvestedResource": "helium3",
+            "harvestAmount": 5
+        },
+        {
+            "id": "titanium_deposit",
+            "type": "resource",
+            "name": "Ilmenite (Titanium Ore)",
+            "modelPath": "models/resources/ilmenite.obj",
+            "texturePath": "textures/resources/ilmenite.png",
+            "minAltitude": -100.0,
+            "maxAltitude": 200.0,
+            "baseDensity": 0.02,
+            "minScale": 0.8,
+            "maxScale": 2.5,
+            "hasCollision": true,
+            "canBeHarvested": true,
+            "harvestedResource": "titanium_ore",
+            "harvestAmount": 8
+        },
+        {
+            "id": "landing_site",
+            "type": "structure",
+            "name": "Historic Landing Site",
+            "modelPath": "models/structures/lander.obj",
+            "texturePath": "textures/structures/lander.png",
+            "minAltitude": -30.0,
+            "maxAltitude": 50.0,
+            "baseDensity": 0.0005,
+            "minScale": 1.0,
+            "maxScale": 1.0,
+            "hasCollision": true,
+            "canBeHarvested": false
+        }
+    ]
+}
