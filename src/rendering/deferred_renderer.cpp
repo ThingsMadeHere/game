@@ -240,6 +240,14 @@ void DeferredRenderer::DebugDrawGBufferColor() {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void DeferredRenderer::DebugDrawGBufferNormals() {
+    if (!initialized) return;
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, normalTexture);
+    DrawFullscreenQuad();
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 void DeferredRenderer::DrawFullscreenQuad() {
     glBindVertexArray(quadVAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);

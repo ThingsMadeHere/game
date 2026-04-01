@@ -63,6 +63,9 @@ public:
     // Debug: Draw raw G-Buffer color directly to screen
     void DebugDrawGBufferColor();
     
+    // Debug: Draw G-Buffer normals visualization
+    void DebugDrawGBufferNormals();
+    
     // Full screen quad for composite pass
     void DrawFullscreenQuad();
     

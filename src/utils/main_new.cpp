@@ -460,12 +460,10 @@ int main() {
             
             g_deferredRenderer.EndGeometryPass();
             
-            // 3. COMPOSITE PASS - Combine G-Buffer with shadows and apply lighting
+            // 3. DEBUG NORMAL VISUALIZATION - Show G-Buffer normals instead of composite
             g_deferredRenderer.BeginCompositePass();
             
-            Vector3 lightColor = {1.0f, 1.0f, 0.9f};
-            Vector3 ambientColor = {0.3f, 0.35f, 0.4f};
-            g_deferredRenderer.CompositeWithShadows(camera, lightDir, lightColor, ambientColor);
+            g_deferredRenderer.DebugDrawGBufferNormals();
             
             g_deferredRenderer.EndCompositePass();
             
