@@ -1,0 +1,177 @@
+{
+    "id": "earth",
+    "name": "Earth",
+    "description": "A habitable terrestrial planet with diverse biomes and abundant life",
+    "planetType": "terrestrial",
+    
+    "semiMajorAxis": 1000.0,
+    "eccentricity": 0.0167,
+    "inclination": 0.0,
+    "orbitalPeriod": 365.25,
+    
+    "radius": 50.0,
+    "mass": 1.0,
+    "surfaceGravity": 9.81,
+    "rotationalPeriod": 24.0,
+    "axialTilt": 23.5,
+    
+    "hasAtmosphere": true,
+    "surfacePressure": 1.0,
+    "skyColorR": 0.4,
+    "skyColorG": 0.6,
+    "skyColorB": 1.0,
+    "averageTemperature": 15.0,
+    "hasWeather": true,
+    
+    "baseHeight": 0.0,
+    "heightScale": 25.0,
+    "waterLevel": 0.3,
+    "cliffThreshold": 0.7,
+    
+    "noiseLayers": [
+        {
+            "name": "continents",
+            "amplitude": 1.0,
+            "frequency": 0.01,
+            "octaves": 4,
+            "blendMode": "add"
+        },
+        {
+            "name": "mountains",
+            "amplitude": 0.5,
+            "frequency": 0.03,
+            "octaves": 6,
+            "blendMode": "add"
+        },
+        {
+            "name": "hills",
+            "amplitude": 0.25,
+            "frequency": 0.08,
+            "octaves": 5,
+            "blendMode": "add"
+        },
+        {
+            "name": "detail",
+            "amplitude": 0.1,
+            "frequency": 0.2,
+            "octaves": 4,
+            "blendMode": "add"
+        }
+    ],
+    
+    "baseColorR": 100,
+    "baseColorG": 140,
+    "baseColorB": 100,
+    "specularIntensity": 0.3,
+    "hasRings": false,
+    
+    "isHabitable": true,
+    "hasMagneticField": true,
+    "tidallyLocked": false,
+    
+    "moons": ["moon"],
+    
+    "ecosystemObjects": [
+        {
+            "id": "oak_tree",
+            "type": "flora",
+            "name": "Oak Tree",
+            "modelPath": "models/vegetation/oak_tree.obj",
+            "texturePath": "textures/vegetation/oak_bark.png",
+            "minAltitude": -10.0,
+            "maxAltitude": 800.0,
+            "minTemperature": 5.0,
+            "maxTemperature": 35.0,
+            "minMoisture": 0.3,
+            "maxMoisture": 1.0,
+            "allowedBiomes": ["forest", "plains", "temperate"],
+            "baseDensity": 0.5,
+            "minScale": 0.8,
+            "maxScale": 1.5,
+            "hasCollision": true,
+            "canBeHarvested": true,
+            "harvestedResource": "wood",
+            "harvestAmount": 5
+        },
+        {
+            "id": "pine_tree",
+            "type": "flora",
+            "name": "Pine Tree",
+            "modelPath": "models/vegetation/pine_tree.obj",
+            "texturePath": "textures/vegetation/pine_bark.png",
+            "minAltitude": 200.0,
+            "maxAltitude": 2000.0,
+            "minTemperature": -10.0,
+            "maxTemperature": 20.0,
+            "minMoisture": 0.2,
+            "maxMoisture": 0.8,
+            "allowedBiomes": ["taiga", "mountain", "boreal"],
+            "baseDensity": 0.4,
+            "minScale": 0.7,
+            "maxScale": 1.3,
+            "hasCollision": true,
+            "canBeHarvested": true,
+            "harvestedResource": "wood",
+            "harvestAmount": 4
+        },
+        {
+            "id": "cactus",
+            "type": "flora",
+            "name": "Saguaro Cactus",
+            "modelPath": "models/vegetation/cactus.obj",
+            "texturePath": "textures/vegetation/cactus.png",
+            "minAltitude": -5.0,
+            "maxAltitude": 500.0,
+            "minTemperature": 15.0,
+            "maxTemperature": 50.0,
+            "minMoisture": 0.0,
+            "maxMoisture": 0.2,
+            "allowedBiomes": ["desert", "arid"],
+            "baseDensity": 0.2,
+            "minScale": 0.5,
+            "maxScale": 1.2,
+            "hasCollision": true,
+            "canBeHarvested": false
+        },
+        {
+            "id": "deer",
+            "type": "fauna",
+            "name": "White-tailed Deer",
+            "modelPath": "models/animals/deer.obj",
+            "texturePath": "textures/animals/deer.png",
+            "minAltitude": -10.0,
+            "maxAltitude": 1000.0,
+            "minTemperature": 0.0,
+            "maxTemperature": 30.0,
+            "minMoisture": 0.2,
+            "maxMoisture": 0.9,
+            "allowedBiomes": ["forest", "plains", "temperate"],
+            "baseDensity": 0.05,
+            "minScale": 0.9,
+            "maxScale": 1.1,
+            "hasCollision": true,
+            "canBeHarvested": true,
+            "harvestedResource": "meat",
+            "harvestAmount": 3,
+            "animated": true,
+            "animationType": "wander",
+            "animationSpeed": 0.5
+        },
+        {
+            "id": "iron_deposit",
+            "type": "resource",
+            "name": "Iron Ore Deposit",
+            "modelPath": "models/resources/iron_ore.obj",
+            "texturePath": "textures/resources/iron.png",
+            "minAltitude": -100.0,
+            "maxAltitude": 200.0,
+            "baseDensity": 0.02,
+            "minScale": 1.0,
+            "maxScale": 2.0,
+            "hasCollision": true,
+            "canBeHarvested": true,
+            "harvestedResource": "iron_ore",
+            "harvestAmount": 10
+        }
+    ]
+}

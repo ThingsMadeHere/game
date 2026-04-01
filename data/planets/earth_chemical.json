@@ -1,0 +1,147 @@
+{
+  "id": "earth_chemical",
+  "name": "Earth (Chemical-Based)",
+  "description": "An Earth-like planet constructed using the chemical database system",
+  "planetType": "terrestrial",
+  "isHabitable": true,
+  "age": 4.54,
+  
+  "orbit": {
+    "semiMajorAxis": 1.0,
+    "eccentricity": 0.0167,
+    "inclination": 0.0,
+    "orbitalPeriod": 365.25,
+    "parentObjectId": "Sun"
+  },
+  
+  "physical": {
+    "radius": 6371.0,
+    "mass": 5.972e24,
+    "density": 5.51,
+    "surfaceGravity": 9.81,
+    "rotationalPeriod": 24.0,
+    "axialTilt": 23.5
+  },
+  
+  "atmosphere": {
+    "hasAtmosphere": true,
+    "surfacePressure": 1.0,
+    "scaleHeight": 8.5,
+    "composition": [
+      {"chemicalId": "N2", "percentage": 0.78},
+      {"chemicalId": "O2", "percentage": 0.21},
+      {"chemicalId": "Ar", "percentage": 0.009},
+      {"chemicalId": "CO2", "percentage": 0.0004}
+    ],
+    "cloudChemicalId": "H2O",
+    "precipitationChemicalId": "H2O",
+    "averageTemperature": 15.0
+  },
+  
+  "terrain": {
+    "waterLevel": 0.3,
+    "waterChemicalId": "H2O",
+    "noiseLayers": [
+      {
+        "name": "base",
+        "type": "perlin",
+        "amplitude": 1.0,
+        "frequency": 0.01,
+        "octaves": 6,
+        "persistence": 0.5,
+        "lacunarity": 2.0,
+        "blendMode": "add"
+      }
+    ],
+    "crustComposition": [
+      {"chemicalId": "SiO2", "concentration": 0.59, "distributionType": "uniform"},
+      {"chemicalId": "Fe2O3", "concentration": 0.15, "distributionType": "clustered"},
+      {"chemicalId": "NaCl", "concentration": 0.05, "distributionType": "biome_dependent", "minAltitude": -5.0, "maxAltitude": 0.5},
+      {"chemicalId": "Fe", "concentration": 0.05, "distributionType": "vein", "veinSize": 2.0, "veinDensity": 0.3}
+    ],
+    "mantleComposition": [
+      {"chemicalId": "SiO2", "concentration": 0.45},
+      {"chemicalId": "Fe", "concentration": 0.25},
+      {"chemicalId": "MgO", "concentration": 0.30}
+    ]
+  },
+  
+  "ecosystem": {
+    "objectReferences": [
+      {
+        "objectId": "oak_tree",
+        "requiredBiome": "temperate_forest",
+        "minAltitude": 0.0,
+        "maxAltitude": 2.0,
+        "minTemperature": 273.0,
+        "maxTemperature": 310.0,
+        "minMoisture": 0.4,
+        "maxMoisture": 1.0,
+        "density": 1.0,
+        "requiredSurfaceChemicals": ["H2O", "O2"],
+        "requiredAtmosphericChemicals": ["O2", "CO2"],
+        "minChemicalConcentration": 0.1
+      },
+      {
+        "objectId": "cactus",
+        "requiredBiome": "desert",
+        "minAltitude": 0.0,
+        "maxAltitude": 1.5,
+        "minTemperature": 280.0,
+        "maxTemperature": 330.0,
+        "minMoisture": 0.0,
+        "maxMoisture": 0.2,
+        "density": 0.5,
+        "requiredSurfaceChemicals": ["SiO2"],
+        "requiredAtmosphericChemicals": ["CO2"]
+      },
+      {
+        "objectId": "coral_reef",
+        "requiredBiome": "ocean",
+        "minAltitude": -0.1,
+        "maxAltitude": 0.0,
+        "minTemperature": 293.0,
+        "maxTemperature": 303.0,
+        "minMoisture": 1.0,
+        "maxMoisture": 1.0,
+        "density": 0.8,
+        "requiredSurfaceChemicals": ["NaCl", "H2O"],
+        "requiredAtmosphericChemicals": ["O2"]
+      }
+    ]
+  },
+  
+  "resources": [
+    {
+      "chemicalId": "Fe",
+      "abundance": 0.8,
+      "minDepth": 10.0,
+      "maxDepth": 500.0,
+      "depositType": "vein",
+      "preferredBiomes": ["mountain", "hills"]
+    },
+    {
+      "chemicalId": "NaCl",
+      "abundance": 0.95,
+      "minDepth": 0.0,
+      "maxDepth": 5.0,
+      "depositType": "layer",
+      "preferredBiomes": ["ocean", "beach"]
+    },
+    {
+      "chemicalId": "H2SO4",
+      "abundance": 0.1,
+      "minDepth": 50.0,
+      "maxDepth": 200.0,
+      "depositType": "pocket",
+      "preferredBiomes": ["volcanic"]
+    }
+  ],
+  
+  "visual": {
+    "baseColor": [100, 140, 100, 255],
+    "oceanColor": [30, 60, 120, 255],
+    "polarCapColor": [240, 240, 255, 255],
+    "hasRings": false
+  }
+}

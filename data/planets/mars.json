@@ -1,0 +1,136 @@
+{
+    "id": "mars",
+    "name": "Mars",
+    "description": "The Red Planet - a cold desert world with thin atmosphere",
+    "planetType": "terrestrial",
+    
+    "semiMajorAxis": 1523.0,
+    "eccentricity": 0.0934,
+    "inclination": 1.85,
+    "orbitalPeriod": 687.0,
+    
+    "radius": 42.0,
+    "mass": 0.107,
+    "surfaceGravity": 3.71,
+    "rotationalPeriod": 24.6,
+    "axialTilt": 25.2,
+    
+    "hasAtmosphere": true,
+    "surfacePressure": 0.006,
+    "skyColorR": 0.8,
+    "skyColorG": 0.5,
+    "skyColorB": 0.4,
+    "averageTemperature": -63.0,
+    "hasWeather": true,
+    
+    "baseHeight": 0.0,
+    "heightScale": 35.0,
+    "waterLevel": 0.0,
+    "cliffThreshold": 0.8,
+    
+    "noiseLayers": [
+        {
+            "name": "basin",
+            "amplitude": 1.0,
+            "frequency": 0.008,
+            "octaves": 3,
+            "blendMode": "add"
+        },
+        {
+            "name": "highlands",
+            "amplitude": 0.7,
+            "frequency": 0.02,
+            "octaves": 5,
+            "blendMode": "add"
+        },
+        {
+            "name": "volcanoes",
+            "amplitude": 1.5,
+            "frequency": 0.005,
+            "octaves": 4,
+            "blendMode": "max"
+        },
+        {
+            "name": "canyons",
+            "amplitude": 0.4,
+            "frequency": 0.015,
+            "octaves": 4,
+            "blendMode": "multiply"
+        },
+        {
+            "name": "craters",
+            "amplitude": 0.3,
+            "frequency": 0.05,
+            "octaves": 3,
+            "blendMode": "subtract"
+        }
+    ],
+    
+    "baseColorR": 180,
+    "baseColorG": 80,
+    "baseColorB": 60,
+    "oceanColorR": 150,
+    "oceanColorG": 70,
+    "oceanColorB": 50,
+    "specularIntensity": 0.1,
+    "hasRings": false,
+    
+    "isHabitable": false,
+    "hasMagneticField": false,
+    "tidallyLocked": false,
+    
+    "moons": ["phobos", "deimos"],
+    
+    "ecosystemObjects": [
+        {
+            "id": "ice_deposit",
+            "type": "resource",
+            "name": "Water Ice Deposit",
+            "modelPath": "models/resources/ice_deposit.obj",
+            "texturePath": "textures/resources/ice.png",
+            "minAltitude": -50.0,
+            "maxAltitude": 100.0,
+            "minTemperature": -100.0,
+            "maxTemperature": -50.0,
+            "baseDensity": 0.03,
+            "minScale": 1.0,
+            "maxScale": 3.0,
+            "hasCollision": true,
+            "canBeHarvested": true,
+            "harvestedResource": "water_ice",
+            "harvestAmount": 20
+        },
+        {
+            "id": "iron_oxide",
+            "type": "resource",
+            "name": "Iron Oxide Deposit",
+            "modelPath": "models/resources/iron_oxide.obj",
+            "texturePath": "textures/resources/rust.png",
+            "minAltitude": -100.0,
+            "maxAltitude": 500.0,
+            "baseDensity": 0.1,
+            "minScale": 0.5,
+            "maxScale": 2.0,
+            "hasCollision": true,
+            "canBeHarvested": true,
+            "harvestedResource": "iron_oxide",
+            "harvestAmount": 15
+        },
+        {
+            "id": "research_probe",
+            "type": "structure",
+            "name": " crashed Research Probe",
+            "modelPath": "models/structures/probe.obj",
+            "texturePath": "textures/structures/probe.png",
+            "minAltitude": -200.0,
+            "maxAltitude": 300.0,
+            "baseDensity": 0.001,
+            "minScale": 1.0,
+            "maxScale": 1.0,
+            "hasCollision": true,
+            "canBeHarvested": true,
+            "harvestedResource": "scrap_metal",
+            "harvestAmount": 25
+        }
+    ]
+}
