@@ -30,6 +30,7 @@ add_executable(game
     src/rendering/marching_cubes.cpp
     src/rendering/gpu_renderer.cpp
     src/rendering/deferred_renderer.cpp
+    src/rendering/shadow_renderer.cpp
     src/rendering/model.cpp
     src/rendering/texture_atlas.cpp
     src/gameplay/inventory.cpp

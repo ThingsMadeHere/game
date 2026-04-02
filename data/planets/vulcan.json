@@ -1,0 +1,73 @@
+{
+    "id": "vulcan",
+    "name": "Vulcan",
+    "description": "The innermost major moon of Massivo, Vulcan is a volcanic nightmare of molten sulfur lakes and towering eruption plumes. Like Io but more extreme, tidal heating keeps the moon's interior molten and its surface constantly renewing.",
+    "planetType": "terrestrial",
+    "parent": "massivo",
+    
+    "semiMajorAxis": 22.0,
+    "eccentricity": 0.01,
+    "inclination": 4.2,
+    
+    "radius": 0.28,
+    "mass": 0.015,
+    "rotationalPeriod": 43.2,
+    "axialTilt": 0.5,
+    
+    "hasAtmosphere": true,
+    "surfacePressure": 0.02,
+    "skyColorR": 0.9,
+    "skyColorG": 0.4,
+    "skyColorB": 0.15,
+    "averageTemperature": 180.0,
+    "hasWeather": true,
+    "weatherType": "sulfur_plumes",
+    
+    "baseHeight": -40.0,
+    "heightScale": 60.0,
+    "waterLevel": -300.0,
+    "cliffThreshold": 0.4,
+    
+    "noiseLayers": [
+        {
+            "name": "calderas",
+            "amplitude": 1.3,
+            "frequency": 0.02,
+            "octaves": 4,
+            "blendMode": "add"
+        },
+        {
+            "name": "lava_channels",
+            "amplitude": 0.7,
+            "frequency": 0.04,
+            "octaves": 5,
+            "blendMode": "subtract"
+        },
+        {
+            "name": "sulfur_deposits",
+            "amplitude": 0.5,
+            "frequency": 0.08,
+            "octaves": 4,
+            "blendMode": "add"
+        },
+        {
+            "name": "plumes",
+            "amplitude": 0.8,
+            "frequency": 0.15,
+            "octaves": 3,
+            "blendMode": "add"
+        }
+    ],
+    
+    "baseColorR": 200,
+    "baseColorG": 100,
+    "baseColorB": 30,
+    "specularIntensity": 0.3,
+    "hasRings": false,
+    
+    "isHabitable": false,
+    "hasMagneticField": false,
+    "tidallyLocked": true,
+    
+    "children": []
+}

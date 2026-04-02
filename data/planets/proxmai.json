@@ -1,0 +1,72 @@
+{
+    "id": "proxmai",
+    "name": "Proxmai",
+    "description": "An iron-rich super-Earth with a massive core and crushing gravity. Its surface is scarred by tectonic activity and volcanic vents, with a thin atmosphere that offers little protection from stellar radiation.",
+    "planetType": "terrestrial",
+    "parent": "sandos",
+    
+    "semiMajorAxis": 380.0,
+    "eccentricity": 0.12,
+    "inclination": 2.1,
+    
+    "radius": 1.4,
+    "mass": 3.5,
+    "rotationalPeriod": 96.0,
+    "axialTilt": 12.5,
+    
+    "hasAtmosphere": true,
+    "surfacePressure": 0.08,
+    "skyColorR": 0.6,
+    "skyColorG": 0.4,
+    "skyColorB": 0.3,
+    "averageTemperature": 85.0,
+    "hasWeather": false,
+    
+    "baseHeight": -20.0,
+    "heightScale": 45.0,
+    "waterLevel": -100.0,
+    "cliffThreshold": 0.6,
+    
+    "noiseLayers": [
+        {
+            "name": "tectonic",
+            "amplitude": 1.2,
+            "frequency": 0.008,
+            "octaves": 5,
+            "blendMode": "add"
+        },
+        {
+            "name": "mountains",
+            "amplitude": 0.8,
+            "frequency": 0.025,
+            "octaves": 6,
+            "blendMode": "add"
+        },
+        {
+            "name": "hills",
+            "amplitude": 0.3,
+            "frequency": 0.06,
+            "octaves": 4,
+            "blendMode": "add"
+        },
+        {
+            "name": "detail",
+            "amplitude": 0.15,
+            "frequency": 0.15,
+            "octaves": 3,
+            "blendMode": "add"
+        }
+    ],
+    
+    "baseColorR": 120,
+    "baseColorG": 80,
+    "baseColorB": 60,
+    "specularIntensity": 0.1,
+    "hasRings": false,
+    
+    "isHabitable": false,
+    "hasMagneticField": true,
+    "tidallyLocked": false,
+    
+    "children": ["sulfos"]
+}

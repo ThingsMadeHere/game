@@ -1,0 +1,66 @@
+{
+    "id": "sulfos",
+    "name": "Sulfos",
+    "description": "A hellish moon orbiting Proxmai, shrouded in thick clouds of sulfuric acid. Despite the toxic atmosphere, primitive sulfur-based life has evolved in the upper atmosphere layers.",
+    "planetType": "terrestrial",
+    "parent": "proxmai",
+    
+    "semiMajorAxis": 25.0,
+    "eccentricity": 0.03,
+    "inclination": 5.2,
+    
+    "radius": 0.45,
+    "mass": 0.092,
+    "rotationalPeriod": 124.8,
+    "axialTilt": 2.0,
+    
+    "hasAtmosphere": true,
+    "surfacePressure": 45.0,
+    "skyColorR": 0.9,
+    "skyColorG": 0.85,
+    "skyColorB": 0.3,
+    "averageTemperature": 220.0,
+    "hasWeather": true,
+    "weatherType": "acid_storms",
+    
+    "baseHeight": -50.0,
+    "heightScale": 20.0,
+    "waterLevel": -200.0,
+    "cliffThreshold": 0.8,
+    
+    "noiseLayers": [
+        {
+            "name": "corrosion",
+            "amplitude": 0.8,
+            "frequency": 0.02,
+            "octaves": 4,
+            "blendMode": "add"
+        },
+        {
+            "name": "acid_pools",
+            "amplitude": 0.4,
+            "frequency": 0.04,
+            "octaves": 3,
+            "blendMode": "subtract"
+        },
+        {
+            "name": "crystals",
+            "amplitude": 0.3,
+            "frequency": 0.1,
+            "octaves": 5,
+            "blendMode": "add"
+        }
+    ],
+    
+    "baseColorR": 180,
+    "baseColorG": 160,
+    "baseColorB": 40,
+    "specularIntensity": 0.6,
+    "hasRings": false,
+    
+    "isHabitable": false,
+    "hasMagneticField": false,
+    "tidallyLocked": true,
+    
+    "children": []
+}

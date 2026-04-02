@@ -1,0 +1,66 @@
+{
+    "id": "oceanus",
+    "name": "Oceanus",
+    "description": "A serene ocean world where small volcanic islands dot an endless expanse of deep water. The planet's relatively low gravity and thick atmosphere create massive waves and stable climate patterns.",
+    "planetType": "terrestrial",
+    "parent": "sandos",
+    
+    "semiMajorAxis": 520.0,
+    "eccentricity": 0.04,
+    "inclination": 1.8,
+    
+    "radius": 0.95,
+    "mass": 0.8,
+    "rotationalPeriod": 22.0,
+    "axialTilt": 18.5,
+    
+    "hasAtmosphere": true,
+    "surfacePressure": 1.2,
+    "skyColorR": 0.35,
+    "skyColorG": 0.55,
+    "skyColorB": 0.75,
+    "averageTemperature": 18.0,
+    "hasWeather": true,
+    "weatherType": "tropical_storms",
+    
+    "baseHeight": -80.0,
+    "heightScale": 15.0,
+    "waterLevel": 0.0,
+    "cliffThreshold": 0.9,
+    
+    "noiseLayers": [
+        {
+            "name": "islands",
+            "amplitude": 1.0,
+            "frequency": 0.015,
+            "octaves": 3,
+            "blendMode": "add"
+        },
+        {
+            "name": "seafloor",
+            "amplitude": 0.6,
+            "frequency": 0.04,
+            "octaves": 5,
+            "blendMode": "add"
+        },
+        {
+            "name": "detail",
+            "amplitude": 0.2,
+            "frequency": 0.1,
+            "octaves": 4,
+            "blendMode": "add"
+        }
+    ],
+    
+    "baseColorR": 30,
+    "baseColorG": 60,
+    "baseColorB": 120,
+    "specularIntensity": 0.8,
+    "hasRings": false,
+    
+    "isHabitable": true,
+    "hasMagneticField": true,
+    "tidallyLocked": false,
+    
+    "children": []
+}

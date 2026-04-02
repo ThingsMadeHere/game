@@ -1,0 +1,68 @@
+{
+    "id": "massivo",
+    "name": "Massivo",
+    "description": "A massive gas giant with swirling amber and rust-colored bands. Its powerful magnetosphere and radiation belts make its inner moons dangerous, but its beauty is unmatched in the Sandos system.",
+    "planetType": "gas_giant",
+    "parent": "sandos",
+    
+    "semiMajorAxis": 1200.0,
+    "eccentricity": 0.06,
+    "inclination": 1.2,
+    
+    "radius": 9.2,
+    "mass": 260.0,
+    "rotationalPeriod": 10.5,
+    "axialTilt": 3.1,
+    
+    "hasAtmosphere": true,
+    "surfacePressure": 1000.0,
+    "skyColorR": 0.8,
+    "skyColorG": 0.55,
+    "skyColorB": 0.25,
+    "averageTemperature": -110.0,
+    "hasWeather": true,
+    "weatherType": "storm_bands",
+    
+    "baseHeight": 0.0,
+    "heightScale": 5.0,
+    "waterLevel": -1000.0,
+    "cliffThreshold": 0.99,
+    
+    "noiseLayers": [
+        {
+            "name": "banding",
+            "amplitude": 0.4,
+            "frequency": 0.005,
+            "octaves": 3,
+            "blendMode": "add"
+        },
+        {
+            "name": "storms",
+            "amplitude": 0.3,
+            "frequency": 0.02,
+            "octaves": 5,
+            "blendMode": "add"
+        },
+        {
+            "name": "swirls",
+            "amplitude": 0.2,
+            "frequency": 0.04,
+            "octaves": 4,
+            "blendMode": "add"
+        }
+    ],
+    
+    "baseColorR": 180,
+    "baseColorG": 120,
+    "baseColorB": 50,
+    "specularIntensity": 0.5,
+    "hasRings": true,
+    "ringInnerRadius": 12.0,
+    "ringOuterRadius": 18.0,
+    
+    "isHabitable": false,
+    "hasMagneticField": true,
+    "tidallyLocked": false,
+    
+    "children": ["vulcan", "glacieo"]
+}

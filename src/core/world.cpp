@@ -1,4 +1,5 @@
 #include "world.h"
+#include "planet.h"
 #include "../rendering/marching_cubes.h"
 #include "../rendering/gpu_renderer.h"
 #include "../terrain/terrain.h"
@@ -82,6 +83,10 @@ Chunk& World::GetChunk(int cx, int cy, int cz) {
 void World::GenerateTerrain(Chunk& chunk) {
     printf("Generating terrain for chunk (%d, %d, %d)\n", chunk.cx, chunk.cy, chunk.cz);
     
+    // Get active planet ID from planet system
+    PlanetDefinition* activePlanet = g_PlanetSystem.GetActivePlanet();
+    std::string planetId = activePlanet ? activePlanet->id : "etaui";
+    
     for (int x = 0; x < CHUNK_SIZE; x++) {
         for (int y = 0; y < CHUNK_HEIGHT; y++) {
             for (int z = 0; z < CHUNK_SIZE; z++) {
@@ -89,63 +94,10 @@ void World::GenerateTerrain(Chunk& chunk) {
                 float worldY = (float)(chunk.cy * CHUNK_HEIGHT + y) * VOXEL_SIZE;
                 float worldZ = (float)(chunk.cz * CHUNK_SIZE + z) * VOXEL_SIZE;
                 
-                // Generate proper continuous terrain height
-                float groundHeight = 8.0f + SmoothNoise3D(worldX * 0.02f, 0, worldZ * 0.02f) * 6.0f;
-                
-                // Create solid ground below height, air above
-                float density = 0.0f;
-                unsigned char material = 0; // AIR by default
-                
-                if (worldY < groundHeight) {
-                    density = 1.0f; // Solid ground
-                    
-                    // Generate random material based on noise
-                    float materialNoise = SmoothNoise3D(worldX * 0.1f, worldY * 0.1f, worldZ * 0.1f);
-                    
-                    // Determine material based on depth and noise
-                    if (worldY < groundHeight - 3.0f) {
-                        // Underground materials
-                        if (materialNoise > 0.7f) {
-                            material = 8; // COAL (rare)
-                        } else if (materialNoise > 0.6f) {
-                            material = 9; // IRON (uncommon)
-                        } else if (materialNoise > 0.55f && worldY < groundHeight - 6.0f) {
-                            material = 10; // GOLD (rare, deep)
-                        } else if (materialNoise > 0.5f && worldY < groundHeight - 8.0f) {
-                            material = 11; // DIAMOND (very rare, very deep)
-                        } else {
-                            material = 1; // STONE (common)
-                        }
-                    } else if (worldY < groundHeight - 1.0f) {
-                        // Sub-surface materials
-                        if (materialNoise > 0.4f) {
-                            material = 2; // DIRT
-                        } else {
-                            material = 1; // STONE
-                        }
-                    } else {
-                        // Surface materials
-                        if (materialNoise > 0.3f) {
-                            material = 3; // GRASS
-                        } else if (materialNoise > 0.2f) {
-                            material = 4; // SAND
-                        } else {
-                            material = 3; // GRASS
-                        }
-                    }
-                    
-                    // Add some caves - hollow out areas below surface
-                    if (worldY < groundHeight - 2.0f) {
-                        float caveNoise = SmoothNoise3D(worldX * 0.05f, worldY * 0.05f, worldZ * 0.05f);
-                        if (caveNoise > 0.6f) {
-                            density = -1.0f; // Cave
-                            material = 0; // AIR
-                        }
-                    }
-                } else {
-                    density = -1.0f; // Air
-                    material = 0; // AIR
-                }
+                // Use planet system to generate terrain based on config
+                float density;
+                unsigned char material;
+                g_PlanetSystem.ApplyTerrainNoise(worldX, worldY, worldZ, density, material, planetId);
                 
                 chunk.SetDensity(x, y, z, density);
                 chunk.SetMaterial(x, y, z, material);
@@ -196,6 +148,18 @@ float World::GetVoxel(int cx, int cy, int cz, int x, int y, int z) {
 
 void World::Init() {
     running = true;
+    
+    // Initialize noise presets first
+    InitPlanetNoisePresets();
+    
+    // Load all planet configurations
+    if (!g_PlanetSystem.LoadAllPlanetsFromDirectory("../data/planets/")) {
+        printf("WARNING: Failed to load some planet configs\n");
+    }
+    
+    // Set active planet to Etaui (the hellscape starting world)
+    g_PlanetSystem.SetActivePlanet("etaui");
+    printf("Active planet set to: Etaui\n");
     
     // Start worker threads for chunk generation
     int numThreads = std::thread::hardware_concurrency();

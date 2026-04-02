@@ -6,7 +6,7 @@
 #include "../ui/loading_screen.h"
 // #include "../audio/audio_system.h"
 #include "../terrain/noise.h"
-#include "../rendering/deferred_renderer.h"
+#include "../rendering/shadow_renderer.h"
 #include <cstdio>
 #include <cmath>
 #include <cstdlib>
@@ -29,8 +29,8 @@ Shader skyShader = {0};
 Mesh skyMesh = {0};
 Model skyModel = {0};
 
-// Global deferred renderer
-DeferredRenderer g_deferredRenderer;
+// Global shadow renderer
+ShadowRenderer g_shadowRenderer;
 
 // Player physics variables
 Vector3 playerVelocity = {0.0f, 0.0f, 0.0f};
@@ -79,8 +79,8 @@ int main() {
     // Initialize sky renderer
     InitSkyRenderer();
     
-    // Initialize deferred renderer
-    g_deferredRenderer.Init(screenWidth, screenHeight);
+    // Initialize shadow renderer
+    g_shadowRenderer.Init(2048);
     
     // Game state
     bool gameInitialized = false;  // Make sure this starts as false
@@ -436,38 +436,28 @@ int main() {
             BeginDrawing();
             ClearBackground({135, 206, 235, 255}); // Sky blue background
             
-            // === DEFERRED RENDERING PIPELINE WITH SHADOWS ===
+            // === SHADOW MAPPING RENDERING ===
             
-            // 1. SHADOW PASS - Render to shadow map from light's perspective
+            // 1. Shadow pass - render scene from light's perspective
             Vector3 lightDir = {0.5f, -1.0f, 0.3f};
             Vector3 sceneCenter = camera.position;
             float sceneRadius = 100.0f;
-            g_deferredRenderer.BeginShadowPass(lightDir, sceneCenter, sceneRadius);
-            world.RenderShadows(g_deferredRenderer.GetLightSpaceMatrix(), g_deferredRenderer.GetShadowShader());
-            g_deferredRenderer.EndShadowPass();
             
-            // 2. GEOMETRY PASS - Render to G-Buffer from camera's perspective
-            g_deferredRenderer.BeginGeometryPass(camera);
+            g_shadowRenderer.BeginShadowPass(lightDir, sceneCenter, sceneRadius);
+            world.RenderShadows(g_shadowRenderer.GetLightSpaceMatrix(), g_shadowRenderer.GetShadowShader());
+            g_shadowRenderer.EndShadowPass();
             
-            // 3D rendering into G-Buffer
+            // 2. Main pass - render with shadows
             BeginMode3D(camera);
+            g_shadowRenderer.BeginMainPass(camera, lightDir);
             
-            // DEBUG: Draw a simple test cube to verify rendering works
             DrawCube((Vector3){0.0f, 0.0f, 10.0f}, 2.0f, 2.0f, 2.0f, RED);
-            
             world.Render(camera);
+            
+            g_shadowRenderer.EndMainPass();
             EndMode3D();
             
-            g_deferredRenderer.EndGeometryPass();
-            
-            // 3. DEBUG NORMAL VISUALIZATION - Show G-Buffer normals instead of composite
-            g_deferredRenderer.BeginCompositePass();
-            
-            g_deferredRenderer.DebugDrawGBufferNormals();
-            
-            g_deferredRenderer.EndCompositePass();
-            
-            // === END DEFERRED RENDERING PIPELINE ===
+            // === END SHADOW MAPPING ===
             
             // 2D UI (rendered on top)
             
@@ -509,7 +499,7 @@ int main() {
         }
     }
     
-    world.Cleanup(); // Cleanup GPU renderer
+    world.Cleanup();
     CloseWindow();
     return 0;
 }

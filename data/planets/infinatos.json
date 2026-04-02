@@ -1,0 +1,82 @@
+{
+    "id": "infinatos",
+    "name": "Infinatos",
+    "description": "The outermost planet of the Sandos system, Infinatos is an ice world with vast frozen plains covering deep subsurface oceans. Hydrothermal vents at the ocean floor may harbor the most isolated life in the system.",
+    "planetType": "terrestrial",
+    "parent": "sandos",
+    
+    "semiMajorAxis": 1850.0,
+    "eccentricity": 0.15,
+    "inclination": 12.5,
+    
+    "radius": 0.88,
+    "mass": 0.65,
+    "rotationalPeriod": 31.0,
+    "axialTilt": 42.0,
+    
+    "hasAtmosphere": true,
+    "surfacePressure": 0.25,
+    "skyColorR": 0.3,
+    "skyColorG": 0.35,
+    "skyColorB": 0.45,
+    "averageTemperature": -65.0,
+    "hasWeather": true,
+    "weatherType": "nitrogen_snow",
+    
+    "baseHeight": -60.0,
+    "heightScale": 30.0,
+    "waterLevel": -0.3,
+    "cliffThreshold": 0.75,
+    "iceSheetThickness": 15.0,
+    "subsurfaceOcean": true,
+    
+    "noiseLayers": [
+        {
+            "name": "ice_sheets",
+            "amplitude": 0.7,
+            "frequency": 0.008,
+            "octaves": 4,
+            "blendMode": "add"
+        },
+        {
+            "name": "crevasses",
+            "amplitude": 0.5,
+            "frequency": 0.02,
+            "octaves": 5,
+            "blendMode": "subtract"
+        },
+        {
+            "name": "pressure_ridges",
+            "amplitude": 0.4,
+            "frequency": 0.05,
+            "octaves": 4,
+            "blendMode": "add"
+        },
+        {
+            "name": "vent_fields",
+            "amplitude": 0.3,
+            "frequency": 0.1,
+            "octaves": 3,
+            "blendMode": "add"
+        },
+        {
+            "name": "detail",
+            "amplitude": 0.15,
+            "frequency": 0.2,
+            "octaves": 4,
+            "blendMode": "add"
+        }
+    ],
+    
+    "baseColorR": 220,
+    "baseColorG": 235,
+    "baseColorB": 245,
+    "specularIntensity": 0.6,
+    "hasRings": false,
+    
+    "isHabitable": false,
+    "hasMagneticField": true,
+    "tidallyLocked": false,
+    
+    "children": []
+}

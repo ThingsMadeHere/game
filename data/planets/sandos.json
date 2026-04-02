@@ -1,0 +1,23 @@
+{
+    "id": "sandos",
+    "name": "Sandos",
+    "description": "A K-type orange dwarf star, cooler and dimmer than Sol but stable and long-lived. Its 0.6 solar masses give it a warm orange glow that bathes its planets in amber light.",
+    "planetType": "star",
+    
+    "mass": 0.6,
+    "radius": 0.7,
+    "surfaceGravity": 168.0,
+    "rotationalPeriod": 28.0,
+    "axialTilt": 7.2,
+    
+    "starType": "K",
+    "surfaceTemperature": 3700,
+    "luminosity": 0.16,
+    
+    "colorR": 1.0,
+    "colorG": 0.65,
+    "colorB": 0.25,
+    
+    "children": ["proxmai", "oceanus", "etaui", "massivo", "infinatos"],
+    "isHabitable": false
+}

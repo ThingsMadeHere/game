@@ -1,0 +1,73 @@
+{
+    "id": "etaui",
+    "name": "Etaui",
+    "description": "A chlorenated hellscape where chlorine-based biochemistry has produced aggressive, corrosive ecosystems. The atmosphere is toxic to oxygen-breathing life, but complex chlorine-metabolizing organisms thrive in the acidic wetlands.",
+    "planetType": "terrestrial",
+    "parent": "sandos",
+    
+    "semiMajorAxis": 680.0,
+    "eccentricity": 0.08,
+    "inclination": 3.5,
+    
+    "radius": 0.92,
+    "mass": 0.75,
+    "rotationalPeriod": 26.5,
+    "axialTilt": 28.3,
+    
+    "hasAtmosphere": true,
+    "surfacePressure": 1.4,
+    "skyColorR": 0.75,
+    "skyColorG": 0.9,
+    "skyColorB": 0.4,
+    "averageTemperature": 35.0,
+    "hasWeather": true,
+    "weatherType": "chlorine_storms",
+    
+    "baseHeight": -10.0,
+    "heightScale": 35.0,
+    "waterLevel": 0.15,
+    "cliffThreshold": 0.65,
+    
+    "noiseLayers": [
+        {
+            "name": "swamp_beds",
+            "amplitude": 0.9,
+            "frequency": 0.012,
+            "octaves": 4,
+            "blendMode": "add"
+        },
+        {
+            "name": "hills",
+            "amplitude": 0.5,
+            "frequency": 0.03,
+            "octaves": 5,
+            "blendMode": "add"
+        },
+        {
+            "name": "coral_structures",
+            "amplitude": 0.4,
+            "frequency": 0.07,
+            "octaves": 6,
+            "blendMode": "add"
+        },
+        {
+            "name": "detail",
+            "amplitude": 0.15,
+            "frequency": 0.18,
+            "octaves": 4,
+            "blendMode": "add"
+        }
+    ],
+    
+    "baseColorR": 60,
+    "baseColorG": 140,
+    "baseColorB": 80,
+    "specularIntensity": 0.4,
+    "hasRings": false,
+    
+    "isHabitable": false,
+    "hasMagneticField": true,
+    "tidallyLocked": false,
+    
+    "children": ["etauos"]
+}

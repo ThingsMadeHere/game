@@ -1,0 +1,74 @@
+{
+    "id": "glacieo",
+    "name": "Glacieo",
+    "description": "A Titan-like moon orbiting Massivo, Glacieo is a world of methane lakes and ethane rivers. Thick orange clouds shroud a frozen landscape where cryovolcanoes occasionally erupt with ammonia-water magma.",
+    "planetType": "terrestrial",
+    "parent": "massivo",
+    
+    "semiMajorAxis": 38.0,
+    "eccentricity": 0.03,
+    "inclination": 7.8,
+    
+    "radius": 0.4,
+    "mass": 0.025,
+    "rotationalPeriod": 100.8,
+    "axialTilt": 26.7,
+    
+    "hasAtmosphere": true,
+    "surfacePressure": 1.5,
+    "skyColorR": 0.75,
+    "skyColorG": 0.5,
+    "skyColorB": 0.25,
+    "averageTemperature": -178.0,
+    "hasWeather": true,
+    "weatherType": "methane_rain",
+    
+    "baseHeight": -20.0,
+    "heightScale": 25.0,
+    "waterLevel": -0.5,
+    "cliffThreshold": 0.7,
+    "liquidType": "methane",
+    
+    "noiseLayers": [
+        {
+            "name": "ice_terrain",
+            "amplitude": 0.8,
+            "frequency": 0.015,
+            "octaves": 4,
+            "blendMode": "add"
+        },
+        {
+            "name": "methane_lakes",
+            "amplitude": 0.5,
+            "frequency": 0.03,
+            "octaves": 3,
+            "blendMode": "subtract"
+        },
+        {
+            "name": "cryovolcanoes",
+            "amplitude": 0.6,
+            "frequency": 0.06,
+            "octaves": 4,
+            "blendMode": "add"
+        },
+        {
+            "name": "ice_crystals",
+            "amplitude": 0.3,
+            "frequency": 0.12,
+            "octaves": 5,
+            "blendMode": "add"
+        }
+    ],
+    
+    "baseColorR": 160,
+    "baseColorG": 100,
+    "baseColorB": 50,
+    "specularIntensity": 0.4,
+    "hasRings": false,
+    
+    "isHabitable": false,
+    "hasMagneticField": false,
+    "tidallyLocked": false,
+    
+    "children": []
+}

@@ -1,4 +1,5 @@
 #include "planet.h"
+#include "../terrain/noise.h"
 #include <fstream>
 #include <sstream>
 #include <algorithm>
@@ -305,11 +306,21 @@ bool PlanetSystem::LoadAllPlanetsFromDirectory(const std::string& directory) {
     // For now, this is a placeholder - would need filesystem iteration
     // In a real implementation, you'd use std::filesystem or platform-specific code
     
-    // Try loading default planet files
+    // Try loading all planet files including new Sandos system
     std::vector<std::string> defaultFiles = {
         dir + "earth.json",
         dir + "mars.json",
-        dir + "moon.json"
+        dir + "moon.json",
+        dir + "sandos.json",
+        dir + "proxmai.json",
+        dir + "sulfos.json",
+        dir + "oceanus.json",
+        dir + "etaui.json",
+        dir + "etauos.json",
+        dir + "massivo.json",
+        dir + "vulcan.json",
+        dir + "glacieo.json",
+        dir + "infinatos.json"
     };
     
     int loaded = 0;
@@ -543,56 +554,91 @@ void PlanetSystem::ApplyTerrainNoise(float x, float y, float z, float& outDensit
                                     unsigned char& outMaterial, const std::string& planetId) {
     const PlanetDefinition* planet = GetPlanet(planetId);
     if (!planet) {
-        // Use default generation if planet not found
         outDensity = 0.0f;
         outMaterial = 0;
         return;
     }
     
-    // Evaluate noise layers
-    float noiseValue = 0.0f;
-    float totalAmplitude = 0.0f;
+    // Get noise preset for this planet type
+    const std::vector<NoiseLayerDef>* preset = GetPlanetNoisePreset(planet->planetType);
+    if (!preset || preset->empty()) {
+        // Fallback to simple terrain
+        float height = 8.0f;
+        if (y < height) {
+            outDensity = 1.0f;
+            outMaterial = (y < height - 2.0f) ? 3 : 1;
+        } else {
+            outDensity = -1.0f;
+            outMaterial = 0;
+        }
+        return;
+    }
     
+    // Build a map of blend configurations from JSON by layer name
+    std::unordered_map<std::string, std::pair<std::string, float>> blendConfigs;
     for (const auto& layer : planet->terrain.noiseLayers) {
-        float layerNoise = FBM(x * layer.frequency, y * layer.frequency, z * layer.frequency, layer.octaves);
-        layerNoise = layerNoise * layer.amplitude + layer.offset;
+        blendConfigs[layer.name] = {layer.blendMode, layer.blendFactor};
+    }
+    
+    // Evaluate noise layers using preset parameters with JSON blend settings
+    float noiseValue = 0.0f;
+    float totalWeight = 0.0f;
+    
+    for (const auto& def : *preset) {
+        // Use 2D noise (X, Z) for terrain surface height
+        float layerNoise = FBM(x * def.frequency, z * def.frequency, 0.0f, def.octaves);
+        layerNoise = layerNoise * def.amplitude + def.offset;
         
-        if (layer.blendMode == "add") {
-            noiseValue += layerNoise * layer.blendFactor;
-        } else if (layer.blendMode == "multiply") {
-            noiseValue *= layerNoise;
-        } else if (layer.blendMode == "max") {
-            noiseValue = fmaxf(noiseValue, layerNoise);
-        } else if (layer.blendMode == "min") {
-            noiseValue = fminf(noiseValue, layerNoise);
-        } else if (layer.blendMode == "lerp") {
-            noiseValue = noiseValue * (1.0f - layer.blendFactor) + layerNoise * layer.blendFactor;
+        // Get blend configuration from JSON (defaults to "add" with factor 1.0)
+        std::string blendMode = "add";
+        float blendFactor = 1.0f;
+        auto it = blendConfigs.find(def.name);
+        if (it != blendConfigs.end()) {
+            blendMode = it->second.first;
+            blendFactor = it->second.second;
+            if (blendFactor == 0.0f) blendFactor = 1.0f; // Default if not set
         }
         
-        totalAmplitude += layer.amplitude;
+        // Apply blend mode
+        if (blendMode == "add") {
+            noiseValue += layerNoise * blendFactor;
+        } else if (blendMode == "multiply") {
+            noiseValue *= layerNoise;
+        } else if (blendMode == "max") {
+            noiseValue = fmaxf(noiseValue, layerNoise);
+        } else if (blendMode == "min") {
+            noiseValue = fminf(noiseValue, layerNoise);
+        } else if (blendMode == "subtract") {
+            noiseValue -= layerNoise * blendFactor;
+        } else if (blendMode == "lerp") {
+            noiseValue = noiseValue * (1.0f - blendFactor) + layerNoise * blendFactor;
+        } else {
+            // Default to add
+            noiseValue += layerNoise * blendFactor;
+        }
+        
+        totalWeight += def.amplitude;
     }
     
-    // Normalize noise value
-    if (totalAmplitude > 0) {
-        noiseValue /= totalAmplitude;
+    // Normalize
+    if (totalWeight > 0) {
+        noiseValue /= totalWeight;
     }
     
-    // Apply height scale and base height
-    float height = planet->terrain.baseHeight + noiseValue * planet->terrain.heightScale;
+    // Calculate surface height using planet's baseHeight and heightScale from JSON
+    float surfaceHeight = planet->terrain.baseHeight + noiseValue * planet->terrain.heightScale;
     
-    // Determine density based on height
-    float worldY = y;
-    if (worldY < height) {
+    // Determine density and material
+    if (y < surfaceHeight) {
         outDensity = 1.0f;
         
-        // Determine material based on depth and noise
-        float depth = height - worldY;
+        float depth = surfaceHeight - y;
         if (depth > 5.0f) {
             outMaterial = 3; // Stone
         } else if (depth > 1.0f) {
             outMaterial = 2; // Dirt
         } else {
-            outMaterial = 1; // Grass
+            outMaterial = 1; // Surface
         }
     } else {
         outDensity = -1.0f;

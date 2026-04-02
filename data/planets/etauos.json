@@ -1,0 +1,73 @@
+{
+    "id": "etauos",
+    "name": "Etauos",
+    "description": "The volcanic moon of Etaui, Etauos is surprisingly habitable despite its violent geology. Water exists on the surface in small seas, and the atmosphere is breathable if thin. Volcanic vents create warm oases amid the frozen wastes.",
+    "planetType": "terrestrial",
+    "parent": "etaui",
+    
+    "semiMajorAxis": 18.0,
+    "eccentricity": 0.02,
+    "inclination": 8.5,
+    
+    "radius": 0.48,
+    "mass": 0.105,
+    "rotationalPeriod": 67.2,
+    "axialTilt": 1.5,
+    
+    "hasAtmosphere": true,
+    "surfacePressure": 0.35,
+    "skyColorR": 0.55,
+    "skyColorG": 0.45,
+    "skyColorB": 0.65,
+    "averageTemperature": -15.0,
+    "hasWeather": true,
+    "weatherType": "volcanic_ash",
+    
+    "baseHeight": -30.0,
+    "heightScale": 40.0,
+    "waterLevel": -0.2,
+    "cliffThreshold": 0.5,
+    
+    "noiseLayers": [
+        {
+            "name": "volcanoes",
+            "amplitude": 1.1,
+            "frequency": 0.01,
+            "octaves": 4,
+            "blendMode": "add"
+        },
+        {
+            "name": "lava_flows",
+            "amplitude": 0.5,
+            "frequency": 0.025,
+            "octaves": 5,
+            "blendMode": "add"
+        },
+        {
+            "name": "craters",
+            "amplitude": 0.3,
+            "frequency": 0.05,
+            "octaves": 3,
+            "blendMode": "subtract"
+        },
+        {
+            "name": "ice_fields",
+            "amplitude": 0.4,
+            "frequency": 0.08,
+            "octaves": 4,
+            "blendMode": "add"
+        }
+    ],
+    
+    "baseColorR": 80,
+    "baseColorG": 70,
+    "baseColorB": 90,
+    "specularIntensity": 0.2,
+    "hasRings": false,
+    
+    "isHabitable": true,
+    "hasMagneticField": false,
+    "tidallyLocked": true,
+    
+    "children": []
+}
