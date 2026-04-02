@@ -58,19 +58,24 @@ void GPUChunkRenderer::Init() {
     // Set texture atlas on the material
     chunkModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = textureAtlas.GetTexture();
     
+    // Create cached materials once during initialization
+    cachedTerrainMaterial = LoadMaterialDefault();
+    cachedTerrainMaterial.maps[MATERIAL_MAP_DIFFUSE].texture = textureAtlas.GetTexture();
+    cachedTerrainMaterial.maps[MATERIAL_MAP_DIFFUSE].color = WHITE;
+    cachedTerrainMaterial.maps[MATERIAL_MAP_DIFFUSE].value = 1.0f;
+    cachedTerrainMaterial.shader = voxelShader;
+    
+    cachedShadowMaterial = LoadMaterialDefault();
+    cachedShadowMaterial.shader = shadowShader;
+    
     fprintf(stderr,"GPU Chunk Renderer initialized\n");
 }
 
 void GPUChunkRenderer::RenderChunk(const Chunk& chunk, const Camera3D& camera) {
     // Only render chunks with valid generated meshes - no fallback
     if (chunk.meshGenerated && chunk.mesh.vertexCount > 0 && chunk.mesh.vertices != nullptr) {
-        fprintf(stderr,"Rendering chunk (%d,%d,%d) with %d vertices\n", 
-               chunk.cx, chunk.cy, chunk.cz, chunk.mesh.vertexCount);
-        
         // Skip chunks with too many vertices (potential crash)
         if (chunk.mesh.vertexCount > 50000) {
-            fprintf(stderr,"Chunk (%d,%d,%d) has too many vertices (%d) - skipping for stability\n", 
-                   chunk.cx, chunk.cy, chunk.cz, chunk.mesh.vertexCount);
             return;
         }
         
@@ -98,30 +103,13 @@ void GPUChunkRenderer::RenderChunk(const Chunk& chunk, const Camera3D& camera) {
         // Bind texture atlas to texture unit 1
         SetShaderValueTexture(voxelShader, uGrassTexture, textureAtlas.GetTexture());
         
-        // Draw mesh using material with grass texture and shader
+        // Draw mesh using cached material (no allocation)
         Matrix transform = MatrixMultiply(
             MatrixScale(1.0f, 1.0f, 1.0f),
             MatrixTranslate(chunkPos.x, chunkPos.y, chunkPos.z)
         );
         
-        // Use texture atlas material
-        Material terrainMat = LoadMaterialDefault();
-        terrainMat.maps[MATERIAL_MAP_DIFFUSE].texture = textureAtlas.GetTexture();
-        
-        // Enable lighting
-        terrainMat.maps[MATERIAL_MAP_DIFFUSE].color = WHITE;
-        terrainMat.maps[MATERIAL_MAP_DIFFUSE].value = 1; // Enable diffuse lighting
-        
-        DrawMesh(chunk.mesh, terrainMat, transform);
-        
-        // DEBUG: Draw a wireframe cube at chunk position to verify location
-        DrawCubeWires(chunkPos, CHUNK_SIZE * VOXEL_SIZE, CHUNK_HEIGHT * VOXEL_SIZE, 
-                      CHUNK_SIZE * VOXEL_SIZE, YELLOW);
-        
-    } else {
-        // No mesh available - skip rendering (chunks should be generated before rendering)
-        fprintf(stderr,"No mesh for chunk (%d,%d,%d) - skipping render\n", 
-               chunk.cx, chunk.cy, chunk.cz);
+        DrawMesh(chunk.mesh, cachedTerrainMaterial, transform);
     }
 }
 
@@ -150,10 +138,9 @@ void GPUChunkRenderer::RenderChunkShadow(const Chunk& chunk, const Matrix& light
         SetShaderValueMatrix(shadowShader, uLightSpaceMatrix, lightSpaceMatrix);
         SetShaderValueMatrix(shadowShader, uModel, model);
         
-        // Draw mesh with shadow shader
-        Material mat = LoadMaterialDefault();
-        mat.shader = shadowShader;
-        DrawMesh(chunk.mesh, mat, MatrixIdentity());
+        // Update cached shadow material shader and draw (no allocation)
+        cachedShadowMaterial.shader = shadowShader;
+        DrawMesh(chunk.mesh, cachedShadowMaterial, MatrixIdentity());
     }
 }
 
@@ -177,61 +164,4 @@ void GPUChunkRenderer::Cleanup() {
     }
     
     printf("GPU Chunk Renderer cleaned up\n");
-}
-
-// Generate a 32x32 procedural grass texture
-Texture2D GPUChunkRenderer::GenerateGrassTexture() {
-    int size = 32;
-    Color* pixels = new Color[size * size];
-    
-    // Base grass colors
-    Color darkGreen = {34, 139, 34, 255};    // Forest green
-    Color lightGreen = {50, 205, 50, 255};   // Lime green
-    Color brown = {139, 69, 19, 255};        // Saddle brown for dirt patches
-    
-    for (int y = 0; y < size; y++) {
-        for (int x = 0; x < size; x++) {
-            // Simple noise-like pattern
-            float noise = (float)(rand() % 100) / 100.0f;
-            
-            // Create grass pattern with variation
-            Color pixel;
-            if (noise < 0.1f) {
-                pixel = brown; // Occasional dirt patches
-            } else if (noise < 0.6f) {
-                pixel = darkGreen;
-            } else {
-                pixel = lightGreen;
-            }
-            
-            // Add some vertical streaks for grass blades
-            if ((x + y) % 3 == 0 && noise > 0.3f) {
-                pixel.r = (unsigned char)fminf(255, pixel.r + 20);
-                pixel.g = (unsigned char)fminf(255, pixel.g + 30);
-            }
-            
-            pixels[y * size + x] = pixel;
-        }
-    }
-    
-    // Create image from pixels
-    Image grassImage = {
-        pixels,
-        size,
-        size,
-        1,
-        PIXELFORMAT_UNCOMPRESSED_R8G8B8A8
-    };
-    
-    // Load texture from image
-    Texture2D texture = LoadTextureFromImage(grassImage);
-    
-    // Set texture to repeat
-    SetTextureWrap(texture, TEXTURE_WRAP_REPEAT);
-    
-    // Unload image (data is copied to GPU)
-    UnloadImage(grassImage);
-    
-    fprintf(stderr,"Generated grass texture: %dx%d\n", size, size);
-    return texture;
 }
