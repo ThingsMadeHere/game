@@ -37,7 +37,11 @@ void PlanetMapGUI::LoadPlanetsFromSystem() {
         }
         
         // Get orbital position (relative to parent)
-        Vector3 pos = PlanetUtils::CalculateOrbitalPosition(planet->orbit, 0.0f);
+        // Stars stay at origin, other bodies orbit their parent
+        Vector3 pos = {0, 0, 0};
+        if (planet->planetType != "star" || !planet->orbit.parentObjectId.empty()) {
+            pos = PlanetUtils::CalculateOrbitalPosition(planet->orbit, 0.0f);
+        }
         entry.position = {pos.x * 0.05f, pos.y * 0.05f, pos.z * 0.05f}; // Larger scale for visibility
         
         // Color based on planet type
@@ -63,17 +67,18 @@ void PlanetMapGUI::LoadPlanetsFromSystem() {
         planets.push_back(entry);
     }
     
-    // Second pass: adjust moon positions to orbit their parents, not the star
-    for (auto& moon : planets) {
-        if (!moon.isMoon) continue;
+    // Second pass: adjust moon/planet positions to be relative to their parents
+    // This creates the proper hierarchy: star at center, planets orbit star, moons orbit planets
+    for (auto& body : planets) {
+        if (!body.isMoon) continue; // Skip stars and root-level planets
         
-        // Find parent planet
+        // Find parent and add parent's position to this body's position
         for (const auto& parent : planets) {
-            if (parent.id == moon.parentName) {
-                // Add parent's position to moon's position
-                moon.position.x += parent.position.x;
-                moon.position.y += parent.position.y;
-                moon.position.z += parent.position.z;
+            if (parent.id == body.parentName) {
+                // Add parent's position to this body's position (recursive positioning)
+                body.position.x += parent.position.x;
+                body.position.y += parent.position.y;
+                body.position.z += parent.position.z;
                 break;
             }
         }
