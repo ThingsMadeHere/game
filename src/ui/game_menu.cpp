@@ -47,29 +47,30 @@ void GameMenu::ShowMainMenu() {
     
     // Buttons - centered on screen
     Rectangle playButton = {(float)GetScreenWidth()/2 - 100, 200, 200, 50};
-    Rectangle settingsButton = {(float)GetScreenWidth()/2 - 100, 270, 200, 50};
-    Rectangle exitButton = {(float)GetScreenWidth()/2 - 100, 340, 200, 50};
+    Rectangle planetMapButton = {(float)GetScreenWidth()/2 - 100, 270, 200, 50};
+    Rectangle settingsButton = {(float)GetScreenWidth()/2 - 100, 340, 200, 50};
+    Rectangle exitButton = {(float)GetScreenWidth()/2 - 100, 410, 200, 50};
     
     Color playColor = CheckCollisionPointRec(GetMousePosition(), playButton) ? YELLOW : WHITE;
+    Color planetMapColor = CheckCollisionPointRec(GetMousePosition(), planetMapButton) ? YELLOW : WHITE;
     Color settingsColor = CheckCollisionPointRec(GetMousePosition(), settingsButton) ? YELLOW : WHITE;
-    Color saveColor = CheckCollisionPointRec(GetMousePosition(), saveButton) ? YELLOW : WHITE;
     Color exitColor = CheckCollisionPointRec(GetMousePosition(), exitButton) ? YELLOW : WHITE;
     
     DrawRectangleLinesEx(playButton, 3, playColor);
     DrawText("PLAY", GetScreenWidth()/2 - 30, 215, 20, playColor);
     
-    DrawRectangleLinesEx(settingsButton, 3, settingsColor);
-    DrawText("SETTINGS", GetScreenWidth()/2 - 50, 285, 20, settingsColor);
+    DrawRectangleLinesEx(planetMapButton, 3, planetMapColor);
+    DrawText("PLANET MAP", GetScreenWidth()/2 - 60, 285, 20, planetMapColor);
     
-    DrawRectangleLinesEx(saveButton, 3, saveColor);
-    DrawText("SAVE", GetScreenWidth()/2 - 35, 335, 20, saveColor);
+    DrawRectangleLinesEx(settingsButton, 3, settingsColor);
+    DrawText("SETTINGS", GetScreenWidth()/2 - 50, 355, 20, settingsColor);
     
     DrawRectangleLinesEx(exitButton, 3, exitColor);
-    DrawText("EXIT", GetScreenWidth()/2 - 20, 355, 20, exitColor);
+    DrawText("EXIT", GetScreenWidth()/2 - 20, 425, 20, exitColor);
     
     // Instructions
-    DrawText("Click buttons to navigate | ESC to close menu", GetScreenWidth()/2 - 150, 450, 16, LIGHTGRAY);
-    DrawText("WASD: Move | Mouse: Look | Space/Shift: Up/Down", GetScreenWidth()/2 - 140, 480, 16, LIGHTGRAY);
+    DrawText("Click buttons to navigate | ESC to close menu", GetScreenWidth()/2 - 150, 500, 16, LIGHTGRAY);
+    DrawText("WASD: Move | Mouse: Look | Space/Shift: Up/Down", GetScreenWidth()/2 - 140, 530, 16, LIGHTGRAY);
 }
 
 void GameMenu::ShowSettings() {
@@ -126,16 +127,16 @@ void GameMenu::HandleMainMenu() {
         
         // Dynamic button positions
         Rectangle playButton = {(float)GetScreenWidth()/2 - 100, 200, 200, 50};
-        Rectangle settingsButton = {(float)GetScreenWidth()/2 - 100, 270, 200, 50};
-        Rectangle saveButton = {(float)GetScreenWidth()/2 - 100, 320, 200, 50};
-        Rectangle exitButton = {(float)GetScreenWidth()/2 - 100, 340, 200, 50};
+        Rectangle planetMapButton = {(float)GetScreenWidth()/2 - 100, 270, 200, 50};
+        Rectangle settingsButton = {(float)GetScreenWidth()/2 - 100, 340, 200, 50};
+        Rectangle exitButton = {(float)GetScreenWidth()/2 - 100, 410, 200, 50};
         
         if (CheckCollisionPointRec(mouse, playButton)) {
             currentState = MenuState::PLAYING;
+        } else if (CheckCollisionPointRec(mouse, planetMapButton)) {
+            currentState = MenuState::PLANET_MAP;
         } else if (CheckCollisionPointRec(mouse, settingsButton)) {
             currentState = MenuState::SETTINGS;
-        } else if (CheckCollisionPointRec(mouse, saveButton)) {
-            saveRequested = true;
         } else if (CheckCollisionPointRec(mouse, exitButton)) {
             // Exit game
             CloseWindow();

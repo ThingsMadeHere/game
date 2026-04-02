@@ -66,7 +66,6 @@ void GPUChunkRenderer::Init() {
     cachedTerrainMaterial.shader = voxelShader;
     
     cachedShadowMaterial = LoadMaterialDefault();
-    cachedShadowMaterial.shader = shadowShader;
     
     fprintf(stderr,"GPU Chunk Renderer initialized\n");
 }

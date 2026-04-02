@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include <raymath.h>
 #include "../ui/game_menu.h"
+#include "../ui/planet_map_gui.h"
 #include "../core/world.h"
 #include "../gameplay/inventory.h"
 #include "../ui/loading_screen.h"
@@ -92,12 +93,36 @@ int main() {
     // Initialize systems
     LoadingScreen loadingScreen;
     loadingScreen.Init();
+    
+    // Initialize planet map GUI
+    PlanetMapGUI planetMapGUI;
+    planetMapGUI.Init();
 
     while (!WindowShouldClose()) {
         currentMenuState = menu.Update();
         fprintf(stderr,"DEBUG: Menu state = %d\n", (int)currentMenuState);
         
-        if (currentMenuState == MenuState::PLAYING) {
+        if (currentMenuState == MenuState::PLANET_MAP) {
+            // Show planet map from main menu
+            if (!planetMapGUI.IsVisible()) {
+                planetMapGUI.Show();
+                EnableCursor();
+            }
+            
+            planetMapGUI.Update(GetFrameTime());
+            
+            // Check ESC to return to main menu
+            if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_M)) {
+                planetMapGUI.Hide();
+                currentMenuState = MenuState::MAIN_MENU;
+            }
+            
+            BeginDrawing();
+            ClearBackground(BLACK);
+            planetMapGUI.Render();
+            EndDrawing();
+            continue;
+        } else if (currentMenuState == MenuState::PLAYING) {
             fprintf(stderr,"DEBUG: Entered PLAYING state\n");
             // Handle loading screen
             if (isLoadingWorld) {
@@ -316,7 +341,24 @@ int main() {
                     inventory.ToggleOpen();
                 }
                 
-                // Mouse look
+                // Open planet map with M
+                if (IsKeyPressed(KEY_M)) {
+                    if (planetMapGUI.IsVisible()) {
+                        planetMapGUI.Hide();
+                        DisableCursor(); // Return to game
+                    } else {
+                        planetMapGUI.Show();
+                        EnableCursor(); // Show cursor for UI
+                    }
+                }
+                
+                // Update planet map if visible
+                if (planetMapGUI.IsVisible()) {
+                    planetMapGUI.Update(GetFrameTime());
+                }
+                
+                // Mouse look (only when not in map)
+                if (!planetMapGUI.IsVisible()) {
                 float mouseSensitivity = 0.003f;
                 Vector2 mouseDelta = GetMouseDelta();
                 
@@ -431,10 +473,22 @@ int main() {
                         lastPos = hitPos;
                     }
                 }
+                }
             }
             
             BeginDrawing();
             ClearBackground({135, 206, 235, 255}); // Sky blue background
+            
+            // === PLANET MAP RENDERING ===
+            if (planetMapGUI.IsVisible()) {
+                planetMapGUI.Render();
+                
+                // Still draw UI on top
+                DrawFPS(10, 10);
+                menu.Render();
+                EndDrawing();
+                continue; // Skip rest of rendering when map is open
+            }
             
             // === SHADOW MAPPING RENDERING ===
             
@@ -481,6 +535,9 @@ int main() {
             if (inventory.IsOpen()) {
                 inventory.DrawInventory(screenWidth, screenHeight);
             }
+            
+            // Draw planet map hint
+            DrawText("M: Planet Map", 10, 130, 15, YELLOW);
             
             // Draw selected block name
             auto& selected = inventory.GetSelectedItem();
