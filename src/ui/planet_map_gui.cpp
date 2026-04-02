@@ -33,23 +33,27 @@ void PlanetMapGUI::LoadPlanetsFromSystem() {
         entry.id = planet->id;
         entry.actualRadius = planet->physical.radius; // Real radius in Earth radii
         
-        // Scale radius: proportional to actual size but visible
-        // Star: very large, Planets: medium with realistic ratios, Moons: small
+        // Use real sizes proportionally
+        // Scale factor: 1 Earth radius = 2 units in visualization
+        // Star gets special treatment since it's much larger than planets
+        float scaleFactor = 2.0f;
         if (planet->planetType == "star") {
-            entry.radius = 15.0f; // Star is huge
-        } else if (planet->planetType == "gas_giant") {
-            entry.radius = 8.0f + planet->physical.radius * 0.5f; // ~12-13 for gas giants
+            // Star radius scaled down to fit view but still much larger than planets
+            // Sandos has radius 0.7 (solar radii), which is ~76x Earth radius
+            // Display it as ~40 units to show it's huge but fit in view
+            entry.radius = 40.0f * planet->physical.radius;
         } else {
-            entry.radius = 2.0f + planet->physical.radius * 1.5f; // ~3-5 for terrestrial
+            // Planets and moons use their actual radius (in Earth radii) scaled uniformly
+            entry.radius = planet->physical.radius * scaleFactor;
         }
         
         // Get orbital position (relative to parent)
         // Stars stay at origin, other bodies orbit their parent
         Vector3 pos = {0, 0, 0};
-        if (planet->planetType != "star" || !planet->orbit.parentObjectId.empty()) {
+        if (planet->planetType != "star" && !planet->orbit.parentObjectId.empty()) {
             pos = PlanetUtils::CalculateOrbitalPosition(planet->orbit, 0.0f);
         }
-        entry.position = {pos.x * 0.5f, pos.y * 0.5f, pos.z * 0.5f}; // Much larger scale
+        entry.position = {pos.x * 0.5f, pos.y * 0.5f, pos.z * 0.5f}; // Scale for visualization
         
         // Color based on planet type
         if (planet->planetType == "star") {
@@ -68,15 +72,15 @@ void PlanetMapGUI::LoadPlanetsFromSystem() {
             entry.color = {150, 150, 150, 255}; // Gray default
         }
         
-        // A moon orbits a planet (parent is not a star)
-        // Check if parent exists and is not a star
+        // Determine if this is a moon (orbits a planet) or a planet (orbits a star)
         entry.isMoon = false;
         entry.parentName = planet->orbit.parentObjectId;
         if (!entry.parentName.empty()) {
             const PlanetDefinition* parent = g_PlanetSystem.GetPlanet(entry.parentName);
             if (parent && parent->planetType != "star") {
-                entry.isMoon = true; // Only moons orbit non-stars
+                entry.isMoon = true; // Only objects orbiting non-stars are moons
             }
+            // If parent is a star or doesn't exist, isMoon stays false (it's a planet)
         }
         
         planets.push_back(entry);
@@ -85,7 +89,7 @@ void PlanetMapGUI::LoadPlanetsFromSystem() {
     // Second pass: adjust moon/planet positions to be relative to their parents
     // This creates the proper hierarchy: star at center, planets orbit star, moons orbit planets
     for (auto& body : planets) {
-        if (!body.isMoon) continue; // Skip stars and root-level planets
+        if (body.parentName.empty()) continue; // Skip objects without parents (stars)
         
         // Find parent and add parent's position to this body's position
         for (const auto& parent : planets) {
@@ -269,18 +273,28 @@ void PlanetMapGUI::DrawUI() {
     if (selectedPlanet >= 0 && selectedPlanet < (int)planets.size()) {
         const auto& p = planets[selectedPlanet];
         
-        DrawRectangle(GetScreenWidth() - 310, 10, 300, 120, {0, 0, 0, 200});
-        DrawRectangleLines(GetScreenWidth() - 310, 10, 300, 120, YELLOW);
+        DrawRectangle(GetScreenWidth() - 310, 10, 300, 150, {0, 0, 0, 200});
+        DrawRectangleLines(GetScreenWidth() - 310, 10, 300, 150, YELLOW);
         
         DrawText("SELECTED", GetScreenWidth() - 300, 20, 20, YELLOW);
         DrawText(p.name.c_str(), GetScreenWidth() - 300, 45, 18, WHITE);
         
         char info[128];
-        sprintf(info, "Type: %s", p.isMoon ? "Moon" : "Planet");
+        // Show correct type: star, planet, or moon
+        std::string typeStr = "Planet";
+        if (p.id == "sandos") {
+            typeStr = "Star";
+        } else if (p.isMoon) {
+            typeStr = "Moon";
+        }
+        sprintf(info, "Type: %s", typeStr.c_str());
         DrawText(info, GetScreenWidth() - 300, 70, 14, GRAY);
         
-        sprintf(info, "Radius: %.0f km", p.actualRadius * 6371.0f);
+        sprintf(info, "Radius: %.2f Earth radii", p.actualRadius);
         DrawText(info, GetScreenWidth() - 300, 90, 14, GRAY);
+        
+        sprintf(info, "(~%.0f km)", p.actualRadius * 6371.0f);
+        DrawText(info, GetScreenWidth() - 300, 110, 12, GRAY);
     }
     
     // Planet name labels in 3D space
