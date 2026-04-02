@@ -1,5 +1,6 @@
 #include "marching_cubes.h"
 #include "../terrain/noise.h"
+#include "../core/planet.h"
 #include "texture_atlas.h"
 #include <cstdio>
 #include <cstring>
@@ -320,48 +321,37 @@ float MarchingCubes::GetDensityWithNeighbors(const Chunk& chunk, const std::unor
     int neighborCy = chunk.cy;
     int neighborCz = chunk.cz;
     
-    if (x < 0) { neighborCx--; x += CHUNK_SIZE; }
-    else if (x >= CHUNK_SIZE) { neighborCx++; x -= CHUNK_SIZE; }
+    int localX = x;
+    int localY = y;
+    int localZ = z;
     
-    if (y < 0) { neighborCy--; y += CHUNK_HEIGHT; }
-    else if (y >= CHUNK_HEIGHT) { neighborCy++; y -= CHUNK_HEIGHT; }
+    if (localX < 0) { neighborCx--; localX += CHUNK_SIZE; }
+    else if (localX >= CHUNK_SIZE) { neighborCx++; localX -= CHUNK_SIZE; }
     
-    if (z < 0) { neighborCz--; z += CHUNK_SIZE; }
-    else if (z >= CHUNK_SIZE) { neighborCz++; z -= CHUNK_SIZE; }
+    if (localY < 0) { neighborCy--; localY += CHUNK_HEIGHT; }
+    else if (localY >= CHUNK_HEIGHT) { neighborCy++; localY -= CHUNK_HEIGHT; }
+    
+    if (localZ < 0) { neighborCz--; localZ += CHUNK_SIZE; }
+    else if (localZ >= CHUNK_SIZE) { neighborCz++; localZ -= CHUNK_SIZE; }
     
     ChunkKey neighborKey = {neighborCx, neighborCy, neighborCz};
     auto it = allChunks.find(neighborKey);
     if (it != allChunks.end()) {
-        return it->second.GetDensity(x, y, z);
+        return it->second.GetDensity(localX, localY, localZ);
     }
     
-    // If neighbor doesn't exist, use the EXACT same terrain generation logic
+    // If neighbor doesn't exist, use the EXACT same terrain generation logic as World::GenerateTerrain
     // This ensures perfect boundary consistency
     
     // Convert to world coordinates (same as terrain generation)
-    float worldX = (float)(neighborCx * CHUNK_SIZE + x) * VOXEL_SIZE;
-    float worldY = (float)(neighborCy * CHUNK_HEIGHT + y) * VOXEL_SIZE;
-    float worldZ = (float)(neighborCz * CHUNK_SIZE + z) * VOXEL_SIZE;
+    float worldX = (float)(neighborCx * CHUNK_SIZE + localX) * VOXEL_SIZE;
+    float worldY = (float)(neighborCy * CHUNK_HEIGHT + localY) * VOXEL_SIZE;
+    float worldZ = (float)(neighborCz * CHUNK_SIZE + localZ) * VOXEL_SIZE;
     
-    // Use the EXACT same ground height calculation
-    float groundHeight = 8.0f + SmoothNoise3D(worldX * 0.02f, 0, worldZ * 0.02f) * 6.0f;
-    
-    // Use the EXACT same density logic
-    float density = 0.0f;
-    
-    if (worldY < groundHeight) {
-        density = 1.0f; // Solid ground
-        
-        // Add caves with EXACT same logic
-        if (worldY < groundHeight - 2.0f) {
-            float caveNoise = SmoothNoise3D(worldX * 0.05f, worldY * 0.05f, worldZ * 0.05f);
-            if (caveNoise > 0.6f) {
-                density = -1.0f; // Cave
-            }
-        }
-    } else {
-        density = -1.0f; // Air
-    }
+    // Use the EXACT same terrain generation logic as World::GenerateTerrain
+    float density;
+    unsigned char material;
+    g_PlanetSystem.ApplyTerrainNoise(worldX, worldY, worldZ, density, material, "etaui");
     
     return density;
 }
