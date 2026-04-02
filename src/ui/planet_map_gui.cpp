@@ -53,7 +53,27 @@ void PlanetMapGUI::LoadPlanetsFromSystem() {
         if (planet->planetType != "star" && !planet->orbit.parentObjectId.empty()) {
             pos = PlanetUtils::CalculateOrbitalPosition(planet->orbit, 0.0f);
         }
-        entry.position = {pos.x * 0.5f, pos.y * 0.5f, pos.z * 0.5f}; // Scale for visualization
+        // Store orbital parameters for animation
+        entry.semiMajorAxis = planet->orbit.semiMajorAxis;
+        entry.eccentricity = planet->orbit.eccentricity;
+        entry.orbitAngle = 0.0f;
+        
+        // Calculate orbital period using Kepler's 3rd law: T² ∝ a³
+        // For visualization, we scale so closer objects orbit faster
+        // Inner planets: fast orbit, Outer planets: slow orbit
+        float a = entry.semiMajorAxis;
+        if (a > 0) {
+            // T = k * a^(3/2) where k is chosen for good visualization
+            // Inner planets (a~100): ~5 seconds per orbit
+            // Outer planets (a~1800): ~20 seconds per orbit
+            float k = 0.15f; 
+            entry.orbitalPeriod = k * powf(a, 1.5f);
+        } else {
+            entry.orbitalPeriod = 0.0f;
+        }
+        
+        entry.basePosition = {pos.x * 0.5f, pos.y * 0.5f, pos.z * 0.5f}; // Store base orbit position
+        entry.position = entry.basePosition; // Current animated position
         
         // Color based on planet type
         if (planet->planetType == "star") {
@@ -91,16 +111,21 @@ void PlanetMapGUI::LoadPlanetsFromSystem() {
     for (auto& body : planets) {
         if (body.parentName.empty()) continue; // Skip objects without parents (stars)
         
-        // Find parent and add parent's position to this body's position
+        // Find parent and add parent's base position to this body's base position
         for (const auto& parent : planets) {
             if (parent.id == body.parentName) {
-                // Add parent's position to this body's position (recursive positioning)
-                body.position.x += parent.position.x;
-                body.position.y += parent.position.y;
-                body.position.z += parent.position.z;
+                // Add parent's base position to this body's base position
+                body.basePosition.x += parent.basePosition.x;
+                body.basePosition.y += parent.basePosition.y;
+                body.basePosition.z += parent.basePosition.z;
                 break;
             }
         }
+    }
+    
+    // Initialize current positions
+    for (auto& body : planets) {
+        body.position = body.basePosition;
     }
 }
 
@@ -118,7 +143,11 @@ void PlanetMapGUI::Hide() {
 void PlanetMapGUI::Update(float deltaTime) {
     if (!visible) return;
     
-    // Auto-rotate the system
+    // Update orbital positions based on time
+    simulationTime += deltaTime * timeScale;
+    UpdateOrbitalPositions(deltaTime);
+    
+    // Auto-rotate the camera view
     rotationAngle += 5.0f * deltaTime;
     if (rotationAngle >= 360.0f) rotationAngle -= 360.0f;
     
@@ -310,6 +339,51 @@ void PlanetMapGUI::DrawUI() {
             Color textColor = isSelected ? YELLOW : WHITE;
             
             DrawText(planet.name.c_str(), (int)screenPos.x - 20, (int)screenPos.y - 10, 12, textColor);
+        }
+    }
+}
+
+void PlanetMapGUI::UpdateOrbitalPositions(float deltaTime) {
+    // Update each body's position based on its orbital period
+    // Stars don't move (they're at center or have no orbit)
+    for (auto& body : planets) {
+        if (body.orbitalPeriod <= 0.0f) continue; // Skip stars and stationary objects
+        
+        // Calculate current angle based on time
+        // Full circle (360 degrees) in orbitalPeriod seconds
+        float angle = (simulationTime / body.orbitalPeriod) * 360.0f;
+        body.orbitAngle = fmodf(angle, 360.0f);
+        
+        // Calculate new position in orbit (relative to parent)
+        float rad = body.orbitAngle * (PI / 180.0f);
+        
+        // For a circular orbit (simplified):
+        // Get the base orbital radius from basePosition (distance from parent)
+        float orbitRadius = sqrtf(
+            body.basePosition.x * body.basePosition.x + 
+            body.basePosition.z * body.basePosition.z
+        );
+        
+        // Calculate new relative position
+        Vector3 relativePos = {
+            orbitRadius * cosf(rad),
+            body.basePosition.y, // Keep original Y (inclination)
+            orbitRadius * sinf(rad)
+        };
+        
+        // Add parent's current position to get absolute position
+        if (!body.parentName.empty()) {
+            for (const auto& parent : planets) {
+                if (parent.id == body.parentName) {
+                    body.position.x = parent.position.x + relativePos.x;
+                    body.position.y = parent.position.y + relativePos.y;
+                    body.position.z = parent.position.z + relativePos.z;
+                    break;
+                }
+            }
+        } else {
+            // No parent (shouldn't happen for orbiting bodies), use relative as absolute
+            body.position = relativePos;
         }
     }
 }
