@@ -21,8 +21,19 @@ _external/
 # Logs and temp files
 *.log
 *.tmp
+*.swp
 
-# IDE
+# Editors
 .vscode/
 .idea/
+
+# Coverage reports
+coverage/
+htmlcov/
+.coverage
+
+# Environment
+.env
+.env.local
+*.env.*
 ```
