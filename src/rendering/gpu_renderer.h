@@ -26,6 +26,10 @@ private:
     // Default density texture (white = solid) - OpenGL GLuint for 3D texture
     GLuint densityTextureID;
     
+    // Cached materials to avoid recreating every frame
+    Material cachedTerrainMaterial;
+    Material cachedShadowMaterial;
+    
     // Grass texture for terrain
     Texture2D grassTexture;
     
@@ -34,7 +38,4 @@ public:
     void RenderChunk(const Chunk& chunk, const Camera3D& camera);
     void RenderChunkShadow(const Chunk& chunk, const Matrix& lightSpaceMatrix, Shader& shadowShader);
     void Cleanup();
-    
-    // Generate procedural grass texture
-    Texture2D GenerateGrassTexture();
 };
