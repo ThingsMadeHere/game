@@ -30,6 +30,7 @@ private:
     Camera3D camera = {0};
     float rotationAngle = 0.0f;
     int selectedPlanet = -1;
+    Vector3 cameraTarget = {0, 0, 0}; // Camera focus point
     
     void DrawPlanet(const PlanetMapEntry& planet);
     void DrawOrbits();

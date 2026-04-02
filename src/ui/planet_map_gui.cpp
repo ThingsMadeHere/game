@@ -22,6 +22,9 @@ void PlanetMapGUI::LoadPlanetsFromSystem() {
     
     // First pass: create entries for all planets
     for (const auto& id : allIds) {
+        // Skip solar system planets - only show Sandos system
+        if (id == "earth" || id == "mars" || id == "moon") continue;
+        
         const PlanetDefinition* planet = g_PlanetSystem.GetPlanet(id);
         if (!planet) continue;
         
@@ -29,11 +32,15 @@ void PlanetMapGUI::LoadPlanetsFromSystem() {
         entry.name = planet->name;
         entry.id = planet->id;
         entry.actualRadius = planet->physical.radius; // Real radius in Earth radii
-        // Scale radius for display: make star bigger, planets visible, moons small but visible
+        
+        // Scale radius: proportional to actual size but visible
+        // Star: very large, Planets: medium with realistic ratios, Moons: small
         if (planet->planetType == "star") {
-            entry.radius = planet->physical.radius * 0.5f; // Star is big
+            entry.radius = 15.0f; // Star is huge
+        } else if (planet->planetType == "gas_giant") {
+            entry.radius = 8.0f + planet->physical.radius * 0.5f; // ~12-13 for gas giants
         } else {
-            entry.radius = 0.5f + planet->physical.radius * 0.3f; // Min 0.5, scale smaller
+            entry.radius = 2.0f + planet->physical.radius * 1.5f; // ~3-5 for terrestrial
         }
         
         // Get orbital position (relative to parent)
@@ -42,7 +49,7 @@ void PlanetMapGUI::LoadPlanetsFromSystem() {
         if (planet->planetType != "star" || !planet->orbit.parentObjectId.empty()) {
             pos = PlanetUtils::CalculateOrbitalPosition(planet->orbit, 0.0f);
         }
-        entry.position = {pos.x * 0.05f, pos.y * 0.05f, pos.z * 0.05f}; // Larger scale for visibility
+        entry.position = {pos.x * 0.5f, pos.y * 0.5f, pos.z * 0.5f}; // Much larger scale
         
         // Color based on planet type
         if (planet->planetType == "star") {
@@ -61,8 +68,16 @@ void PlanetMapGUI::LoadPlanetsFromSystem() {
             entry.color = {150, 150, 150, 255}; // Gray default
         }
         
-        entry.isMoon = !planet->orbit.parentObjectId.empty();
+        // A moon orbits a planet (parent is not a star)
+        // Check if parent exists and is not a star
+        entry.isMoon = false;
         entry.parentName = planet->orbit.parentObjectId;
+        if (!entry.parentName.empty()) {
+            const PlanetDefinition* parent = g_PlanetSystem.GetPlanet(entry.parentName);
+            if (parent && parent->planetType != "star") {
+                entry.isMoon = true; // Only moons orbit non-stars
+            }
+        }
         
         planets.push_back(entry);
     }
@@ -121,39 +136,59 @@ void PlanetMapGUI::Update(float deltaTime) {
         camera.position.z *= 1.02f;
     }
     
-    // Update camera position based on rotation
-    float dist = sqrtf(camera.position.x * camera.position.x + camera.position.z * camera.position.z);
+    // Update camera position based on rotation around target
+    float dist = sqrtf(
+        (camera.position.x - cameraTarget.x) * (camera.position.x - cameraTarget.x) +
+        (camera.position.z - cameraTarget.z) * (camera.position.z - cameraTarget.z)
+    );
     float rad = rotationAngle * (PI / 180.0f);
-    camera.position.x = dist * cosf(rad);
-    camera.position.z = dist * sinf(rad);
+    camera.position.x = cameraTarget.x + dist * cosf(rad);
+    camera.position.z = cameraTarget.z + dist * sinf(rad);
+    camera.target = cameraTarget;
     
     // Planet selection with mouse
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         Ray ray = GetMouseRay(GetMousePosition(), camera);
         
         selectedPlanet = -1;
-        float closestDist = 999999.0f;
+        float closestT = 999999.0f;
         
         for (size_t i = 0; i < planets.size(); i++) {
-            // Simple sphere-ray intersection
-            Vector3 toPlanet = {
+            // Ray-sphere intersection
+            Vector3 L = {
                 planets[i].position.x - ray.position.x,
                 planets[i].position.y - ray.position.y,
                 planets[i].position.z - ray.position.z
             };
             
-            float dist2 = toPlanet.x * toPlanet.x + toPlanet.y * toPlanet.y + toPlanet.z * toPlanet.z;
+            float tca = L.x * ray.direction.x + L.y * ray.direction.y + L.z * ray.direction.z;
+            if (tca < 0) continue; // Sphere is behind ray origin
+            
+            float d2 = (L.x * L.x + L.y * L.y + L.z * L.z) - tca * tca;
             float radius2 = planets[i].radius * planets[i].radius;
             
-            if (dist2 < radius2 * 4.0f && dist2 < closestDist) {
-                closestDist = dist2;
+            if (d2 > radius2) continue; // Ray misses sphere
+            
+            float thc = sqrtf(radius2 - d2);
+            float t = tca - thc; // Distance to intersection point
+            
+            if (t < closestT) {
+                closestT = t;
                 selectedPlanet = (int)i;
+                // Center camera on selected planet
+                cameraTarget = planets[i].position;
             }
         }
     }
     
     if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_M)) {
         Hide();
+    }
+    
+    // Press C to reset camera focus to center (star)
+    if (IsKeyPressed(KEY_C)) {
+        cameraTarget = {0, 0, 0};
+        selectedPlanet = -1;
     }
 }
 
@@ -221,7 +256,7 @@ void PlanetMapGUI::DrawUI() {
     
     // Title
     DrawText("SYSTEM MAP", 20, 20, 24, WHITE);
-    DrawText("Press M to close", 20, 50, 16, GRAY);
+    DrawText("Press M to close | C to center on star", 20, 50, 16, GRAY);
     DrawText("Arrows/WASD to move", 20, 70, 16, GRAY);
     DrawText("Click to select planet", 20, 90, 16, GRAY);
     
