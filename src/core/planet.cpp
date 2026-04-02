@@ -152,7 +152,11 @@ bool PlanetSystem::LoadPlanetFromJSON(const std::string& jsonPath) {
     planet.orbit.argumentOfPeriapsis = ExtractFloatValue(json, "argumentOfPeriapsis", 0.0f);
     planet.orbit.meanAnomalyAtEpoch = ExtractFloatValue(json, "meanAnomalyAtEpoch", 0.0f);
     planet.orbit.orbitalPeriod = ExtractFloatValue(json, "orbitalPeriod", 365.0f);
+    // Support both "parentObjectId" and "parent" field names
     planet.orbit.parentObjectId = ExtractStringValue(json, "parentObjectId");
+    if (planet.orbit.parentObjectId.empty()) {
+        planet.orbit.parentObjectId = ExtractStringValue(json, "parent");
+    }
     
     // Physical parameters
     planet.physical.radius = ExtractFloatValue(json, "radius", 50.0f);
