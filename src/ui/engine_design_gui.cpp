@@ -602,13 +602,39 @@ void EngineDesignGUI::DrawEngineModel() {
     
     // 3D model viewport is already drawn in main panel
     
-    // Simple 3D camera for model view
+    // Simple 3D camera for model view - adjusted to center the model better
     Camera3D modelCamera = {0};
-    modelCamera.position = {0, 2, 5};
+    modelCamera.position = {0, 0, 5};
     modelCamera.target = {0, 0, 0};
     modelCamera.up = {0, 1, 0};
     modelCamera.fovy = 45.0f;
     modelCamera.projection = CAMERA_PERSPECTIVE;
+    
+    // Set up lighting from top-left
+    Material defaultMaterial = LoadMaterialDefault();
+    Vector3 lightDir = { -0.5f, 1.0f, 0.5f }; // Light coming from top-left-front
+    Vector3 lightPos = Vector3Scale(lightDir, 10.0f); // Position the light
+    
+    // Set ambient and diffuse colors for better visibility
+    defaultMaterial.maps[MATERIAL_MAP_DIFFUSE].color = WHITE;
+    defaultMaterial.maps[MATERIAL_MAP_SPECULAR].color = (Color){ 50, 50, 50, 255 };
+    
+    // Set shader uniforms for lighting if using custom shader
+    if (defaultMaterial.shader.id > 0) {
+        int locLightPos = GetShaderLocation(defaultMaterial.shader, "lightPos");
+        int locLightColor = GetShaderLocation(defaultMaterial.shader, "lightColor");
+        int locAmbientValue = GetShaderLocation(defaultMaterial.shader, "ambientValue");
+        
+        if (locLightPos >= 0) SetShaderValue(defaultMaterial.shader, locLightPos, &lightPos, SHADER_UNIFORM_VEC3);
+        if (locLightColor >= 0) {
+            Vector3 lightColor = { 1.0f, 1.0f, 0.95f }; // Warm white light
+            SetShaderValue(defaultMaterial.shader, locLightColor, &lightColor, SHADER_UNIFORM_VEC3);
+        }
+        if (locAmbientValue >= 0) {
+            float ambient = 0.3f;
+            SetShaderValue(defaultMaterial.shader, locAmbientValue, &ambient, SHADER_UNIFORM_FLOAT);
+        }
+    }
     
     // Set viewport and draw 3D model
     BeginMode3D(modelCamera);
@@ -617,12 +643,12 @@ void EngineDesignGUI::DrawEngineModel() {
     modelRotation.y += 1.0f; // Slow rotation
     
     // Draw simple engine representation based on type
-    DrawSimpleEngineModel(currentDesign.type, {0, 0, 0}, 1.0f);
+    DrawSimpleEngineModel(currentDesign.type, {0, 0, 0}, 1.0f, defaultMaterial, lightPos);
     
     EndMode3D();
 }
 
-void EngineDesignGUI::DrawSimpleEngineModel(EngineType type, Vector3 position, float scale) {
+void EngineDesignGUI::DrawSimpleEngineModel(EngineType type, Vector3 position, float scale, Material material, Vector3 lightPos) {
     Vector3 pos = position;
     
     switch (type) {
@@ -644,9 +670,9 @@ void EngineDesignGUI::DrawSimpleEngineModel(EngineType type, Vector3 position, f
             // Use NERV model for solid core nuclear
             if (currentDesign.reactorType == NuclearReactorType::SOLID_CORE && nervModel.meshCount > 0) {
                 printf("Drawing NERV GLB model for solid core nuclear\n");
-                // Apply rotation and center the model - adjust Y position for better centering
+                // Apply rotation and center the model at origin (no offset)
                 DrawModelEx(nervModel, 
-                           {0, -0.5f, 0},        // Adjusted center position (lowered)
+                           {0, 0, 0},           // Centered position (removed offset)
                            {0, 1, 0},           // Rotation axis (Y-axis)
                            modelRotation.y,     // Rotation angle
                            {0.3f, 0.3f, 0.3f}, // Scale

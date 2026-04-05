@@ -183,6 +183,6 @@ private:
     
     // 3D model functions
     void LoadEngineModel(EngineType type);
-    void DrawSimpleEngineModel(EngineType type, Vector3 position, float scale);
+    void DrawSimpleEngineModel(EngineType type, Vector3 position, float scale, Material material, Vector3 lightPos);
     void LoadNERVModel(); // Load NERV model for solid core nuclear
 };

@@ -1,3 +1,4 @@
+```
 # Build artifacts
 build/
 CMakeCache.txt
@@ -16,21 +17,31 @@ _deps/
 *.out
 
 # Dependencies
-_external/
+.venv/
+venv/
+__pycache__/
+node_modules/
 
 # Logs and temp files
 *.log
 *.tmp
 *.swp
 
-# Editors
-.vscode/
-.idea/
-
 # Environment
 .env
 .env.local
 *.env.*
 
-# Make .gitignore read-only (prevents accidental modification)
+# Editors
+.vscode/
+.idea/
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+
+# OS generated files
+.DS_Store
+Thumbs.db
 ```
