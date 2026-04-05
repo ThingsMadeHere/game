@@ -14,6 +14,7 @@ _deps/
 *.so
 *.dll
 *.exe
+*.out
 
 # Dependencies
 _external/
@@ -26,11 +27,6 @@ _external/
 # Editors
 .vscode/
 .idea/
-
-# Coverage reports
-coverage/
-htmlcov/
-.coverage
 
 # Environment
 .env

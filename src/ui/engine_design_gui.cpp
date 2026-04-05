@@ -180,29 +180,31 @@ void EngineDesignGUI::DrawMainPanel() {
     DrawText("ENGINE DESIGN WORKSHOP", mainPanel.x + 30, mainPanel.y + 20, 32, titleColor);
     DrawText("Configure your spacecraft propulsion system", mainPanel.x + 30, mainPanel.y + 60, 16, textColor);
     
-    // Draw panel sections
-    DrawRectangleRec(typePanel, {40, 40, 50, 200});
+    // Draw panel sections backgrounds
+    Color sectionBg = {40, 40, 50, 200};
+    DrawRectangleRec(typePanel, sectionBg);
     DrawRectangleLinesEx(typePanel, 2, panelBorder);
     DrawText("ENGINE TYPE", typePanel.x + 15, typePanel.y + 10, 18, titleColor);
     
-    DrawRectangleRec(configPanel, {40, 40, 50, 200});
+    DrawRectangleRec(configPanel, sectionBg);
     DrawRectangleLinesEx(configPanel, 2, panelBorder);
     
-    DrawRectangleRec(modelPanel, {40, 40, 50, 200});
+    DrawRectangleRec(modelPanel, sectionBg);
     DrawRectangleLinesEx(modelPanel, 2, panelBorder);
     DrawText("3D PREVIEW", modelPanel.x + 15, modelPanel.y + 10, 18, titleColor);
     
-    DrawRectangleRec(performancePanel, {40, 40, 50, 200});
+    DrawRectangleRec(performancePanel, sectionBg);
     DrawRectangleLinesEx(performancePanel, 2, panelBorder);
     DrawText("PERFORMANCE METRICS", performancePanel.x + 15, performancePanel.y + 10, 16, titleColor);
     
     // Back button
-    DrawRectangleRec(backButton, {60, 60, 80, 180});
+    Color buttonBg = {60, 60, 80, 180};
+    DrawRectangleRec(backButton, buttonBg);
     DrawRectangleLinesEx(backButton, 2, panelBorder);
     DrawText("BACK", backButton.x + 35, backButton.y + 12, 16, titleColor);
     
     // Save button
-    DrawRectangleRec(saveButton, {60, 60, 80, 180});
+    DrawRectangleRec(saveButton, buttonBg);
     DrawRectangleLinesEx(saveButton, 2, panelBorder);
     DrawText("SAVE DESIGN", saveButton.x + 20, saveButton.y + 12, 16, titleColor);
 }
@@ -211,7 +213,8 @@ void EngineDesignGUI::DrawTypeSelection() {
     // Type buttons are already drawn in main panel
     for (int i = 0; i < 5; i++) {
         Color color = (currentDesign.type == static_cast<EngineType>(i)) ? selectedColor : panelBorder;
-        DrawRectangleRec(typeButtons[i], {60, 60, 80, 180});
+        Color buttonBg = (currentDesign.type == static_cast<EngineType>(i)) ? Color{80, 80, 100, 200} : Color{60, 60, 80, 180};
+        DrawRectangleRec(typeButtons[i], buttonBg);
         DrawRectangleLinesEx(typeButtons[i], 2, color);
         
         const char* typeNames[] = {
@@ -229,7 +232,8 @@ void EngineDesignGUI::DrawChemicalOptions() {
     const char* fuels[] = {"RP-1", "LH2", "CH4", "Hydrazine", "UDMH"};
     for (int i = 0; i < 5; i++) {
         Color color = (selectedFuelIndex == i) ? selectedColor : panelBorder;
-        DrawRectangleRec(fuelButtons[i], {50, 50, 60, 150});
+        Color btnBg = (selectedFuelIndex == i) ? Color{70, 70, 90, 200} : Color{50, 50, 60, 150};
+        DrawRectangleRec(fuelButtons[i], btnBg);
         DrawRectangleLinesEx(fuelButtons[i], 1, color);
         DrawText(fuels[i], fuelButtons[i].x + 5, fuelButtons[i].y + 5, 11, titleColor);
     }
@@ -239,7 +243,8 @@ void EngineDesignGUI::DrawChemicalOptions() {
     const char* oxidizers[] = {"LOX", "N2O4", "N2O", "H2O2"};
     for (int i = 0; i < 4; i++) {
         Color color = (selectedOxidizerIndex == i) ? selectedColor : panelBorder;
-        DrawRectangleRec(oxidizerButtons[i], {50, 50, 60, 150});
+        Color btnBg = (selectedOxidizerIndex == i) ? Color{70, 70, 90, 200} : Color{50, 50, 60, 150};
+        DrawRectangleRec(oxidizerButtons[i], btnBg);
         DrawRectangleLinesEx(oxidizerButtons[i], 1, color);
         DrawText(oxidizers[i], oxidizerButtons[i].x + 5, oxidizerButtons[i].y + 5, 11, titleColor);
     }
@@ -257,7 +262,8 @@ void EngineDesignGUI::DrawNuclearOptions() {
     const char* fuels[] = {"U-235", "U-238", "Pu-239", "Th-232"};
     for (int i = 0; i < 4; i++) {
         Color color = (selectedNuclearFuelIndex == i) ? selectedColor : panelBorder;
-        DrawRectangleRec(nuclearFuelButtons[i], {50, 50, 60, 150});
+        Color btnBg = (selectedNuclearFuelIndex == i) ? Color{70, 70, 90, 200} : Color{50, 50, 60, 150};
+        DrawRectangleRec(nuclearFuelButtons[i], btnBg);
         DrawRectangleLinesEx(nuclearFuelButtons[i], 1, color);
         DrawText(fuels[i], nuclearFuelButtons[i].x + 5, nuclearFuelButtons[i].y + 5, 11, titleColor);
     }
@@ -267,7 +273,8 @@ void EngineDesignGUI::DrawNuclearOptions() {
     const char* reactors[] = {"Solid Core", "Liquid Core", "Gas Core", "Pulse", "Fission Fragment"};
     for (int i = 0; i < 5; i++) {
         Color color = (selectedReactorTypeIndex == i) ? selectedColor : panelBorder;
-        DrawRectangleRec(reactorTypeButtons[i], {50, 50, 60, 150});
+        Color btnBg = (selectedReactorTypeIndex == i) ? Color{70, 70, 90, 200} : Color{50, 50, 60, 150};
+        DrawRectangleRec(reactorTypeButtons[i], btnBg);
         DrawRectangleLinesEx(reactorTypeButtons[i], 1, color);
         DrawText(reactors[i], reactorTypeButtons[i].x + 5, reactorTypeButtons[i].y + 5, 10, titleColor);
     }
@@ -287,7 +294,8 @@ void EngineDesignGUI::DrawIonOptions() {
     };
     for (int i = 0; i < 5; i++) {
         Color color = (selectedIonTypeIndex == i) ? selectedColor : panelBorder;
-        DrawRectangleRec(ionTypeButtons[i], {50, 50, 60, 150});
+        Color btnBg = (selectedIonTypeIndex == i) ? Color{70, 70, 90, 200} : Color{50, 50, 60, 150};
+        DrawRectangleRec(ionTypeButtons[i], btnBg);
         DrawRectangleLinesEx(ionTypeButtons[i], 1, color);
         DrawText(drives[i], ionTypeButtons[i].x + 5, ionTypeButtons[i].y + 5, 10, titleColor);
     }
@@ -303,7 +311,8 @@ void EngineDesignGUI::DrawFusionOptions() {
     const char* fuels[] = {"D-T", "D-D", "D-3He", "p-11B"};
     for (int i = 0; i < 4; i++) {
         Color color = (selectedFusionFuelIndex == i) ? selectedColor : panelBorder;
-        DrawRectangleRec(fusionFuelButtons[i], {50, 50, 60, 150});
+        Color btnBg = (selectedFusionFuelIndex == i) ? Color{70, 70, 90, 200} : Color{50, 50, 60, 150};
+        DrawRectangleRec(fusionFuelButtons[i], btnBg);
         DrawRectangleLinesEx(fusionFuelButtons[i], 1, color);
         DrawText(fuels[i], fusionFuelButtons[i].x + 5, fusionFuelButtons[i].y + 5, 11, titleColor);
     }
@@ -316,7 +325,8 @@ void EngineDesignGUI::DrawFusionOptions() {
     };
     for (int i = 0; i < 6; i++) {
         Color color = (selectedFusionConfigIndex == i) ? selectedColor : panelBorder;
-        DrawRectangleRec(fusionConfigButtons[i], {50, 50, 60, 150});
+        Color btnBg = (selectedFusionConfigIndex == i) ? Color{70, 70, 90, 200} : Color{50, 50, 60, 150};
+        DrawRectangleRec(fusionConfigButtons[i], btnBg);
         DrawRectangleLinesEx(fusionConfigButtons[i], 1, color);
         DrawText(configs[i], fusionConfigButtons[i].x + 5, fusionConfigButtons[i].y + 5, 9, titleColor);
     }
@@ -336,7 +346,8 @@ void EngineDesignGUI::DrawAntimatterOptions() {
 
 void EngineDesignGUI::DrawPerformancePreview() {
     // Performance panel
-    DrawRectangleRec(performancePanel, {40, 40, 50, 200});
+    Color sectionBg = {40, 40, 50, 200};
+    DrawRectangleRec(performancePanel, sectionBg);
     DrawRectangleLinesEx(performancePanel, 2, panelBorder);
     
     DrawText("PERFORMANCE METRICS", performancePanel.x + 15, performancePanel.y + 10, 16, titleColor);
