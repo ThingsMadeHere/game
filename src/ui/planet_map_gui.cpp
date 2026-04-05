@@ -2,6 +2,8 @@
 #include "../core/planet.h"
 #include <cmath>
 #include <cstdio>
+#include "raylib.h"
+#include "rlgl.h"
 
 void PlanetMapGUI::Init() {
     camera.position = {200.0f, 200.0f, 200.0f}; // Increased from 50 for better draw distance
@@ -9,6 +11,9 @@ void PlanetMapGUI::Init() {
     camera.up = {0.0f, 1.0f, 0.0f};
     camera.fovy = 45.0f;
     camera.projection = CAMERA_PERSPECTIVE;
+    
+    // Set far clipping plane to a very large distance (effectively remove it)
+    rlSetProjectionMatrixPerspective(camera.fovy, (float)GetScreenWidth()/(float)GetScreenHeight(), 0.1f, 100000.0f);
     
     rotationAngle = 0.0f;
     selectedPlanet = -1;
@@ -109,21 +114,27 @@ void PlanetMapGUI::LoadPlanetsFromSystem() {
         planets.push_back(entry);
     }
     
-    // Second pass: adjust moon/planet positions to be relative to their parents
+    // Second pass: adjust planet positions to be relative to their parents (star)
+    // Moons keep their own orbit relative to their parent planet (don't add parent's position)
     // This creates the proper hierarchy: star at center, planets orbit star, moons orbit planets
     for (auto& body : planets) {
         if (body.parentName.empty()) continue; // Skip objects without parents (stars)
         
-        // Find parent and add parent's base position to this body's base position
-        for (const auto& parent : planets) {
-            if (parent.id == body.parentName) {
-                // Add parent's base position to this body's base position
-                body.basePosition.x += parent.basePosition.x;
-                body.basePosition.y += parent.basePosition.y;
-                body.basePosition.z += parent.basePosition.z;
-                break;
+        // Only add parent's position for planets (not moons)
+        // Moons should orbit their parent planet using only their own SMA
+        if (!body.isMoon) {
+            // Find parent and add parent's base position to this body's base position
+            for (const auto& parent : planets) {
+                if (parent.id == body.parentName) {
+                    // Add parent's base position to this body's base position
+                    body.basePosition.x += parent.basePosition.x;
+                    body.basePosition.y += parent.basePosition.y;
+                    body.basePosition.z += parent.basePosition.z;
+                    break;
+                }
             }
         }
+        // Moons keep their basePosition as-is (relative to their parent planet)
     }
     
     // Initialize current positions
@@ -375,10 +386,14 @@ void PlanetMapGUI::UpdateOrbitalPositions(float deltaTime) {
             orbitRadius * sinf(rad)
         };
         
-        // Add parent's current position to get absolute position
+        // Add parent's current position to get absolute position (only for non-moons)
+        // Moons orbit their parent planet, so we need to add the parent's position
+        // Planets orbit the star, so we add the star's position (which is at origin)
         if (!body.parentName.empty()) {
             for (const auto& parent : planets) {
                 if (parent.id == body.parentName) {
+                    // For moons: add parent planet's position to moon's relative orbit
+                    // For planets: add star's position (0,0,0) to planet's relative orbit
                     body.position.x = parent.position.x + relativePos.x;
                     body.position.y = parent.position.y + relativePos.y;
                     body.position.z = parent.position.z + relativePos.z;
