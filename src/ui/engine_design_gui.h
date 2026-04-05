@@ -144,6 +144,7 @@ private:
     // 3D model
     Model engineModel = {0};
     Model nervModel = {0}; // NERV model for solid core nuclear
+    Model chemicalModel = {0}; // Chemical engine model
     Vector3 modelRotation = {0, 0, 0};
     float modelScale = 1.0f;
     
@@ -185,4 +186,5 @@ private:
     void LoadEngineModel(EngineType type);
     void DrawSimpleEngineModel(EngineType type, Vector3 position, float scale, Material material, Vector3 lightPos);
     void LoadNERVModel(); // Load NERV model for solid core nuclear
+    void LoadChemicalModel(); // Load chemical engine model
 };

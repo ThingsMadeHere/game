@@ -3,8 +3,9 @@
 #include <cmath>
 
 EngineDesignGUI::EngineDesignGUI() {
-    // Load NERV model for solid core nuclear engines
+    // Load models for engines
     LoadNERVModel();
+    LoadChemicalModel();
     
     // Initialize type button positions (horizontal layout)
     for (int i = 0; i < 5; i++) {
@@ -602,39 +603,13 @@ void EngineDesignGUI::DrawEngineModel() {
     
     // 3D model viewport is already drawn in main panel
     
-    // Simple 3D camera for model view - adjusted to center the model better
+    // Simple 3D camera for model view - centered on model
     Camera3D modelCamera = {0};
     modelCamera.position = {0, 0, 5};
     modelCamera.target = {0, 0, 0};
     modelCamera.up = {0, 1, 0};
     modelCamera.fovy = 45.0f;
     modelCamera.projection = CAMERA_PERSPECTIVE;
-    
-    // Set up lighting from top-left
-    Material defaultMaterial = LoadMaterialDefault();
-    Vector3 lightDir = { -0.5f, 1.0f, 0.5f }; // Light coming from top-left-front
-    Vector3 lightPos = Vector3Scale(lightDir, 10.0f); // Position the light
-    
-    // Set ambient and diffuse colors for better visibility
-    defaultMaterial.maps[MATERIAL_MAP_DIFFUSE].color = WHITE;
-    defaultMaterial.maps[MATERIAL_MAP_SPECULAR].color = (Color){ 50, 50, 50, 255 };
-    
-    // Set shader uniforms for lighting if using custom shader
-    if (defaultMaterial.shader.id > 0) {
-        int locLightPos = GetShaderLocation(defaultMaterial.shader, "lightPos");
-        int locLightColor = GetShaderLocation(defaultMaterial.shader, "lightColor");
-        int locAmbientValue = GetShaderLocation(defaultMaterial.shader, "ambientValue");
-        
-        if (locLightPos >= 0) SetShaderValue(defaultMaterial.shader, locLightPos, &lightPos, SHADER_UNIFORM_VEC3);
-        if (locLightColor >= 0) {
-            Vector3 lightColor = { 1.0f, 1.0f, 0.95f }; // Warm white light
-            SetShaderValue(defaultMaterial.shader, locLightColor, &lightColor, SHADER_UNIFORM_VEC3);
-        }
-        if (locAmbientValue >= 0) {
-            float ambient = 0.3f;
-            SetShaderValue(defaultMaterial.shader, locAmbientValue, &ambient, SHADER_UNIFORM_FLOAT);
-        }
-    }
     
     // Set viewport and draw 3D model
     BeginMode3D(modelCamera);
@@ -643,7 +618,7 @@ void EngineDesignGUI::DrawEngineModel() {
     modelRotation.y += 1.0f; // Slow rotation
     
     // Draw simple engine representation based on type
-    DrawSimpleEngineModel(currentDesign.type, {0, 0, 0}, 1.0f, defaultMaterial, lightPos);
+    DrawSimpleEngineModel(currentDesign.type, {0, 0, 0}, 1.0f, LoadMaterialDefault(), {0, 0, 0});
     
     EndMode3D();
 }
@@ -653,12 +628,23 @@ void EngineDesignGUI::DrawSimpleEngineModel(EngineType type, Vector3 position, f
     
     switch (type) {
         case EngineType::CHEMICAL: {
-            // Bell nozzle shape
-            Color engineColor = {150, 150, 150, 255}; // Gray metal
-            DrawCylinder(pos, 0.3f * scale, 0.8f * scale, 1.0f * scale, 16, engineColor); // Main body
-            DrawCylinder({pos.x, pos.y - 0.5f, pos.z}, 0.2f * scale, 0.3f * scale, 0.5f * scale, 16, engineColor); // Top
-            // Nozzle
-            DrawCylinder({pos.x, pos.y - 0.8f, pos.z}, 0.8f * scale, 0.3f * scale, 0.3f * scale, 16, {100, 100, 100, 255});
+            // Use chemical GLB model if available
+            if (chemicalModel.meshCount > 0) {
+                printf("Drawing Chemical GLB model\n");
+                DrawModelEx(chemicalModel, 
+                           {0.0f, 0.0f, 0.0f},      // Centered position
+                           {0, 1, 0},           // Rotation axis (Y-axis)
+                           modelRotation.y,     // Rotation angle
+                           {0.8f, 0.8f, 0.8f}, // Scale (increased from 0.4f)
+                           WHITE);              // Color
+            } else {
+                // Fallback bell nozzle shape
+                Color engineColor = {150, 150, 150, 255}; // Gray metal
+                DrawCylinder(pos, 0.3f * scale, 0.8f * scale, 1.0f * scale, 16, engineColor); // Main body
+                DrawCylinder({pos.x, pos.y - 0.5f, pos.z}, 0.2f * scale, 0.3f * scale, 0.5f * scale, 16, engineColor); // Top
+                // Nozzle
+                DrawCylinder({pos.x, pos.y - 0.8f, pos.z}, 0.8f * scale, 0.3f * scale, 0.3f * scale, 16, {100, 100, 100, 255});
+            }
             break;
         }
         case EngineType::NUCLEAR: {
@@ -670,9 +656,9 @@ void EngineDesignGUI::DrawSimpleEngineModel(EngineType type, Vector3 position, f
             // Use NERV model for solid core nuclear
             if (currentDesign.reactorType == NuclearReactorType::SOLID_CORE && nervModel.meshCount > 0) {
                 printf("Drawing NERV GLB model for solid core nuclear\n");
-                // Apply rotation and center the model at origin (no offset)
+                // Apply rotation and position model at top right
                 DrawModelEx(nervModel, 
-                           {0, 0, 0},           // Centered position (removed offset)
+                           {1.5f, 1.0f, 0.0f},       // Top right position
                            {0, 1, 0},           // Rotation axis (Y-axis)
                            modelRotation.y,     // Rotation angle
                            {0.3f, 0.3f, 0.3f}, // Scale
@@ -725,6 +711,18 @@ void EngineDesignGUI::DrawSimpleEngineModel(EngineType type, Vector3 position, f
             DrawCylinder({pos.x, pos.y - 0.8f, pos.z}, 0.3f * scale, 0.2f * scale, 0.4f * scale, 16, {150, 150, 150, 255});
             break;
         }
+    }
+}
+
+void EngineDesignGUI::LoadChemicalModel() {
+    // Load chemical engine model from GLB file
+    printf("Attempting to load Chemical model from: ../data/models/Chemical.glb\n");
+    chemicalModel = LoadModel("../data/models/Chemical.glb");
+    
+    if (chemicalModel.meshCount > 0) {
+        printf("Chemical GLB model loaded successfully - mesh count: %d\n", chemicalModel.meshCount);
+    } else {
+        printf("Failed to load Chemical GLB model - mesh count: %d\n", chemicalModel.meshCount);
     }
 }
 
