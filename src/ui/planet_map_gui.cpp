@@ -4,7 +4,7 @@
 #include <cstdio>
 
 void PlanetMapGUI::Init() {
-    camera.position = {50.0f, 50.0f, 50.0f};
+    camera.position = {200.0f, 200.0f, 200.0f}; // Increased from 50 for better draw distance
     camera.target = {0.0f, 0.0f, 0.0f};
     camera.up = {0.0f, 1.0f, 0.0f};
     camera.fovy = 45.0f;
@@ -72,7 +72,21 @@ void PlanetMapGUI::LoadPlanetsFromSystem() {
             entry.orbitalPeriod = 0.0f;
         }
         
-        entry.basePosition = {pos.x * 0.5f, pos.y * 0.5f, pos.z * 0.5f}; // Store base orbit position
+        // Determine if this is a moon (orbits a planet) or a planet (orbits a star)
+        entry.isMoon = false;
+        entry.parentName = planet->orbit.parentObjectId;
+        float orbitScale = 0.5f; // Default scale for planets
+        
+        if (!entry.parentName.empty()) {
+            const PlanetDefinition* parent = g_PlanetSystem.GetPlanet(entry.parentName);
+            if (parent && parent->planetType != "star") {
+                entry.isMoon = true; // Only objects orbiting non-stars are moons
+                orbitScale = 0.1f; // Much smaller scale for moon orbits
+            }
+            // If parent is a star or doesn't exist, isMoon stays false (it's a planet)
+        }
+        
+        entry.basePosition = {pos.x * orbitScale, pos.y * orbitScale, pos.z * orbitScale}; // Store base orbit position
         entry.position = entry.basePosition; // Current animated position
         
         // Color based on planet type
@@ -90,17 +104,6 @@ void PlanetMapGUI::LoadPlanetsFromSystem() {
             entry.color = {200, 150, 100, 255}; // Orange-brown
         } else {
             entry.color = {150, 150, 150, 255}; // Gray default
-        }
-        
-        // Determine if this is a moon (orbits a planet) or a planet (orbits a star)
-        entry.isMoon = false;
-        entry.parentName = planet->orbit.parentObjectId;
-        if (!entry.parentName.empty()) {
-            const PlanetDefinition* parent = g_PlanetSystem.GetPlanet(entry.parentName);
-            if (parent && parent->planetType != "star") {
-                entry.isMoon = true; // Only objects orbiting non-stars are moons
-            }
-            // If parent is a star or doesn't exist, isMoon stays false (it's a planet)
         }
         
         planets.push_back(entry);
@@ -131,8 +134,8 @@ void PlanetMapGUI::LoadPlanetsFromSystem() {
 
 void PlanetMapGUI::Show() {
     visible = true;
-    // Reset camera
-    camera.position = {50.0f, 50.0f, 50.0f};
+    // Reset camera with increased distance
+    camera.position = {200.0f, 200.0f, 200.0f}; // Increased from 50 for better draw distance
     camera.target = {0.0f, 0.0f, 0.0f};
 }
 
@@ -258,9 +261,10 @@ void PlanetMapGUI::DrawPlanet(const PlanetMapEntry& planet) {
 }
 
 void PlanetMapGUI::DrawOrbits() {
-    // Draw orbital paths as circles
+    // Draw orbital paths as circles for all orbiting bodies
     for (const auto& planet : planets) {
-        if (!planet.isMoon) continue; // Skip stars/planets without parents
+        // Skip stars (they don't orbit anything)
+        if (planet.parentName.empty()) continue;
         
         // Find parent position
         Vector3 parentPos = {0, 0, 0};
@@ -271,10 +275,10 @@ void PlanetMapGUI::DrawOrbits() {
             }
         }
         
-        // Calculate orbit radius
+        // Use base position for consistent orbit radius (not current moving position)
         float orbitRadius = sqrtf(
-            (planet.position.x - parentPos.x) * (planet.position.x - parentPos.x) +
-            (planet.position.z - parentPos.z) * (planet.position.z - parentPos.z)
+            planet.basePosition.x * planet.basePosition.x + 
+            planet.basePosition.z * planet.basePosition.z
         );
         
         // Draw orbit circle
