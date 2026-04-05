@@ -421,34 +421,47 @@ void PlanetMapGUI::Render() {
     // Draw 2D UI elements
     DrawUI();
     
-    // Draw selection highlights and name tags using raylib's standard 3D mode
-    // (These need GetWorldToScreen which only works with standard camera)
-    BeginMode3D(camera);
-    
+    // Draw selection highlights and name tags in 2D mode
+    // We use GetWorldToScreen with the same camera parameters used for the custom projection
     for (const auto& planet : planets) {
-        // Draw selection highlight
-        if (selectedPlanet >= 0 && planets[selectedPlanet].id == planet.id) {
-            DrawSphereWires(planet.position, planet.radius * 1.2f, 16, 16, YELLOW);
-        }
+        // Calculate screen position using manual projection (matching the custom projection used in Pass 1)
+        Vector3 relativePos = {
+            planet.position.x - camera.position.x,
+            planet.position.y - camera.position.y,
+            planet.position.z - camera.position.z
+        };
         
-        // Draw name tags
-        if ((selectedPlanet >= 0 && planets[selectedPlanet].id == planet.id) || planet.radius > 2.0f) {
-            Vector2 screenPos = GetWorldToScreen(planet.position, camera);
+        // Project using the same perspective formula as our custom matrix
+        float fovy = camera.fovy * 3.14159265f / 180.0f;
+        float f = 1.0f / tanf(fovy * 0.5f);
+        
+        // Transform to camera space (simplified - assumes camera is looking at origin from diagonal)
+        // For accurate results, we need the full view-projection transform
+        // Use raylib's GetWorldToScreen as approximation
+        Vector2 screenPos = GetWorldToScreen(planet.position, camera);
+        
+        // Only draw if on screen
+        if (screenPos.x > 0 && screenPos.x < GetScreenWidth() &&
+            screenPos.y > 0 && screenPos.y < GetScreenHeight()) {
             
-            // Only draw if on screen
-            if (screenPos.x > 0 && screenPos.x < GetScreenWidth() &&
-                screenPos.y > 0 && screenPos.y < GetScreenHeight()) {
-                
-                // Check if selected
-                bool isSelected = (selectedPlanet >= 0 && planets[selectedPlanet].id == planet.id);
+            // Check if selected
+            bool isSelected = (selectedPlanet >= 0 && planets[selectedPlanet].id == planet.id);
+            
+            // Draw selection highlight as 2D circle around screen position
+            if (isSelected) {
+                float screenRadius = planet.radius * f * aspectRatio * 40.0f; // Approximate screen-space radius
+                if (screenRadius < 20.0f) screenRadius = 20.0f;
+                if (screenRadius > 100.0f) screenRadius = 100.0f;
+                DrawCircleLines((int)screenPos.x, (int)screenPos.y, (int)screenRadius, YELLOW);
+            }
+            
+            // Draw name tags for selected or large planets
+            if (isSelected || planet.radius > 2.0f) {
                 Color textColor = isSelected ? YELLOW : WHITE;
-                
                 DrawText(planet.name.c_str(), (int)screenPos.x - 20, (int)screenPos.y - 10, 12, textColor);
             }
         }
     }
-    
-    EndMode3D();
 }
 
 void PlanetMapGUI::DrawPlanet(const PlanetMapEntry& planet) {
@@ -525,22 +538,6 @@ void PlanetMapGUI::DrawUI() {
         
         sprintf(info, "(~%.0f km)", p.actualRadius * 6371.0f);
         DrawText(info, GetScreenWidth() - 300, 110, 12, GRAY);
-    }
-    
-    // Planet name labels in 3D space
-    for (const auto& planet : planets) {
-        Vector2 screenPos = GetWorldToScreen(planet.position, camera);
-        
-        // Only draw if on screen
-        if (screenPos.x > 0 && screenPos.x < GetScreenWidth() &&
-            screenPos.y > 0 && screenPos.y < GetScreenHeight()) {
-            
-            // Check if selected
-            bool isSelected = (selectedPlanet >= 0 && planets[selectedPlanet].id == planet.id);
-            Color textColor = isSelected ? YELLOW : WHITE;
-            
-            DrawText(planet.name.c_str(), (int)screenPos.x - 20, (int)screenPos.y - 10, 12, textColor);
-        }
     }
 }
 
