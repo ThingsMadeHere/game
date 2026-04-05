@@ -2,20 +2,23 @@
 # Build artifacts
 build/
 CMakeCache.txt
-*.cmake
+CMakeFiles/
 Makefile
 cmake_install.cmake
-CMakeFiles/
-CMakeRuleHashes.txt
-CMakeDirectoryInformation.cmake
-TargetDirectories.txt
-DependInfo.cmake
-Labels.json
-Labels.txt
-build.make
-*.build
-*.dir
-*.stamp
-*.txt
-tmp/
+
+# Dependencies
+_deps/
+
+# Logs and temp files
+*.log
+*.tmp
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
 ```

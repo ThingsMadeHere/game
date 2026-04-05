@@ -458,6 +458,7 @@ void PlanetMapGUI::Render() {
 
 void PlanetMapGUI::DrawPlanet(const PlanetMapEntry& planet) {
     // Draw planet sphere only (selection highlight handled in Render)
+    // Note: This is called within custom matrix mode, so we use rlgl directly
     DrawSphere(planet.position, planet.radius, planet.color);
 }
 
