@@ -37,7 +37,7 @@ void ChunkWorker(World* world) {
         }
         
         // Generate chunk terrain
-        ChunkKey key = makeChunkKey(req.cx, req.cy, req.cz);
+        long long key = makeChunkKey(req.cx, req.cy, req.cz);
         Chunk chunk(req.cx, req.cy, req.cz);
         
         // Get active planet for terrain generation
@@ -90,13 +90,13 @@ void ChunkWorker(World* world) {
 
 // Helper function to get chunk without creating new ones
 Chunk* World::GetChunkIfExists(int cx, int cy, int cz) {
-    ChunkKey key = {cx, cy, cz};
+    long long key = makeChunkKey(cx, cy, cz);
     auto it = chunks.find(key);
     return (it != chunks.end()) ? &it->second : nullptr;
 }
 
 Chunk& World::GetChunk(int cx, int cy, int cz) {
-    ChunkKey key = {cx, cy, cz};
+    long long key = makeChunkKey(cx, cy, cz);
     auto it = chunks.find(key);
     if (it == chunks.end()) {
         Chunk chunk(cx, cy, cz);
@@ -121,25 +121,34 @@ void World::GenerateTerrain(Chunk& chunk) {
                 float worldY = (float)(chunk.cy * CHUNK_HEIGHT + y) * VOXEL_SIZE;
                 float worldZ = (float)(chunk.cz * CHUNK_SIZE + z) * VOXEL_SIZE;
                 
-                // Use planet system to generate terrain based on config
-                float density;
-                unsigned char material;
-                g_PlanetSystem.ApplyTerrainNoise(worldX, worldY, worldZ, density, material, planetId);
+                // Simple terrain height using noise
+                float baseHeight = 20.0f;
+                float noiseVal = FBM(worldX * 0.05f, worldZ * 0.05f, 0, 4);
+                float terrainHeight = baseHeight + noiseVal * 15.0f;
                 
-                chunk.SetDensity(x, y, z, density);
-                chunk.SetMaterial(x, y, z, material);
+                if (worldY < terrainHeight - 5) {
+                    chunk.setVoxel(x, y, z, BlockType::STONE);
+                } else if (worldY < terrainHeight - 1) {
+                    chunk.setVoxel(x, y, z, BlockType::DIRT);
+                } else if (worldY < terrainHeight) {
+                    if (terrainHeight < 18.0f) {
+                        chunk.setVoxel(x, y, z, BlockType::SAND);
+                    } else {
+                        chunk.setVoxel(x, y, z, BlockType::GRASS);
+                    }
+                }
             }
         }
     }
     
-    // Generate mesh using marching cubes
-    chunk.mesh = marchingCubes.GenerateMesh(chunk, chunks);
-    chunk.meshGenerated = true; // Mark mesh as generated
-    chunk.needsUpdate = false;  // Mark as clean
+    // Generate mesh using voxel mesher
+    chunk.mesh = VoxelMesher::GenerateChunkMesh(chunk, &chunks);
+    chunk.meshGenerated = true;
+    chunk.needsUpdate = false;
 }
 
 void World::UpdateChunk(int cx, int cy, int cz) {
-    ChunkKey key = {cx, cy, cz};
+    long long key = makeChunkKey(cx, cy, cz);
     auto it = chunks.find(key);
     if (it != chunks.end()) {
         if (it->second.needsUpdate) {
@@ -147,7 +156,7 @@ void World::UpdateChunk(int cx, int cy, int cz) {
             
             // Regenerate mesh if needed
             if (!it->second.meshGenerated || it->second.needsUpdate) {
-                it->second.mesh = marchingCubes.GenerateMesh(it->second, chunks);
+                it->second.mesh = VoxelMesher::GenerateChunkMesh(it->second, &chunks);
                 it->second.meshGenerated = true;
                 it->second.needsUpdate = false;
             }
@@ -161,16 +170,16 @@ void World::UpdateChunk(int cx, int cy, int cz) {
     }
 }
 
-void World::SetVoxel(int cx, int cy, int cz, int x, int y, int z, float density) {
+void World::SetVoxel(int cx, int cy, int cz, int x, int y, int z, BlockType type) {
     Chunk& chunk = GetChunk(cx, cy, cz);
-    chunk.SetDensity(x, y, z, density);
+    chunk.setVoxel(x, y, z, type);
     chunk.needsUpdate = true;
 }
 
-float World::GetVoxel(int cx, int cy, int cz, int x, int y, int z) {
+BlockType World::GetVoxel(int cx, int cy, int cz, int x, int y, int z) {
     Chunk* chunk = GetChunkIfExists(cx, cy, cz);
-    if (chunk == nullptr) return -1.0f; // Empty/air if chunk doesn't exist
-    return chunk->GetDensity(x, y, z);
+    if (chunk == nullptr) return BlockType::AIR; // Empty/air if chunk doesn't exist
+    return chunk->getBlock(x, y, z);
 }
 
 void World::Init() {
@@ -198,8 +207,6 @@ void World::Init() {
     }
     
     printf("Started %d worker threads for chunk generation\n", numThreads);
-    
-    gpuRenderer.Init();
 }
 
 void World::Cleanup() {
@@ -207,7 +214,7 @@ void World::Cleanup() {
     running = false;
     
     // Wake up all worker threads
-    for (int i = 0; i < workerThreads.size(); i++) {
+    for (size_t i = 0; i < workerThreads.size(); i++) {
         QueueChunkGeneration(-999, 0, 0); // Shutdown signal
     }
     
@@ -217,9 +224,6 @@ void World::Cleanup() {
             thread.join();
         }
     }
-    
-    // Cleanup GPU renderer
-    gpuRenderer.Cleanup();
 }
 
 void World::SaveWorld(const std::string& filename) {
@@ -243,15 +247,18 @@ void World::SaveWorld(const std::string& filename) {
     // Write each modified chunk
     for (const auto& [key, chunk] : chunks) {
         if (chunk.needsUpdate || chunk.meshGenerated) {
-            // Write chunk key
-            file.write(reinterpret_cast<const char*>(&key.cx), sizeof(key.cx));
-            file.write(reinterpret_cast<const char*>(&key.cy), sizeof(key.cy));
-            file.write(reinterpret_cast<const char*>(&key.cz), sizeof(key.cz));
+            // Write chunk key (encoded as long long)
+            int cx = (int)(key >> 32);
+            int cy = (int)((key >> 16) & 0xFFFF);
+            int cz = (int)(key & 0xFFFF);
+            file.write(reinterpret_cast<const char*>(&cx), sizeof(cx));
+            file.write(reinterpret_cast<const char*>(&cy), sizeof(cy));
+            file.write(reinterpret_cast<const char*>(&cz), sizeof(cz));
             
-            // Write chunk density data (simplified)
+            // Write chunk voxel data (block types)
             for (int i = 0; i < CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE; i++) {
-                float density = chunk.GetDensity(i % CHUNK_SIZE, (i / CHUNK_SIZE) % CHUNK_HEIGHT, (i / (CHUNK_SIZE * CHUNK_HEIGHT)) % CHUNK_SIZE);
-                file.write(reinterpret_cast<const char*>(&density), sizeof(density));
+                unsigned char blockType = (unsigned char)chunk.voxels[i].type;
+                file.write(reinterpret_cast<const char*>(&blockType), sizeof(blockType));
             }
             
             // Write chunk state
@@ -296,9 +303,9 @@ void World::Render(const Camera3D& camera) {
             continue;
         }
         
-        // ONLY render chunks with generated meshes - no voxel fallback
+        // ONLY render chunks with generated meshes
         if (chunk.meshGenerated && chunk.mesh.vertexCount > 0) {
-            gpuRenderer.RenderChunk(chunk, camera);
+            DrawMesh(chunk.mesh);
             chunksRendered++;
         }
     }
@@ -316,12 +323,8 @@ void World::Render(const Camera3D& camera) {
 }
 
 void World::RenderShadows(const Matrix& lightSpaceMatrix, Shader& shadowShader) {
-    // Render all chunks to shadow map
-    for (auto& [key, chunk] : chunks) {
-        if (chunk.meshGenerated && chunk.mesh.vertexCount > 0) {
-            gpuRenderer.RenderChunkShadow(chunk, lightSpaceMatrix, shadowShader);
-        }
-    }
+    // Shadow rendering not needed with voxel mesher approach
+    // Chunks are rendered directly with DrawMesh
 }
 
 void World::AddModel(const std::string& name, const std::string& objPath,
@@ -354,7 +357,7 @@ int World::GetGeneratedChunkCount() const {
 }
 
 void World::GenerateMesh(Chunk& chunk) {
-    chunk.mesh = marchingCubes.GenerateMesh(chunk, chunks);
+    chunk.mesh = VoxelMesher::GenerateChunkMesh(chunk, &chunks);
     chunk.meshGenerated = true;
     chunk.needsUpdate = false;
     
@@ -384,11 +387,11 @@ void World::RegenerateNeighborChunks(int cx, int cy, int cz) {
         int ny = neighbors[i][1];
         int nz = neighbors[i][2];
         
-        ChunkKey neighborKey = {nx, ny, nz};
+        long long neighborKey = makeChunkKey(nx, ny, nz);
         auto it = chunks.find(neighborKey);
         if (it != chunks.end() && it->second.meshGenerated) {
             // Regenerate this neighbor's mesh with updated neighbor information
-            it->second.mesh = marchingCubes.GenerateMesh(it->second, chunks);
+            it->second.mesh = VoxelMesher::GenerateChunkMesh(it->second, &chunks);
         }
     }
 }
@@ -406,7 +409,7 @@ void World::ProcessChunkQueue() {
         if (req.cx == -999) break;
         
         // Check if chunk already exists
-        ChunkKey key = {req.cx, req.cy, req.cz};
+        long long key = makeChunkKey(req.cx, req.cy, req.cz);
         if (chunks.find(key) != chunks.end()) {
             chunksProcessedThisFrame++;
             continue;
@@ -419,7 +422,7 @@ void World::ProcessChunkQueue() {
         // Add to world
         auto result = chunks.emplace(key, chunk);
         if (result.second) {
-            result.first->second.mesh = marchingCubes.GenerateMesh(result.first->second, chunks);
+            result.first->second.mesh = VoxelMesher::GenerateChunkMesh(result.first->second, &chunks);
             result.first->second.meshGenerated = true;
             result.first->second.needsUpdate = false;
         }
