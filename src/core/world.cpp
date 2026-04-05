@@ -1,9 +1,7 @@
 #include "world.h"
 #include "planet.h"
-#include "../rendering/marching_cubes.h"
-#include "../rendering/gpu_renderer.h"
+#include "../rendering/voxel_mesher.h"
 #include "../terrain/terrain.h"
-#include "../terrain/noise.h"
 #include <cstdio>
 #include <cmath>
 #include <algorithm>
@@ -14,7 +12,6 @@
 
 // Simple frustum culling check
 bool IsChunkVisible(const Camera3D& camera, int cx, int cy, int cz) {
-    // Simple distance-based culling for now
     Vector3 chunkCenter = {
         (float)(cx * CHUNK_SIZE + CHUNK_SIZE / 2.0f),
         (float)(cy * CHUNK_HEIGHT + CHUNK_HEIGHT / 2.0f),
@@ -28,13 +25,10 @@ bool IsChunkVisible(const Camera3D& camera, int cx, int cy, int cz) {
     };
     
     float distance = sqrtf(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z);
-    return distance < (RENDER_DISTANCE * CHUNK_SIZE * 2.0f); // Adjust visibility distance
+    return distance < (RENDER_DISTANCE * CHUNK_SIZE * 1.5f);
 }
 
-// Global GPU renderer instance
-GPUChunkRenderer gpuRenderer;
-
-// Thread worker function
+// Thread worker function for async chunk generation
 void ChunkWorker(World* world) {
     while (world->IsRunning()) {
         ChunkRequest req = world->PopChunkRequest();
@@ -42,21 +36,54 @@ void ChunkWorker(World* world) {
             break; // Shutdown signal
         }
         
-        // Generate chunk
-        ChunkKey key = {req.cx, req.cy, req.cz};
+        // Generate chunk terrain
+        ChunkKey key = makeChunkKey(req.cx, req.cy, req.cz);
         Chunk chunk(req.cx, req.cy, req.cz);
-        world->GenerateTerrain(chunk);
         
-        // Add to world (terrain only, no mesh yet)
+        // Get active planet for terrain generation
+        PlanetDefinition* activePlanet = g_PlanetSystem.GetActivePlanet();
+        std::string planetId = activePlanet ? activePlanet->id : "default";
+        
+        // Generate voxel data using noise
+        for (int y = 0; y < CHUNK_HEIGHT; y++) {
+            for (int z = 0; z < CHUNK_SIZE; z++) {
+                for (int x = 0; x < CHUNK_SIZE; x++) {
+                    float worldX = (float)(chunk.cx * CHUNK_SIZE + x);
+                    float worldY = (float)(chunk.cy * CHUNK_HEIGHT + y);
+                    float worldZ = (float)(chunk.cz * CHUNK_SIZE + z);
+                    
+                    // Simple terrain height using noise
+                    float baseHeight = 20.0f;
+                    float noiseVal = FBM(worldX * 0.05f, worldZ * 0.05f, 0, 4);
+                    float terrainHeight = baseHeight + noiseVal * 15.0f;
+                    
+                    if (worldY < terrainHeight - 5) {
+                        chunk.setVoxel(x, y, z, BlockType::STONE);
+                    } else if (worldY < terrainHeight - 1) {
+                        chunk.setVoxel(x, y, z, BlockType::DIRT);
+                    } else if (worldY < terrainHeight) {
+                        // Surface block - grass or sand based on height
+                        if (terrainHeight < 18.0f) {
+                            chunk.setVoxel(x, y, z, BlockType::SAND);
+                        } else {
+                            chunk.setVoxel(x, y, z, BlockType::GRASS);
+                        }
+                    }
+                    // Above terrain = air (already initialized)
+                }
+            }
+        }
+        
+        // Generate mesh from voxel data
+        chunk.mesh = VoxelMesher::GenerateChunkMesh(chunk, nullptr);
+        chunk.meshGenerated = true;
+        chunk.needsUpdate = false;
+        
+        // Add to world
         std::lock_guard<std::mutex> lock(world->GetMutex());
         auto result = world->GetChunks().emplace(key, chunk);
         if (result.second) {
-            // Mark chunk as having terrain but no mesh yet
-            result.first->second.meshGenerated = false;
-            result.first->second.needsUpdate = false;
-            
-            // Don't generate mesh here - let main thread handle it
-            // This prevents race conditions with GPU renderer
+            // Successfully added
         }
     }
 }
