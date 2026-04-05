@@ -48,11 +48,13 @@ void GameMenu::ShowMainMenu() {
     // Buttons - centered on screen
     Rectangle playButton = {(float)GetScreenWidth()/2 - 100, 200, 200, 50};
     Rectangle planetMapButton = {(float)GetScreenWidth()/2 - 100, 270, 200, 50};
-    Rectangle settingsButton = {(float)GetScreenWidth()/2 - 100, 340, 200, 50};
-    Rectangle exitButton = {(float)GetScreenWidth()/2 - 100, 410, 200, 50};
+    Rectangle engineDesignButton = {(float)GetScreenWidth()/2 - 100, 340, 200, 50};
+    Rectangle settingsButton = {(float)GetScreenWidth()/2 - 100, 410, 200, 50};
+    Rectangle exitButton = {(float)GetScreenWidth()/2 - 100, 480, 200, 50};
     
     Color playColor = CheckCollisionPointRec(GetMousePosition(), playButton) ? YELLOW : WHITE;
     Color planetMapColor = CheckCollisionPointRec(GetMousePosition(), planetMapButton) ? YELLOW : WHITE;
+    Color engineDesignColor = CheckCollisionPointRec(GetMousePosition(), engineDesignButton) ? YELLOW : WHITE;
     Color settingsColor = CheckCollisionPointRec(GetMousePosition(), settingsButton) ? YELLOW : WHITE;
     Color exitColor = CheckCollisionPointRec(GetMousePosition(), exitButton) ? YELLOW : WHITE;
     
@@ -62,11 +64,14 @@ void GameMenu::ShowMainMenu() {
     DrawRectangleLinesEx(planetMapButton, 3, planetMapColor);
     DrawText("PLANET MAP", GetScreenWidth()/2 - 60, 285, 20, planetMapColor);
     
+    DrawRectangleLinesEx(engineDesignButton, 3, engineDesignColor);
+    DrawText("ENGINE DESIGN", GetScreenWidth()/2 - 70, 355, 20, engineDesignColor);
+    
     DrawRectangleLinesEx(settingsButton, 3, settingsColor);
-    DrawText("SETTINGS", GetScreenWidth()/2 - 50, 355, 20, settingsColor);
+    DrawText("SETTINGS", GetScreenWidth()/2 - 50, 425, 20, settingsColor);
     
     DrawRectangleLinesEx(exitButton, 3, exitColor);
-    DrawText("EXIT", GetScreenWidth()/2 - 20, 425, 20, exitColor);
+    DrawText("EXIT", GetScreenWidth()/2 - 20, 495, 20, exitColor);
     
     // Instructions
     DrawText("Click buttons to navigate | ESC to close menu", GetScreenWidth()/2 - 150, 500, 16, LIGHTGRAY);
@@ -128,13 +133,16 @@ void GameMenu::HandleMainMenu() {
         // Dynamic button positions
         Rectangle playButton = {(float)GetScreenWidth()/2 - 100, 200, 200, 50};
         Rectangle planetMapButton = {(float)GetScreenWidth()/2 - 100, 270, 200, 50};
-        Rectangle settingsButton = {(float)GetScreenWidth()/2 - 100, 340, 200, 50};
-        Rectangle exitButton = {(float)GetScreenWidth()/2 - 100, 410, 200, 50};
+        Rectangle engineDesignButton = {(float)GetScreenWidth()/2 - 100, 340, 200, 50};
+        Rectangle settingsButton = {(float)GetScreenWidth()/2 - 100, 410, 200, 50};
+        Rectangle exitButton = {(float)GetScreenWidth()/2 - 100, 480, 200, 50};
         
         if (CheckCollisionPointRec(mouse, playButton)) {
             currentState = MenuState::PLAYING;
         } else if (CheckCollisionPointRec(mouse, planetMapButton)) {
             currentState = MenuState::PLANET_MAP;
+        } else if (CheckCollisionPointRec(mouse, engineDesignButton)) {
+            currentState = MenuState::ENGINE_DESIGN;
         } else if (CheckCollisionPointRec(mouse, settingsButton)) {
             currentState = MenuState::SETTINGS;
         } else if (CheckCollisionPointRec(mouse, exitButton)) {

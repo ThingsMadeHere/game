@@ -2,6 +2,7 @@
 #include <raymath.h>
 #include "../ui/game_menu.h"
 #include "../ui/planet_map_gui.h"
+#include "../ui/engine_design_gui.h"
 #include "../core/world.h"
 #include "../gameplay/inventory.h"
 #include "../ui/loading_screen.h"
@@ -97,6 +98,9 @@ int main() {
     // Initialize planet map GUI
     PlanetMapGUI planetMapGUI;
     planetMapGUI.Init();
+    
+    // Initialize engine design GUI
+    EngineDesignGUI engineDesignGUI;
 
     while (!WindowShouldClose()) {
         currentMenuState = menu.Update();
@@ -120,6 +124,26 @@ int main() {
             BeginDrawing();
             ClearBackground(BLACK);
             planetMapGUI.Render();
+            EndDrawing();
+            continue;
+        } else if (currentMenuState == MenuState::ENGINE_DESIGN) {
+            // Show engine design from main menu
+            if (!engineDesignGUI.IsVisible()) {
+                engineDesignGUI.Show();
+                EnableCursor();
+            }
+            
+            engineDesignGUI.Update();
+            
+            // Check ESC to return to main menu
+            if (IsKeyPressed(KEY_ESCAPE)) {
+                engineDesignGUI.Hide();
+                currentMenuState = MenuState::MAIN_MENU;
+            }
+            
+            BeginDrawing();
+            ClearBackground(BLACK);
+            engineDesignGUI.Render();
             EndDrawing();
             continue;
         } else if (currentMenuState == MenuState::PLAYING) {

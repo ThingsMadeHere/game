@@ -1,0 +1,298 @@
+Skip to content
+PubChemPy 1.0.5 documentation
+PubChemPy 1.0.5 documentation
+- [Introduction](https://docs.pubchempy.org/en/latest/guide/introduction.html)
+- [Installation](https://docs.pubchempy.org/en/latest/guide/install.html)
+- [Getting started](https://docs.pubchempy.org/en/latest/guide/gettingstarted.html)
+- [Searching](https://docs.pubchempy.org/en/latest/guide/searching.html)
+- [Compounds](https://docs.pubchempy.org/en/latest/guide/compound.html)
+- [Substances](https://docs.pubchempy.org/en/latest/guide/substance.html)
+- [Properties](https://docs.pubchempy.org/en/latest/guide/properties.html)
+- [pandas integration](https://docs.pubchempy.org/en/latest/guide/pandas.html)
+- [Download](https://docs.pubchempy.org/en/latest/guide/download.html)
+- [Advanced usage](https://docs.pubchempy.org/en/latest/guide/advanced.html)
+- [PUG REST](https://docs.pubchempy.org/en/latest/guide/pugrest.html)
+- [Contributing](https://docs.pubchempy.org/en/latest/guide/contribute.html)
+[Introduction](https://docs.pubchempy.org/en/latest/guide/introduction.html)
+[Installation](https://docs.pubchempy.org/en/latest/guide/install.html)
+[Getting started](https://docs.pubchempy.org/en/latest/guide/gettingstarted.html)
+[Searching](https://docs.pubchempy.org/en/latest/guide/searching.html)
+[Compounds](https://docs.pubchempy.org/en/latest/guide/compound.html)
+[Substances](https://docs.pubchempy.org/en/latest/guide/substance.html)
+[Properties](https://docs.pubchempy.org/en/latest/guide/properties.html)
+[pandas integration](https://docs.pubchempy.org/en/latest/guide/pandas.html)
+[Download](https://docs.pubchempy.org/en/latest/guide/download.html)
+[Advanced usage](https://docs.pubchempy.org/en/latest/guide/advanced.html)
+[PUG REST](https://docs.pubchempy.org/en/latest/guide/pugrest.html)
+[Contributing](https://docs.pubchempy.org/en/latest/guide/contribute.html)
+- [API documentation](https://docs.pubchempy.org/en/latest/api.html)
+[API documentation](https://docs.pubchempy.org/en/latest/api.html)
+Back to top
+[View this page](https://github.com/mcs07/PubChemPy/blob/main/docs/index.md?plain=true)
+[Edit this page](https://github.com/mcs07/PubChemPy/edit/main/docs/index.md)
+
+# PubChemPy documentation¶
+
+¶
+PubChemPy provides a way to interact with the PubChem database in Python, via the PUG REST API. PubChem is a comprehensive chemical information resource that contains millions of chemical structures and their associated biological, physical, and toxicological data.
+This package handles the complexity of the PubChem PUG REST API, providing a simple Pythonic interface for chemical informatics workflows. It allows retrieval of chemical structures, properties, and experimental data, including molecular descriptors, fingerprints, 3D conformer data, and biological assay results. It also enables chemical searches by name, substructure and similarity, conversion between different chemical formats, chemical standardization, and depiction.
+Here’s a quick example showing how to get calculated properties for a specific compound:
+
+```
+>>> import pubchempy as pcp >>> compound = pcp.Compound.from_cid(2244) # Aspirin >>> print(compound.molecular_formula) C9H8O4 >>> print(compound.iupac_name) 2-acetyloxybenzoic acid >>> print(compound.molecular_weight) 180.16 >>> print(compound.xlogp) 1.2
+```
+
+Here’s how to search for a compound by name:
+
+```
+>>> for compound in pcp.get_compounds("glucose", "name"): ... print(compound.cid) ... print(compound.smiles) ... 5793 C([C@@H]1[C@H]([C@@H]([C@H](C(O1)O)O)O)O)O
+```
+
+All the heavy lifting is done by PubChem’s servers, using their database and chemical toolkits.
+
+## Features¶
+¶
+- Search PubChem Substance and Compound databases by name, SMILES, InChI and SDF.
+- Retrieve the standardised Compound record for a given input structure.
+- Convert between SDF, SMILES, InChI, PubChem CID and more.
+- Retrieve calculated properties, fingerprints and descriptors.
+- Generate 2D and 3D coordinates.
+- Get IUPAC systematic names, trade names and all known synonyms for a given Compound.
+- Download compound records as XML, ASNT/B, JSON, SDF and depiction as a PNG image.
+- Construct property tables using pandas DataFrames.
+- A complete Python wrapper around the [PubChem PUG REST web service](https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest).
+- Supports Python versions 3.9+.
+Search PubChem Substance and Compound databases by name, SMILES, InChI and SDF.
+Retrieve the standardised Compound record for a given input structure.
+Convert between SDF, SMILES, InChI, PubChem CID and more.
+Retrieve calculated properties, fingerprints and descriptors.
+Generate 2D and 3D coordinates.
+Get IUPAC systematic names, trade names and all known synonyms for a given Compound.
+Download compound records as XML, ASNT/B, JSON, SDF and depiction as a PNG image.
+Construct property tables using pandas DataFrames.
+A complete Python wrapper around the [PubChem PUG REST web service](https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest).
+Supports Python versions 3.9+.
+
+## Useful links¶
+¶
+- Source code is available on [GitHub](https://github.com/mcs07/PubChemPy).
+- Ask a question or report a bug on the [Issue Tracker](https://github.com/mcs07/PubChemPy/issues).
+- PUG REST API tutorial and [documentation](https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest).
+Source code is available on [GitHub](https://github.com/mcs07/PubChemPy).
+Ask a question or report a bug on the [Issue Tracker](https://github.com/mcs07/PubChemPy/issues).
+PUG REST API tutorial and [documentation](https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest).
+
+## User guide¶
+
+¶
+A step-by-step guide to getting started with PubChemPy.
+- Introduction
+How PubChemPy works
+[PubChemPy license](https://docs.pubchempy.org/en/latest/guide/introduction.html)
+
+
+- [How PubChemPy works](https://docs.pubchempy.org/en/latest/guide/introduction.html)
+- [PubChemPy license](https://docs.pubchempy.org/en/latest/guide/introduction.html)
+- Installation
+Option 1: Use pip (recommended)
+Option 2: Use conda
+[Option 3: Clone the repository](https://docs.pubchempy.org/en/latest/guide/install.html)
+
+
+- [Option 1: Use pip (recommended)](https://docs.pubchempy.org/en/latest/guide/install.html)
+- [Option 2: Use conda](https://docs.pubchempy.org/en/latest/guide/install.html)
+- [Option 3: Clone the repository](https://docs.pubchempy.org/en/latest/guide/install.html)
+- Getting started
+Retrieving a Compound
+[Searching](https://docs.pubchempy.org/en/latest/guide/gettingstarted.html)
+
+
+- [Retrieving a Compound](https://docs.pubchempy.org/en/latest/guide/gettingstarted.html)
+- [Searching](https://docs.pubchempy.org/en/latest/guide/gettingstarted.html)
+- Searching
+[Getting a full results list for common compound names](https://docs.pubchempy.org/en/latest/guide/searching.html)
+
+
+- [Getting a full results list for common compound names](https://docs.pubchempy.org/en/latest/guide/searching.html)
+- Compounds
+Dictionary representation
+[3D compounds](https://docs.pubchempy.org/en/latest/guide/compound.html)
+
+
+- [Dictionary representation](https://docs.pubchempy.org/en/latest/guide/compound.html)
+- [3D compounds](https://docs.pubchempy.org/en/latest/guide/compound.html)
+- Substances
+[Retrieving substances](https://docs.pubchempy.org/en/latest/guide/substance.html)
+
+
+- [Retrieving substances](https://docs.pubchempy.org/en/latest/guide/substance.html)
+- Properties
+Synonyms
+CAS Registry Numbers
+[Identifiers](https://docs.pubchempy.org/en/latest/guide/properties.html)
+
+
+- [Synonyms](https://docs.pubchempy.org/en/latest/guide/properties.html)
+- [CAS Registry Numbers](https://docs.pubchempy.org/en/latest/guide/properties.html)
+- [Identifiers](https://docs.pubchempy.org/en/latest/guide/properties.html)
+- pandas integration
+Installing pandas
+[Usage](https://docs.pubchempy.org/en/latest/guide/pandas.html)
+
+
+- [Installing pandas](https://docs.pubchempy.org/en/latest/guide/pandas.html)
+- [Usage](https://docs.pubchempy.org/en/latest/guide/pandas.html)
+- [Download](https://docs.pubchempy.org/en/latest/guide/download.html)
+- Advanced usage
+Avoiding TimeoutError
+Logging
+Using behind a proxy
+[Custom requests](https://docs.pubchempy.org/en/latest/guide/advanced.html)
+
+
+- [Avoiding TimeoutError](https://docs.pubchempy.org/en/latest/guide/advanced.html)
+- [Logging](https://docs.pubchempy.org/en/latest/guide/advanced.html)
+- [Using behind a proxy](https://docs.pubchempy.org/en/latest/guide/advanced.html)
+- [Custom requests](https://docs.pubchempy.org/en/latest/guide/advanced.html)
+- PUG REST
+PUG REST architecture
+Request flow
+When to use alternatives
+[Further reading](https://docs.pubchempy.org/en/latest/guide/pugrest.html)
+
+
+- [PUG REST architecture](https://docs.pubchempy.org/en/latest/guide/pugrest.html)
+- [Request flow](https://docs.pubchempy.org/en/latest/guide/pugrest.html)
+- [When to use alternatives](https://docs.pubchempy.org/en/latest/guide/pugrest.html)
+- [Further reading](https://docs.pubchempy.org/en/latest/guide/pugrest.html)
+- [Contributing](https://docs.pubchempy.org/en/latest/guide/contribute.html)
+[Introduction](https://docs.pubchempy.org/en/latest/guide/introduction.html)
+- [How PubChemPy works](https://docs.pubchempy.org/en/latest/guide/introduction.html)
+- [PubChemPy license](https://docs.pubchempy.org/en/latest/guide/introduction.html)
+[How PubChemPy works](https://docs.pubchempy.org/en/latest/guide/introduction.html)
+[PubChemPy license](https://docs.pubchempy.org/en/latest/guide/introduction.html)
+[Installation](https://docs.pubchempy.org/en/latest/guide/install.html)
+- [Option 1: Use pip (recommended)](https://docs.pubchempy.org/en/latest/guide/install.html)
+- [Option 2: Use conda](https://docs.pubchempy.org/en/latest/guide/install.html)
+- [Option 3: Clone the repository](https://docs.pubchempy.org/en/latest/guide/install.html)
+[Option 1: Use pip (recommended)](https://docs.pubchempy.org/en/latest/guide/install.html)
+[Option 2: Use conda](https://docs.pubchempy.org/en/latest/guide/install.html)
+[Option 3: Clone the repository](https://docs.pubchempy.org/en/latest/guide/install.html)
+
+## User guide¶
+
+[Getting started](https://docs.pubchempy.org/en/latest/guide/gettingstarted.html)
+- [Retrieving a Compound](https://docs.pubchempy.org/en/latest/guide/gettingstarted.html)
+- [Searching](https://docs.pubchempy.org/en/latest/guide/gettingstarted.html)
+[Retrieving a Compound](https://docs.pubchempy.org/en/latest/guide/gettingstarted.html)
+[Searching](https://docs.pubchempy.org/en/latest/guide/gettingstarted.html)
+[Searching](https://docs.pubchempy.org/en/latest/guide/searching.html)
+- [Getting a full results list for common compound names](https://docs.pubchempy.org/en/latest/guide/searching.html)
+[Getting a full results list for common compound names](https://docs.pubchempy.org/en/latest/guide/searching.html)
+[Compounds](https://docs.pubchempy.org/en/latest/guide/compound.html)
+- [Dictionary representation](https://docs.pubchempy.org/en/latest/guide/compound.html)
+- [3D compounds](https://docs.pubchempy.org/en/latest/guide/compound.html)
+[Dictionary representation](https://docs.pubchempy.org/en/latest/guide/compound.html)
+[3D compounds](https://docs.pubchempy.org/en/latest/guide/compound.html)
+[Substances](https://docs.pubchempy.org/en/latest/guide/substance.html)
+- [Retrieving substances](https://docs.pubchempy.org/en/latest/guide/substance.html)
+[Retrieving substances](https://docs.pubchempy.org/en/latest/guide/substance.html)
+[Properties](https://docs.pubchempy.org/en/latest/guide/properties.html)
+- [Synonyms](https://docs.pubchempy.org/en/latest/guide/properties.html)
+- [CAS Registry Numbers](https://docs.pubchempy.org/en/latest/guide/properties.html)
+- [Identifiers](https://docs.pubchempy.org/en/latest/guide/properties.html)
+[Synonyms](https://docs.pubchempy.org/en/latest/guide/properties.html)
+[CAS Registry Numbers](https://docs.pubchempy.org/en/latest/guide/properties.html)
+[Identifiers](https://docs.pubchempy.org/en/latest/guide/properties.html)
+[pandas integration](https://docs.pubchempy.org/en/latest/guide/pandas.html)
+- [Installing pandas](https://docs.pubchempy.org/en/latest/guide/pandas.html)
+- [Usage](https://docs.pubchempy.org/en/latest/guide/pandas.html)
+[Installing pandas](https://docs.pubchempy.org/en/latest/guide/pandas.html)
+[Usage](https://docs.pubchempy.org/en/latest/guide/pandas.html)
+[Download](https://docs.pubchempy.org/en/latest/guide/download.html)
+[Advanced usage](https://docs.pubchempy.org/en/latest/guide/advanced.html)
+- [Avoiding TimeoutError](https://docs.pubchempy.org/en/latest/guide/advanced.html)
+- [Logging](https://docs.pubchempy.org/en/latest/guide/advanced.html)
+- [Using behind a proxy](https://docs.pubchempy.org/en/latest/guide/advanced.html)
+- [Custom requests](https://docs.pubchempy.org/en/latest/guide/advanced.html)
+[Avoiding TimeoutError](https://docs.pubchempy.org/en/latest/guide/advanced.html)
+[Logging](https://docs.pubchempy.org/en/latest/guide/advanced.html)
+[Using behind a proxy](https://docs.pubchempy.org/en/latest/guide/advanced.html)
+[Custom requests](https://docs.pubchempy.org/en/latest/guide/advanced.html)
+[PUG REST](https://docs.pubchempy.org/en/latest/guide/pugrest.html)
+- [PUG REST architecture](https://docs.pubchempy.org/en/latest/guide/pugrest.html)
+- [Request flow](https://docs.pubchempy.org/en/latest/guide/pugrest.html)
+- [When to use alternatives](https://docs.pubchempy.org/en/latest/guide/pugrest.html)
+- [Further reading](https://docs.pubchempy.org/en/latest/guide/pugrest.html)
+[PUG REST architecture](https://docs.pubchempy.org/en/latest/guide/pugrest.html)
+[Request flow](https://docs.pubchempy.org/en/latest/guide/pugrest.html)
+[When to use alternatives](https://docs.pubchempy.org/en/latest/guide/pugrest.html)
+[Further reading](https://docs.pubchempy.org/en/latest/guide/pugrest.html)
+[Contributing](https://docs.pubchempy.org/en/latest/guide/contribute.html)
+
+## API documentation¶
+
+¶
+Comprehensive API documentation with information on every function, class and method.
+- API documentation
+Search functions
+Objects
+Identifier functions
+Request functions
+pandas functions
+Constants
+Exceptions
+[Changes](https://docs.pubchempy.org/en/latest/api.html)
+
+
+- [Search functions](https://docs.pubchempy.org/en/latest/api.html)
+- [Objects](https://docs.pubchempy.org/en/latest/api.html)
+- [Identifier functions](https://docs.pubchempy.org/en/latest/api.html)
+- [Request functions](https://docs.pubchempy.org/en/latest/api.html)
+- [pandas functions](https://docs.pubchempy.org/en/latest/api.html)
+- [Constants](https://docs.pubchempy.org/en/latest/api.html)
+- [Exceptions](https://docs.pubchempy.org/en/latest/api.html)
+- [Changes](https://docs.pubchempy.org/en/latest/api.html)
+[API documentation](https://docs.pubchempy.org/en/latest/api.html)
+- [Search functions](https://docs.pubchempy.org/en/latest/api.html)
+- [Objects](https://docs.pubchempy.org/en/latest/api.html)
+- [Identifier functions](https://docs.pubchempy.org/en/latest/api.html)
+- [Request functions](https://docs.pubchempy.org/en/latest/api.html)
+- [pandas functions](https://docs.pubchempy.org/en/latest/api.html)
+- [Constants](https://docs.pubchempy.org/en/latest/api.html)
+- [Exceptions](https://docs.pubchempy.org/en/latest/api.html)
+- [Changes](https://docs.pubchempy.org/en/latest/api.html)
+[Search functions](https://docs.pubchempy.org/en/latest/api.html)
+[Objects](https://docs.pubchempy.org/en/latest/api.html)
+[Identifier functions](https://docs.pubchempy.org/en/latest/api.html)
+[Request functions](https://docs.pubchempy.org/en/latest/api.html)
+[pandas functions](https://docs.pubchempy.org/en/latest/api.html)
+[Constants](https://docs.pubchempy.org/en/latest/api.html)
+[Exceptions](https://docs.pubchempy.org/en/latest/api.html)
+[Changes](https://docs.pubchempy.org/en/latest/api.html)
+[Next
+
+                Introduction](https://docs.pubchempy.org/en/latest/guide/introduction.html)
+[Sphinx](https://www.sphinx-doc.org/)
+[@pradyunsg](https://pradyunsg.me)
+[Furo](https://github.com/pradyunsg/furo)
+- PubChemPy documentation
+Features
+Useful links
+User guide
+API documentation
+
+
+- Features
+- Useful links
+- User guide
+- API documentation
+PubChemPy documentation
+- Features
+- Useful links
+- User guide
+- API documentation
+Features
+Useful links
+User guide
+API documentation

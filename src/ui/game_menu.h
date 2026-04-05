@@ -6,7 +6,8 @@ enum class MenuState {
     PLAYING,
     MAIN_MENU,
     SETTINGS,
-    PLANET_MAP
+    PLANET_MAP,
+    ENGINE_DESIGN
 };
 
 struct Settings {
@@ -27,8 +28,9 @@ private:
     // UI Elements
     Rectangle playButton = {400, 200, 200, 50};
     Rectangle planetMapButton = {400, 270, 200, 50};
-    Rectangle settingsButton = {400, 340, 200, 50};
-    Rectangle exitButton = {400, 410, 200, 50};
+    Rectangle engineDesignButton = {400, 340, 200, 50};
+    Rectangle settingsButton = {400, 410, 200, 50};
+    Rectangle exitButton = {400, 480, 200, 50};
     Rectangle backButton = {50, 500, 150, 40};
     
     // Settings sliders

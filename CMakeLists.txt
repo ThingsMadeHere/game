@@ -37,6 +37,7 @@ add_executable(game
     src/ui/game_menu.cpp
     src/ui/loading_screen.cpp
     src/ui/planet_map_gui.cpp
+    src/ui/engine_design_gui.cpp
 )
 
 # Include raylib headers explicitly
