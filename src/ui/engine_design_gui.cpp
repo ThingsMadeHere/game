@@ -412,7 +412,7 @@ void EngineDesignGUI::CalculatePerformance() {
                 case NuclearReactorType::LIQUID_CORE: ispBase = 1200.0f; break;
                 case NuclearReactorType::GAS_CORE: ispBase = 2000.0f; break;
                 case NuclearReactorType::PULSE: ispBase = 5000.0f; break; // Orion
-                case NuclearReactorType::FISSION_FRAGMENT: ispBase = 50000.0f; break;
+                case NuclearReactorType::FISSION_FRAGMENT: ispBase = 1000000.0f; break; // 1M ISP
             }
             
             currentDesign.specificImpulse = ispBase;

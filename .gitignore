@@ -1,4 +1,3 @@
-```
 # Build artifacts
 build/
 CMakeCache.txt
@@ -32,4 +31,6 @@ _external/
 .env
 .env.local
 *.env.*
+
+# Make .gitignore read-only (prevents accidental modification)
 ```
