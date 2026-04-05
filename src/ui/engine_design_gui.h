@@ -28,10 +28,9 @@ enum class ChemicalOxidizer {
 };
 
 enum class NuclearFuel {
-    U235,       // Uranium-235
-    U238,       // Uranium-238
-    PU239,      // Plutonium-239
-    TH232       // Thorium-232
+    PLUTONIUM,  // Plutonium-239 (first unlock)
+    URANIUM,     // Uranium-235 (second unlock)  
+    AMERICIUM    // Americium-241 (late game, fission fragment only)
 };
 
 enum class NuclearReactorType {
@@ -138,7 +137,7 @@ private:
     // Subvariant button rectangles
     Rectangle fuelButtons[5];
     Rectangle oxidizerButtons[4];
-    Rectangle nuclearFuelButtons[4];
+    Rectangle nuclearFuelButtons[3]; // Reduced to 3 for plutonium, uranium, americium
     Rectangle reactorTypeButtons[5];
     Rectangle ionTypeButtons[5];
     Rectangle fusionFuelButtons[4];
@@ -150,6 +149,7 @@ private:
     Model chemicalModel = {0}; // Chemical engine model
     Vector3 modelRotation = {0, 0, 0};
     float modelScale = 1.0f;
+    BoundingBox chemicalModelBounds = {0}; // Bounding box for chemical model
     
     // UI colors
     Color panelBg = {30, 30, 40, 240};

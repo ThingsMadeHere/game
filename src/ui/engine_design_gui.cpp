@@ -15,7 +15,7 @@ EngineDesignGUI::EngineDesignGUI() {
     // Initialize subvariant button positions
     for (int i = 0; i < 5; i++) {
         fuelButtons[i] = {90, 280 + i * 30.0f, 180, 25};
-        nuclearFuelButtons[i] = {90, 280 + i * 30.0f, 180, 25};
+        nuclearFuelButtons[i] = {90, 280 + i * 30.0f, 180, 25}; // Keep 5 for safety, but only use 3
         reactorTypeButtons[i] = {290, 280 + i * 30.0f, 200, 25};
         ionTypeButtons[i] = {90, 280 + i * 30.0f, 200, 25};
     }
@@ -91,7 +91,7 @@ void EngineDesignGUI::Update() {
                 }
                 break;
             case EngineType::NUCLEAR:
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < 3; i++) { // Only 3 fissile materials: plutonium, uranium, americium
                     if (CheckCollisionPointRec(mouse, nuclearFuelButtons[i])) {
                         selectedNuclearFuelIndex = i;
                         currentDesign.fissileMaterial = static_cast<NuclearFuel>(i);
@@ -269,8 +269,8 @@ void EngineDesignGUI::DrawNuclearOptions() {
     
     // Fissile material selection
     DrawText("Fissile Material:", configPanel.x + 15, configPanel.y + 40, 14, titleColor);
-    const char* fuels[] = {"U-235", "U-238", "Pu-239", "Th-232"};
-    for (int i = 0; i < 4; i++) {
+    const char* fuels[] = {"Plutonium-239", "Uranium-235", "Americium-241"};
+    for (int i = 0; i < 3; i++) { // Only 3 fissile materials now
         Color color = (selectedNuclearFuelIndex == i) ? selectedColor : panelBorder;
         Color btnBg = (selectedNuclearFuelIndex == i) ? Color{70, 70, 90, 200} : Color{50, 50, 60, 150};
         DrawRectangleRec(nuclearFuelButtons[i], btnBg);
@@ -413,6 +413,16 @@ void EngineDesignGUI::CalculatePerformance() {
             // Nuclear thermal rocket performance
             float ispBase = 800.0f;
             
+            // Restrict americium to fission fragment engines only
+            if (currentDesign.fissileMaterial == NuclearFuel::AMERICIUM && 
+                currentDesign.reactorType != NuclearReactorType::FISSION_FRAGMENT) {
+                // Invalid combination - set to minimal performance
+                currentDesign.specificImpulse = 0.0f;
+                currentDesign.thrust = 0.0f;
+                currentDesign.efficiency = 0.0f;
+                return;
+            }
+            
             switch (currentDesign.reactorType) {
                 case NuclearReactorType::SOLID_CORE: ispBase = 850.0f; break;
                 case NuclearReactorType::LIQUID_CORE: ispBase = 1200.0f; break;
@@ -421,10 +431,22 @@ void EngineDesignGUI::CalculatePerformance() {
                 case NuclearReactorType::FISSION_FRAGMENT: ispBase = 1000000.0f; break; // 1M ISP
             }
             
+            // Adjust for fuel type (except americium which is already handled)
+            // Set default values first
             currentDesign.specificImpulse = ispBase;
-            currentDesign.thrust = 500.0f; // 500 kN base
-            currentDesign.efficiency = 0.75f;
-            break;
+            currentDesign.thrust = 500.0f; // 500 kN base thrust
+            currentDesign.efficiency = 0.75f; // Base efficiency
+            
+            if (currentDesign.fissileMaterial == NuclearFuel::PLUTONIUM) {
+                currentDesign.specificImpulse *= 1.1f; // Plutonium is slightly better
+                currentDesign.efficiency = 0.75f; // Standard efficiency
+            } else if (currentDesign.fissileMaterial == NuclearFuel::URANIUM) {
+                currentDesign.specificImpulse *= 1.05f; // Uranium gives moderate ISP bonus
+                currentDesign.efficiency = 0.85f; // Higher efficiency than plutonium
+                currentDesign.thrust = 600.0f; // Higher thrust than others (500kN base)
+            } else if (currentDesign.fissileMaterial == NuclearFuel::AMERICIUM) {
+                currentDesign.efficiency = 0.95f; // Highest efficiency for fission fragment
+            }
         }
         
         case EngineType::ION: {
@@ -550,10 +572,9 @@ const char* EngineDesignGUI::GetOxidizerName(ChemicalOxidizer oxidizer) {
 
 const char* EngineDesignGUI::GetNuclearFuelName(NuclearFuel fuel) {
     switch (fuel) {
-        case NuclearFuel::U235: return "U-235";
-        case NuclearFuel::U238: return "U-238";
-        case NuclearFuel::PU239: return "Pu-239";
-        case NuclearFuel::TH232: return "Th-232";
+        case NuclearFuel::PLUTONIUM: return "Plutonium-239";
+        case NuclearFuel::URANIUM: return "Uranium-235";
+        case NuclearFuel::AMERICIUM: return "Americium-241";
         default: return "Unknown";
     }
 }
@@ -637,7 +658,7 @@ void EngineDesignGUI::DrawSimpleEngineModel(EngineType type, Vector3 position, f
             if (chemicalModel.meshCount > 0) {
                 printf("Drawing Chemical GLB model\n");
                 DrawModelEx(chemicalModel, 
-                           {0.0f, 0.0f, 0.0f},      // Centered position
+                           {1.2f, -0.7f, 0.0f},      // Centered position
                            {0, 1, 0},           // Rotation axis (Y-axis)
                            modelRotation.y,     // Rotation angle
                            {0.8f, 0.8f, 0.8f}, // Scale (increased from 0.4f)
@@ -663,7 +684,7 @@ void EngineDesignGUI::DrawSimpleEngineModel(EngineType type, Vector3 position, f
                 printf("Drawing NERV GLB model for solid core nuclear\n");
                 // Apply rotation and position model at top right
                 DrawModelEx(nervModel, 
-                           {1.5f, 1.0f, 0.0f},       // Top right position
+                           {1.2f, -0.7f, 0.0f},       // Top right position
                            {0, 1, 0},           // Rotation axis (Y-axis)
                            modelRotation.y,     // Rotation angle
                            {0.3f, 0.3f, 0.3f}, // Scale

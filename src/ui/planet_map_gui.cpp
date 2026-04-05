@@ -88,13 +88,13 @@ void PlanetMapGUI::LoadPlanetsFromSystem() {
         
         // Calculate orbital period using Kepler's 3rd law: T² ∝ a³
         // For visualization, we scale so closer objects orbit faster
-        // Inner planets: fast orbit, Outer planets: slow orbit
+        // Inner planets: very fast orbit, Outer planets: still fast orbit
         float a = entry.semiMajorAxis;
         if (a > 0) {
             // T = k * a^(3/2) where k is chosen for good visualization
-            // Inner planets (a~100): ~5 seconds per orbit
-            // Outer planets (a~1800): ~20 seconds per orbit
-            float k = 0.15f; 
+            // Inner planets (a~100): ~1 second per orbit
+            // Outer planets (a~1800): ~4 seconds per orbit
+            float k = 0.003f; // Much faster orbital periods (reduced from 0.15f)
             entry.orbitalPeriod = k * powf(a, 1.5f);
         } else {
             entry.orbitalPeriod = 0.0f;
@@ -227,18 +227,8 @@ void PlanetMapGUI::Update(float deltaTime) {
         lastMousePos = currentMousePos;
     }
     
-    // Auto-rotation when no right mouse drag
-    if (!isRightMouseDragging) {
-        if (selectedPlanet >= 0 && selectedPlanet < (int)planets.size()) {
-            rotationAngle += 3.0f * deltaTime; // Slow rotation around selected planet
-            cameraYaw = rotationAngle; // Sync yaw with auto-rotation
-        } else {
-            // Auto-rotate the camera view when no planet selected
-            rotationAngle += 5.0f * deltaTime;
-            cameraYaw = rotationAngle; // Sync yaw with auto-rotation
-        }
-        if (rotationAngle >= 360.0f) rotationAngle -= 360.0f;
-    }
+    // Auto-rotation disabled - no cinematic rotation
+    // Camera only rotates with manual user input (right-click drag or keyboard)
     
     // Keyboard controls (when not right-click dragging)
     if (!isRightMouseDragging) {
@@ -267,7 +257,14 @@ void PlanetMapGUI::Update(float deltaTime) {
         }
     }
     
-    // Convert spherical coordinates to Cartesian position
+    // Update camera target to selected planet or center
+    if (selectedPlanet >= 0 && selectedPlanet < (int)planets.size()) {
+        cameraTarget = planets[selectedPlanet].position;
+    } else {
+        cameraTarget = {0.0f, 0.0f, 0.0f}; // Default to center when no planet selected
+    }
+    
+    // Calculate camera position based on updated target
     float yawRad = cameraYaw * 3.14159265f / 180.0f;
     float pitchRad = cameraPitch * 3.14159265f / 180.0f;
     
@@ -275,10 +272,8 @@ void PlanetMapGUI::Update(float deltaTime) {
     camera.position.y = cameraTarget.y + cameraDistance * sinf(pitchRad);
     camera.position.z = cameraTarget.z + cameraDistance * cosf(pitchRad) * sinf(yawRad);
     
-    // Update camera target to selected planet or center
-    if (selectedPlanet >= 0 && selectedPlanet < (int)planets.size()) {
-        cameraTarget = planets[selectedPlanet].position;
-    }
+    // Update actual camera target for raylib
+    camera.target = cameraTarget;
     
     // Planet selection with mouse
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
