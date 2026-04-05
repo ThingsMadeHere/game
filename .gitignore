@@ -9,10 +9,25 @@ cmake_install.cmake
 # Dependencies
 _deps/
 
-# Temporary files
+# Compiled files
+*.o
+*.obj
+*.a
+*.so
+*.dll
+*.exe
+
+# Logs and temp files
+*.log
 *.tmp
 *.swp
 
-# Logs
-*.log
+# Editors
+.vscode/
+.idea/
+
+# Environment
+.env
+.env.local
+*.env.*
 ```
