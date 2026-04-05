@@ -7,26 +7,26 @@ EngineDesignGUI::EngineDesignGUI() {
     LoadNERVModel();
     LoadChemicalModel();
     
-    // Initialize type button positions (horizontal layout)
+    // Initialize type button positions (horizontal layout) - moved down
     for (int i = 0; i < 5; i++) {
-        typeButtons[i] = {90 + i * 95.0f, 110, 90, 40};
+        typeButtons[i] = {95 + i * 75.0f, 160, 70, 35};
     }
     
-    // Initialize subvariant button positions
+    // Initialize subvariant button positions - moved down
     for (int i = 0; i < 5; i++) {
-        fuelButtons[i] = {90, 280 + i * 30.0f, 180, 25};
-        nuclearFuelButtons[i] = {90, 280 + i * 30.0f, 180, 25}; // Keep 5 for safety, but only use 3
-        reactorTypeButtons[i] = {290, 280 + i * 30.0f, 200, 25};
-        ionTypeButtons[i] = {90, 280 + i * 30.0f, 200, 25};
+        fuelButtons[i] = {95, 290 + i * 28.0f, 160, 24};
+        nuclearFuelButtons[i] = {95, 290 + i * 28.0f, 160, 24}; // Keep 5 for safety, but only use 3
+        reactorTypeButtons[i] = {265, 290 + i * 28.0f, 180, 24};
+        ionTypeButtons[i] = {95, 290 + i * 28.0f, 180, 24};
     }
     
     for (int i = 0; i < 4; i++) {
-        oxidizerButtons[i] = {290, 280 + i * 30.0f, 180, 25};
-        fusionFuelButtons[i] = {90, 280 + i * 30.0f, 180, 25};
+        oxidizerButtons[i] = {265, 290 + i * 28.0f, 160, 24};
+        fusionFuelButtons[i] = {95, 290 + i * 28.0f, 160, 24};
     }
     
     for (int i = 0; i < 6; i++) {
-        fusionConfigButtons[i] = {290, 280 + i * 30.0f, 200, 25};
+        fusionConfigButtons[i] = {265, 290 + i * 28.0f, 180, 24};
     }
 }
 
@@ -182,41 +182,39 @@ void EngineDesignGUI::Render() {
 }
 
 void EngineDesignGUI::DrawMainPanel() {
-    // Main panel background
+    // Main panel background - cleaner
     DrawRectangleRec(mainPanel, panelBg);
-    DrawRectangleLinesEx(mainPanel, 3, panelBorder);
+    DrawRectangleLinesEx(mainPanel, 2, panelBorder);
     
-    // Title
-    DrawText("ENGINE DESIGN WORKSHOP", mainPanel.x + 30, mainPanel.y + 20, 32, titleColor);
-    DrawText("Configure your spacecraft propulsion system", mainPanel.x + 30, mainPanel.y + 60, 16, textColor);
+    // Simplified title
+    DrawText("ENGINE DESIGNER", mainPanel.x + 25, mainPanel.y + 15, 24, titleColor);
     
-    // Draw panel sections backgrounds
-    Color sectionBg = {40, 40, 50, 200};
+    // Draw panel sections backgrounds - cleaner colors
+    Color sectionBg = {35, 35, 45, 180};
     DrawRectangleRec(typePanel, sectionBg);
-    DrawRectangleLinesEx(typePanel, 2, panelBorder);
-    DrawText("ENGINE TYPE", typePanel.x + 15, typePanel.y + 10, 18, titleColor);
+    DrawRectangleLinesEx(typePanel, 1, {100, 100, 120, 255});
+    DrawText("ENGINE TYPE", typePanel.x + 12, typePanel.y + 8, 16, titleColor);
     
     DrawRectangleRec(configPanel, sectionBg);
-    DrawRectangleLinesEx(configPanel, 2, panelBorder);
+    DrawRectangleLinesEx(configPanel, 1, {100, 100, 120, 255});
     
     DrawRectangleRec(modelPanel, sectionBg);
-    DrawRectangleLinesEx(modelPanel, 2, panelBorder);
-    DrawText("3D PREVIEW", modelPanel.x + 15, modelPanel.y + 10, 18, titleColor);
+    DrawRectangleLinesEx(modelPanel, 1, {100, 100, 120, 255});
+    DrawText("PREVIEW", modelPanel.x + 12, modelPanel.y + 8, 16, titleColor);
     
     DrawRectangleRec(performancePanel, sectionBg);
-    DrawRectangleLinesEx(performancePanel, 2, panelBorder);
-    DrawText("PERFORMANCE METRICS", performancePanel.x + 15, performancePanel.y + 10, 16, titleColor);
+    DrawRectangleLinesEx(performancePanel, 1, {100, 100, 120, 255});
+    DrawText("PERFORMANCE", performancePanel.x + 12, performancePanel.y + 8, 14, titleColor);
     
-    // Back button
-    Color buttonBg = {60, 60, 80, 180};
+    // Cleaner buttons
+    Color buttonBg = {50, 50, 70, 160};
     DrawRectangleRec(backButton, buttonBg);
-    DrawRectangleLinesEx(backButton, 2, panelBorder);
-    DrawText("BACK", backButton.x + 35, backButton.y + 12, 16, titleColor);
+    DrawRectangleLinesEx(backButton, 1, panelBorder);
+    DrawText("BACK", backButton.x + 30, backButton.y + 10, 14, titleColor);
     
-    // Save button
     DrawRectangleRec(saveButton, buttonBg);
-    DrawRectangleLinesEx(saveButton, 2, panelBorder);
-    DrawText("SAVE DESIGN", saveButton.x + 20, saveButton.y + 12, 16, titleColor);
+    DrawRectangleLinesEx(saveButton, 1, panelBorder);
+    DrawText("SAVE", saveButton.x + 35, saveButton.y + 10, 14, titleColor);
 }
 
 void EngineDesignGUI::DrawTypeSelection() {
@@ -235,28 +233,28 @@ void EngineDesignGUI::DrawTypeSelection() {
 }
 
 void EngineDesignGUI::DrawChemicalOptions() {
-    DrawText("Chemical Engine Configuration", configPanel.x + 15, configPanel.y + 10, 18, titleColor);
+    DrawText("Chemical Configuration", configPanel.x + 12, configPanel.y + 8, 16, titleColor);
     
-    // Fuel selection
-    DrawText("Fuel:", configPanel.x + 15, configPanel.y + 40, 14, titleColor);
+    // Fuel selection - moved down
+    DrawText("Fuel:", configPanel.x + 12, configPanel.y + 35, 12, titleColor);
     const char* fuels[] = {"RP-1", "LH2", "CH4", "Hydrazine", "UDMH"};
     for (int i = 0; i < 5; i++) {
-        Color color = (selectedFuelIndex == i) ? selectedColor : panelBorder;
-        Color btnBg = (selectedFuelIndex == i) ? Color{70, 70, 90, 200} : Color{50, 50, 60, 150};
+        Color color = (selectedFuelIndex == i) ? selectedColor : (Color){100, 100, 120, 255};
+        Color btnBg = (selectedFuelIndex == i) ? (Color){60, 60, 80, 180} : (Color){45, 45, 55, 150};
         DrawRectangleRec(fuelButtons[i], btnBg);
         DrawRectangleLinesEx(fuelButtons[i], 1, color);
-        DrawText(fuels[i], fuelButtons[i].x + 5, fuelButtons[i].y + 5, 11, titleColor);
+        DrawText(fuels[i], fuelButtons[i].x + 4, fuelButtons[i].y + 6, 10, titleColor);
     }
     
-    // Oxidizer selection
-    DrawText("Oxidizer:", configPanel.x + 265, configPanel.y + 40, 14, titleColor);
+    // Oxidizer selection - moved down
+    DrawText("Oxidizer:", configPanel.x + 265, configPanel.y + 35, 12, titleColor);
     const char* oxidizers[] = {"LOX", "N2O4", "N2O", "H2O2"};
     for (int i = 0; i < 4; i++) {
-        Color color = (selectedOxidizerIndex == i) ? selectedColor : panelBorder;
-        Color btnBg = (selectedOxidizerIndex == i) ? Color{70, 70, 90, 200} : Color{50, 50, 60, 150};
+        Color color = (selectedOxidizerIndex == i) ? selectedColor : (Color){100, 100, 120, 255};
+        Color btnBg = (selectedOxidizerIndex == i) ? (Color){60, 60, 80, 180} : (Color){45, 45, 55, 150};
         DrawRectangleRec(oxidizerButtons[i], btnBg);
         DrawRectangleLinesEx(oxidizerButtons[i], 1, color);
-        DrawText(oxidizers[i], oxidizerButtons[i].x + 5, oxidizerButtons[i].y + 5, 11, titleColor);
+        DrawText(oxidizers[i], oxidizerButtons[i].x + 4, oxidizerButtons[i].y + 6, 10, titleColor);
     }
     
     // Update design based on selections
@@ -265,28 +263,28 @@ void EngineDesignGUI::DrawChemicalOptions() {
 }
 
 void EngineDesignGUI::DrawNuclearOptions() {
-    DrawText("Nuclear Engine Configuration", configPanel.x + 15, configPanel.y + 10, 18, titleColor);
+    DrawText("Nuclear Engine Configuration", configPanel.x + 12, configPanel.y + 8, 16, titleColor);
     
-    // Fissile material selection
-    DrawText("Fissile Material:", configPanel.x + 15, configPanel.y + 40, 14, titleColor);
+    // Fissile material selection - moved down
+    DrawText("Fissile Material:", configPanel.x + 12, configPanel.y + 35, 12, titleColor);
     const char* fuels[] = {"Plutonium-239", "Uranium-235", "Americium-241"};
     for (int i = 0; i < 3; i++) { // Only 3 fissile materials now
-        Color color = (selectedNuclearFuelIndex == i) ? selectedColor : panelBorder;
-        Color btnBg = (selectedNuclearFuelIndex == i) ? Color{70, 70, 90, 200} : Color{50, 50, 60, 150};
+        Color color = (selectedNuclearFuelIndex == i) ? selectedColor : (Color){100, 100, 120, 255};
+        Color btnBg = (selectedNuclearFuelIndex == i) ? (Color){60, 60, 80, 180} : (Color){45, 45, 55, 150};
         DrawRectangleRec(nuclearFuelButtons[i], btnBg);
         DrawRectangleLinesEx(nuclearFuelButtons[i], 1, color);
-        DrawText(fuels[i], nuclearFuelButtons[i].x + 5, nuclearFuelButtons[i].y + 5, 11, titleColor);
+        DrawText(fuels[i], nuclearFuelButtons[i].x + 4, nuclearFuelButtons[i].y + 6, 10, titleColor);
     }
     
-    // Reactor type selection
-    DrawText("Reactor Type:", configPanel.x + 265, configPanel.y + 40, 14, titleColor);
+    // Reactor type selection - moved down
+    DrawText("Reactor Type:", configPanel.x + 265, configPanel.y + 35, 12, titleColor);
     const char* reactors[] = {"Solid Core", "Liquid Core", "Gas Core", "Pulse", "Fission Fragment"};
     for (int i = 0; i < 5; i++) {
-        Color color = (selectedReactorTypeIndex == i) ? selectedColor : panelBorder;
-        Color btnBg = (selectedReactorTypeIndex == i) ? Color{70, 70, 90, 200} : Color{50, 50, 60, 150};
+        Color color = (selectedReactorTypeIndex == i) ? selectedColor : (Color){100, 100, 120, 255};
+        Color btnBg = (selectedReactorTypeIndex == i) ? (Color){60, 60, 80, 180} : (Color){45, 45, 55, 150};
         DrawRectangleRec(reactorTypeButtons[i], btnBg);
         DrawRectangleLinesEx(reactorTypeButtons[i], 1, color);
-        DrawText(reactors[i], reactorTypeButtons[i].x + 5, reactorTypeButtons[i].y + 5, 10, titleColor);
+        DrawText(reactors[i], reactorTypeButtons[i].x + 4, reactorTypeButtons[i].y + 6, 10, titleColor);
     }
     
     // Update design
@@ -691,16 +689,18 @@ void EngineDesignGUI::DrawSimpleEngineModel(EngineType type, Vector3 position, f
                            WHITE);              // Color
             } else {
                 printf("Using fallback shapes for nuclear engine\n");
-                // Fallback to simple shapes
-                DrawSphere({0, 0, 0}, 0.5f * scale, reactorColor); // Reactor core
-                DrawCylinder({0, -0.3f, 0}, 0.4f * scale, 0.6f * scale, 0.6f * scale, 16, {150, 150, 150, 255}); // Chamber
-                DrawCylinder({0, -0.8f, 0}, 0.6f * scale, 0.4f * scale, 0.2f * scale, 16, {100, 100, 100, 255}); // Nozzle
+                // Fallback to simple shapes - using consistent transform
+                Vector3 pos = {1.2f, -0.7f, 0.0f}; // Consistent engine transform
+                DrawSphere(pos, 0.5f * scale, reactorColor); // Reactor core
+                DrawCylinder({pos.x, pos.y - 0.3f, pos.z}, 0.4f * scale, 0.6f * scale, 0.6f * scale, 16, {150, 150, 150, 255}); // Chamber
+                DrawCylinder({pos.x, pos.y - 0.8f, pos.z}, 0.6f * scale, 0.4f * scale, 0.2f * scale, 16, {100, 100, 100, 255}); // Nozzle
             }
             break;
         }
         case EngineType::ION: {
-            // Compact thruster with grids
+            // Compact thruster with grids - using consistent transform
             Color ionColor = {100, 200, 255, 255}; // Blue
+            Vector3 pos = {1.2f, -0.7f, 0.0f}; // Consistent engine transform
             DrawCube({pos.x, pos.y, pos.z}, 0.4f * scale, 0.3f * scale, 0.2f * scale, ionColor); // Main body
             // Grid plates
             DrawCube({pos.x, pos.y, pos.z + 0.1f * scale}, 0.3f * scale, 0.25f * scale, 0.02f * scale, {200, 200, 200, 255});
@@ -708,8 +708,9 @@ void EngineDesignGUI::DrawSimpleEngineModel(EngineType type, Vector3 position, f
             break;
         }
         case EngineType::FUSION: {
-            // Toroidal chamber
+            // Toroidal chamber - using consistent transform
             Color fusionColor = {255, 255, 100, 255}; // Yellow plasma
+            Vector3 pos = {1.2f, -0.7f, 0.0f}; // Consistent engine transform
             // Draw torus using multiple spheres (simplified)
             for (int i = 0; i < 16; i++) {
                 float angle = (i / 16.0f) * 2.0f * PI;
@@ -725,8 +726,9 @@ void EngineDesignGUI::DrawSimpleEngineModel(EngineType type, Vector3 position, f
             break;
         }
         case EngineType::ANTIMATTER: {
-            // Sleek, advanced design
+            // Sleek, advanced design - using consistent transform
             Color antimatterColor = {255, 100, 255, 255}; // Purple
+            Vector3 pos = {1.2f, -0.7f, 0.0f}; // Consistent engine transform
             DrawCylinder(pos, 0.2f * scale, 0.4f * scale, 1.2f * scale, 16, antimatterColor); // Main chamber
             // Magnetic coils
             for (int i = 0; i < 4; i++) {

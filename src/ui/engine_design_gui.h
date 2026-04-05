@@ -122,17 +122,17 @@ private:
     int selectedFusionFuelIndex = 0;
     int selectedFusionConfigIndex = 0;
     
-    // UI layout
-    Rectangle mainPanel = {50, 50, 1100, 650};
+    // UI layout - cleaner with better padding
+    Rectangle mainPanel = {60, 60, 1000, 580};
     Rectangle typeButtons[5];
-    Rectangle backButton = {60, 660, 120, 40};
-    Rectangle saveButton = {980, 660, 120, 40};
+    Rectangle backButton = {70, 590, 100, 35};
+    Rectangle saveButton = {860, 590, 100, 35};
     
-    // Panel sections
-    Rectangle typePanel = {70, 90, 500, 120};
-    Rectangle configPanel = {70, 230, 500, 350};
-    Rectangle modelPanel = {590, 90, 520, 490};
-    Rectangle performancePanel = {590, 600, 520, 80};
+    // Panel sections - more spacing, moved down
+    Rectangle typePanel = {80, 140, 420, 100};
+    Rectangle configPanel = {80, 260, 420, 300};
+    Rectangle modelPanel = {520, 100, 440, 420};
+    Rectangle performancePanel = {520, 530, 440, 60};
     
     // Subvariant button rectangles
     Rectangle fuelButtons[5];

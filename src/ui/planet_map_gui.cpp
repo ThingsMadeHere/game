@@ -497,47 +497,49 @@ void PlanetMapGUI::DrawOrbits() {
 }
 
 void PlanetMapGUI::DrawUI() {
-    // Background panel
-    DrawRectangle(10, 10, 300, 150, {0, 0, 0, 200});
-    DrawRectangleLines(10, 10, 300, 150, WHITE);
+    // Main controls panel - cleaner with more padding
+    DrawRectangle(20, 20, 280, 120, {0, 0, 0, 180});
+    DrawRectangleLines(20, 20, 280, 120, {150, 150, 150, 255});
     
-    // Title
-    DrawText("SYSTEM MAP", 20, 20, 24, WHITE);
-    DrawText("Press M to close | C to center on star", 20, 50, 16, GRAY);
-    DrawText("Arrows/WASD to move", 20, 70, 16, GRAY);
-    DrawText("Click to select planet", 20, 90, 16, GRAY);
+    // Title - simplified
+    DrawText("SYSTEM MAP", 35, 35, 20, WHITE);
     
-    // Planet count
+    // Essential controls only - reduced text
+    DrawText("M: Close | Click: Select | Arrows: Move", 35, 65, 14, {200, 200, 200, 255});
+    DrawText("W/S: Zoom | Right-click: Rotate", 35, 85, 14, {200, 200, 200, 255});
+    
+    // Planet count - smaller
     char countText[64];
-    sprintf(countText, "Planets: %zu", planets.size());
-    DrawText(countText, 20, 120, 16, WHITE);
+    sprintf(countText, "Bodies: %zu", planets.size());
+    DrawText(countText, 35, 105, 12, {180, 180, 180, 255});
     
-    // Selected planet info
+    // Selected planet info - cleaner design
     if (selectedPlanet >= 0 && selectedPlanet < (int)planets.size()) {
         const auto& p = planets[selectedPlanet];
         
-        DrawRectangle(GetScreenWidth() - 310, 10, 300, 150, {0, 0, 0, 200});
-        DrawRectangleLines(GetScreenWidth() - 310, 10, 300, 150, YELLOW);
+        // Right panel with better padding
+        DrawRectangle(GetScreenWidth() - 300, 20, 280, 100, {0, 0, 0, 180});
+        DrawRectangleLines(GetScreenWidth() - 300, 20, 280, 100, YELLOW);
         
-        DrawText("SELECTED", GetScreenWidth() - 300, 20, 20, YELLOW);
-        DrawText(p.name.c_str(), GetScreenWidth() - 300, 45, 18, WHITE);
+        // Planet name - prominent
+        DrawText(p.name.c_str(), GetScreenWidth() - 290, 35, 18, WHITE);
         
+        // Essential info only - cleaner layout
         char info[128];
-        // Show correct type: star, planet, or moon
         std::string typeStr = "Planet";
         if (p.id == "sandos") {
             typeStr = "Star";
         } else if (p.isMoon) {
             typeStr = "Moon";
         }
-        sprintf(info, "Type: %s", typeStr.c_str());
-        DrawText(info, GetScreenWidth() - 300, 70, 14, GRAY);
         
-        sprintf(info, "Radius: %.2f Earth radii", p.actualRadius);
-        DrawText(info, GetScreenWidth() - 300, 90, 14, GRAY);
+        // Type and radius on one line
+        sprintf(info, "%s | %.1f Earth radii", typeStr.c_str(), p.actualRadius);
+        DrawText(info, GetScreenWidth() - 290, 60, 14, {200, 200, 200, 255});
         
-        sprintf(info, "(~%.0f km)", p.actualRadius * 6371.0f);
-        DrawText(info, GetScreenWidth() - 300, 110, 12, GRAY);
+        // Smaller km info
+        sprintf(info, "~%.0f km", p.actualRadius * 6371.0f);
+        DrawText(info, GetScreenWidth() - 290, 80, 12, {160, 160, 160, 255});
     }
 }
 
