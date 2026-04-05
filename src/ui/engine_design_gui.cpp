@@ -30,6 +30,7 @@ EngineDesignGUI::EngineDesignGUI() {
 }
 
 void EngineDesignGUI::Show() {
+    printf("EngineDesignGUI::Show() called\n");
     visible = true;
     currentDesign = {};
     currentDesign.type = EngineType::CHEMICAL;
@@ -597,6 +598,8 @@ const char* EngineDesignGUI::GetFusionConfigName(FusionReactorConfig config) {
 }
 
 void EngineDesignGUI::DrawEngineModel() {
+    printf("DrawEngineModel called - engine type: %d, reactor type: %d\n", (int)currentDesign.type, (int)currentDesign.reactorType);
+    
     // 3D model viewport is already drawn in main panel
     
     // Simple 3D camera for model view
@@ -640,8 +643,14 @@ void EngineDesignGUI::DrawSimpleEngineModel(EngineType type, Vector3 position, f
             
             // Use NERV model for solid core nuclear
             if (currentDesign.reactorType == NuclearReactorType::SOLID_CORE && nervModel.meshCount > 0) {
-                printf("Drawing NERV model for solid core nuclear\n");
-                DrawModel(nervModel, {0, 0, 0}, 1.0f, WHITE);
+                printf("Drawing NERV GLB model for solid core nuclear\n");
+                // Apply rotation and center the model - adjust Y position for better centering
+                DrawModelEx(nervModel, 
+                           {0, -0.5f, 0},        // Adjusted center position (lowered)
+                           {0, 1, 0},           // Rotation axis (Y-axis)
+                           modelRotation.y,     // Rotation angle
+                           {0.3f, 0.3f, 0.3f}, // Scale
+                           WHITE);              // Color
             } else {
                 printf("Using fallback shapes for nuclear engine\n");
                 // Fallback to simple shapes
@@ -694,14 +703,14 @@ void EngineDesignGUI::DrawSimpleEngineModel(EngineType type, Vector3 position, f
 }
 
 void EngineDesignGUI::LoadNERVModel() {
-    // Load NERV model from data/models directory
-    printf("Attempting to load NERV model from: ../data/models/NERV.obj\n");
-    nervModel = LoadModel("../data/models/NERV.obj");
+    // Load NERV model from GLB file
+    printf("Attempting to load NERV model from: ../data/models/NERV.glb\n");
+    nervModel = LoadModel("../data/models/NERV.glb");
     
     if (nervModel.meshCount > 0) {
-        printf("NERV model loaded successfully - mesh count: %d\n", nervModel.meshCount);
+        printf("NERV GLB model loaded successfully - mesh count: %d\n", nervModel.meshCount);
         // Model will be drawn at appropriate scale in DrawSimpleEngineModel
     } else {
-        printf("Failed to load NERV model - mesh count: %d\n", nervModel.meshCount);
+        printf("Failed to load NERV GLB model - mesh count: %d\n", nervModel.meshCount);
     }
 }

@@ -142,6 +142,7 @@ void GameMenu::HandleMainMenu() {
         } else if (CheckCollisionPointRec(mouse, planetMapButton)) {
             currentState = MenuState::PLANET_MAP;
         } else if (CheckCollisionPointRec(mouse, engineDesignButton)) {
+            printf("Engine design button clicked!\n");
             currentState = MenuState::ENGINE_DESIGN;
         } else if (CheckCollisionPointRec(mouse, settingsButton)) {
             currentState = MenuState::SETTINGS;
