@@ -799,6 +799,14 @@ void EngineDesignGUI::LoadChemicalModel() {
     
     if (chemicalModel.meshCount > 0) {
         printf("Chemical GLB model loaded successfully - mesh count: %d\n", chemicalModel.meshCount);
+        
+        // Calculate bounding box to find model dimensions
+        chemicalModelBounds = GetMeshBoundingBox(chemicalModel.meshes[0]);
+        float modelHeight = chemicalModelBounds.max.y - chemicalModelBounds.min.y;
+        printf("Chemical model bounds - min: (%.2f, %.2f, %.2f), max: (%.2f, %.2f, %.2f), height: %.2f\n",
+               chemicalModelBounds.min.x, chemicalModelBounds.min.y, chemicalModelBounds.min.z,
+               chemicalModelBounds.max.x, chemicalModelBounds.max.y, chemicalModelBounds.max.z,
+               modelHeight);
     } else {
         printf("Failed to load Chemical GLB model - mesh count: %d\n", chemicalModel.meshCount);
     }
