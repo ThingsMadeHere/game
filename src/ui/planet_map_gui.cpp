@@ -6,17 +6,24 @@
 #include "rlgl.h"
 
 void PlanetMapGUI::Init() {
-    camera.position = {200.0f, 200.0f, 200.0f}; // Increased from 50 for better draw distance
+    camera.position = {1000.0f, 1000.0f, 1000.0f}; // Even larger distance for far plane
     camera.target = {0.0f, 0.0f, 0.0f};
     camera.up = {0.0f, 1.0f, 0.0f};
     camera.fovy = 45.0f;
     camera.projection = CAMERA_PERSPECTIVE;
     
-    // Set far clipping plane to a very large distance (effectively remove it)
-    rlSetProjectionMatrixPerspective(camera.fovy, (float)GetScreenWidth()/(float)GetScreenHeight(), 0.1f, 100000.0f);
+    // Initialize render texture for 3D scene
+    sceneTexture = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
+    
+    // Initialize custom projection matrix for far plane
+    aspectRatio = (float)GetScreenWidth() / (float)GetScreenHeight();
     
     rotationAngle = 0.0f;
     selectedPlanet = -1;
+    isRightMouseDragging = false;
+    lastMousePos = {0, 0};
+    cameraYaw = -45.0f;  // Start at 45 degrees yaw
+    cameraPitch = -30.0f; // Start at 30 degrees pitch
     LoadPlanetsFromSystem();
 }
 
@@ -38,18 +45,34 @@ void PlanetMapGUI::LoadPlanetsFromSystem() {
         entry.id = planet->id;
         entry.actualRadius = planet->physical.radius; // Real radius in Earth radii
         
-        // Use real sizes proportionally
-        // Scale factor: 1 Earth radius = 2 units in visualization
+        // Use smaller sizes to prevent overlapping
+        // Scale factor: 1 Earth radius = 0.8 units in visualization (reduced from 2.0)
         // Star gets special treatment since it's much larger than planets
-        float scaleFactor = 2.0f;
+        float scaleFactor = 0.8f;
         if (planet->planetType == "star") {
-            // Star radius scaled down to fit view but still much larger than planets
+            // Star radius scaled down significantly to fit view but still larger than planets
             // Sandos has radius 0.7 (solar radii), which is ~76x Earth radius
-            // Display it as ~40 units to show it's huge but fit in view
-            entry.radius = 40.0f * planet->physical.radius;
+            // Display it as ~15 units to show it's larger but not overwhelming
+            entry.radius = 15.0f;
         } else {
             // Planets and moons use their actual radius (in Earth radii) scaled uniformly
             entry.radius = planet->physical.radius * scaleFactor;
+            
+            // Cap maximum radius for planets to prevent overlapping
+            if (entry.radius > 3.0f) {
+                entry.radius = 3.0f;
+            }
+            
+            // Moons should be even smaller
+            if (planet->planetType != "star" && !planet->orbit.parentObjectId.empty()) {
+                const PlanetDefinition* parent = g_PlanetSystem.GetPlanet(planet->orbit.parentObjectId);
+                if (parent && parent->planetType != "star") {
+                    entry.radius *= 0.5f; // Moons are half the size of planets
+                    if (entry.radius > 1.5f) {
+                        entry.radius = 1.5f; // Cap moon size
+                    }
+                }
+            }
         }
         
         // Get orbital position (relative to parent)
@@ -145,8 +168,8 @@ void PlanetMapGUI::LoadPlanetsFromSystem() {
 
 void PlanetMapGUI::Show() {
     visible = true;
-    // Reset camera with increased distance
-    camera.position = {200.0f, 200.0f, 200.0f}; // Increased from 50 for better draw distance
+    // Reset camera with increased distance for better far plane
+    camera.position = {1000.0f, 1000.0f, 1000.0f}; // Even larger distance
     camera.target = {0.0f, 0.0f, 0.0f};
 }
 
@@ -161,37 +184,101 @@ void PlanetMapGUI::Update(float deltaTime) {
     simulationTime += deltaTime * timeScale;
     UpdateOrbitalPositions(deltaTime);
     
-    // Auto-rotate the camera view
-    rotationAngle += 5.0f * deltaTime;
-    if (rotationAngle >= 360.0f) rotationAngle -= 360.0f;
-    
-    // Camera controls
-    if (IsKeyDown(KEY_UP)) camera.position.y += 2.0f;
-    if (IsKeyDown(KEY_DOWN)) camera.position.y -= 2.0f;
-    if (IsKeyDown(KEY_LEFT)) rotationAngle -= 2.0f;
-    if (IsKeyDown(KEY_RIGHT)) rotationAngle += 2.0f;
-    
-    // Zoom
-    if (IsKeyDown(KEY_W)) {
-        camera.position.x *= 0.98f;
-        camera.position.y *= 0.98f;
-        camera.position.z *= 0.98f;
-    }
-    if (IsKeyDown(KEY_S)) {
-        camera.position.x *= 1.02f;
-        camera.position.y *= 1.02f;
-        camera.position.z *= 1.02f;
-    }
-    
-    // Update camera position based on rotation around target
-    float dist = sqrtf(
+    // Calculate camera distance from target
+    float cameraDistance = sqrtf(
         (camera.position.x - cameraTarget.x) * (camera.position.x - cameraTarget.x) +
+        (camera.position.y - cameraTarget.y) * (camera.position.y - cameraTarget.y) +
         (camera.position.z - cameraTarget.z) * (camera.position.z - cameraTarget.z)
     );
-    float rad = rotationAngle * (PI / 180.0f);
-    camera.position.x = cameraTarget.x + dist * cosf(rad);
-    camera.position.z = cameraTarget.z + dist * sinf(rad);
-    camera.target = cameraTarget;
+    
+    // Mouse wheel zoom
+    float wheelMove = GetMouseWheelMove();
+    if (wheelMove != 0) {
+        cameraDistance -= wheelMove * 100.0f; // Zoom speed
+        if (cameraDistance < 100.0f) cameraDistance = 100.0f;  // Min zoom
+        if (cameraDistance > 5000.0f) cameraDistance = 5000.0f; // Max zoom
+    }
+    
+    // Right mouse drag rotation around selected object
+    if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
+        isRightMouseDragging = true;
+        lastMousePos = GetMousePosition();
+    }
+    
+    if (IsMouseButtonReleased(MOUSE_RIGHT_BUTTON)) {
+        isRightMouseDragging = false;
+    }
+    
+    if (isRightMouseDragging) {
+        Vector2 currentMousePos = GetMousePosition();
+        Vector2 mouseDelta = {
+            currentMousePos.x - lastMousePos.x,
+            currentMousePos.y - lastMousePos.y
+        };
+        
+        // Update yaw and pitch based on mouse movement
+        cameraYaw += mouseDelta.x * 0.5f;        // Horizontal rotation
+        cameraPitch -= mouseDelta.y * 0.3f;       // Vertical rotation (inverted for natural feel)
+        
+        // Clamp pitch to prevent flipping over
+        if (cameraPitch > 89.0f) cameraPitch = 89.0f;
+        if (cameraPitch < -89.0f) cameraPitch = -89.0f;
+        
+        lastMousePos = currentMousePos;
+    }
+    
+    // Auto-rotation when no right mouse drag
+    if (!isRightMouseDragging) {
+        if (selectedPlanet >= 0 && selectedPlanet < (int)planets.size()) {
+            rotationAngle += 3.0f * deltaTime; // Slow rotation around selected planet
+            cameraYaw = rotationAngle; // Sync yaw with auto-rotation
+        } else {
+            // Auto-rotate the camera view when no planet selected
+            rotationAngle += 5.0f * deltaTime;
+            cameraYaw = rotationAngle; // Sync yaw with auto-rotation
+        }
+        if (rotationAngle >= 360.0f) rotationAngle -= 360.0f;
+    }
+    
+    // Keyboard controls (when not right-click dragging)
+    if (!isRightMouseDragging) {
+        // Arrow keys for manual rotation when no planet selected
+        if (selectedPlanet < 0) {
+            if (IsKeyDown(KEY_LEFT)) cameraYaw -= 2.0f;
+            if (IsKeyDown(KEY_RIGHT)) cameraYaw += 2.0f;
+        }
+        
+        // Up/Down arrows for pitch adjustment
+        if (IsKeyDown(KEY_UP)) cameraPitch += 2.0f;
+        if (IsKeyDown(KEY_DOWN)) cameraPitch -= 2.0f;
+        
+        // Clamp pitch
+        if (cameraPitch > 89.0f) cameraPitch = 89.0f;
+        if (cameraPitch < -89.0f) cameraPitch = -89.0f;
+        
+        // W/S for zoom
+        if (IsKeyDown(KEY_W)) {
+            cameraDistance *= 0.98f;
+            if (cameraDistance < 100.0f) cameraDistance = 100.0f;
+        }
+        if (IsKeyDown(KEY_S)) {
+            cameraDistance *= 1.02f;
+            if (cameraDistance > 5000.0f) cameraDistance = 5000.0f;
+        }
+    }
+    
+    // Convert spherical coordinates to Cartesian position
+    float yawRad = cameraYaw * 3.14159265f / 180.0f;
+    float pitchRad = cameraPitch * 3.14159265f / 180.0f;
+    
+    camera.position.x = cameraTarget.x + cameraDistance * cosf(pitchRad) * cosf(yawRad);
+    camera.position.y = cameraTarget.y + cameraDistance * sinf(pitchRad);
+    camera.position.z = cameraTarget.z + cameraDistance * cosf(pitchRad) * sinf(yawRad);
+    
+    // Update camera target to selected planet or center
+    if (selectedPlanet >= 0 && selectedPlanet < (int)planets.size()) {
+        cameraTarget = planets[selectedPlanet].position;
+    }
     
     // Planet selection with mouse
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
@@ -222,7 +309,6 @@ void PlanetMapGUI::Update(float deltaTime) {
             if (t < closestT) {
                 closestT = t;
                 selectedPlanet = (int)i;
-                // Center camera on selected planet
                 cameraTarget = planets[i].position;
             }
         }
@@ -236,39 +322,143 @@ void PlanetMapGUI::Update(float deltaTime) {
     if (IsKeyPressed(KEY_C)) {
         cameraTarget = {0, 0, 0};
         selectedPlanet = -1;
+        cameraYaw = -45.0f;
+        cameraPitch = -30.0f;
     }
 }
 
 void PlanetMapGUI::Render() {
     if (!visible) return;
     
-    BeginMode3D(camera);
+    // Update aspect ratio in case screen size changed
+    aspectRatio = (float)GetScreenWidth() / (float)GetScreenHeight();
     
+    // Check if render texture needs to be recreated (screen size changed)
+    if (sceneTexture.texture.width != GetScreenWidth() || sceneTexture.texture.height != GetScreenHeight()) {
+        UnloadRenderTexture(sceneTexture);
+        sceneTexture = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
+    }
+    
+    // --- PASS 1: Render 3D scene to texture with custom projection ---
+    BeginTextureMode(sceneTexture);
+    ClearBackground(BLACK);
+    
+    // Setup custom projection matrix with extended far plane
+    rlMatrixMode(RL_PROJECTION);
+    rlLoadIdentity();
+    
+    // Custom perspective projection with far plane at 10000
+    float fovy = camera.fovy * 3.14159265f / 180.0f; // Convert to radians
+    float near = 0.01f;
+    float far = 10000.0f;               // Extended far plane
+    
+    // Calculate perspective matrix manually
+    float f = 1.0f / tanf(fovy * 0.5f);
+    float projection[16] = {
+        f / aspectRatio, 0, 0, 0,
+        0, f, 0, 0,
+        0, 0, (far + near) / (near - far), -1,
+        0, 0, (2 * far * near) / (near - far), 0
+    };
+    
+    rlMultMatrixf(projection);
+    
+    // Setup view matrix
+    rlMatrixMode(RL_MODELVIEW);
+    rlLoadIdentity();
+    
+    // Calculate view matrix manually
+    Vector3 forward = {
+        camera.target.x - camera.position.x,
+        camera.target.y - camera.position.y,
+        camera.target.z - camera.position.z
+    };
+    
+    // Vector3Normalize(forward)
+    float forwardLength = sqrtf(forward.x * forward.x + forward.y * forward.y + forward.z * forward.z);
+    forward.x /= forwardLength;
+    forward.y /= forwardLength;
+    forward.z /= forwardLength;
+    
+    // Vector3 right = { forward.z, 0, -forward.x };
+    Vector3 right = { forward.z, 0, -forward.x };
+    
+    // Vector3Normalize(right)
+    float rightLength = sqrtf(right.x * right.x + right.y * right.y + right.z * right.z);
+    right.x /= rightLength;
+    right.y /= rightLength;
+    right.z /= rightLength;
+    
+    // Vector3 up = Vector3CrossProduct(right, forward);
+    Vector3 up = {
+        right.y * forward.z - right.z * forward.y,
+        right.z * forward.x - right.x * forward.z,
+        right.x * forward.y - right.y * forward.x
+    };
+    
+    float view[16] = {
+        right.x, up.x, -forward.x, 0,
+        right.y, up.y, -forward.y, 0,
+        right.z, up.z, -forward.z, 0,
+        -(right.x * camera.position.x + right.y * camera.position.y + right.z * camera.position.z),
+        -(up.x * camera.position.x + up.y * camera.position.y + up.z * camera.position.z),
+        forward.x * camera.position.x + forward.y * camera.position.y + forward.z * camera.position.z, 1
+    };
+    
+    rlMultMatrixf(view);
+    
+    // Enable depth testing
+    rlEnableDepthTest();
+    
+    // Render 3D elements
     DrawOrbits();
     
     for (const auto& planet : planets) {
         DrawPlanet(planet);
     }
     
-    EndMode3D();
+    EndTextureMode();
     
+    // --- PASS 2: Composite and render 2D UI ---
+    // Draw the rendered 3D scene
+    DrawTextureRec(sceneTexture.texture, {0, 0, (float)sceneTexture.texture.width, -(float)sceneTexture.texture.height}, {0, 0}, WHITE);
+    
+    // Draw 2D UI elements
     DrawUI();
+    
+    // Draw selection highlights and name tags using raylib's standard 3D mode
+    // (These need GetWorldToScreen which only works with standard camera)
+    BeginMode3D(camera);
+    
+    for (const auto& planet : planets) {
+        // Draw selection highlight
+        if (selectedPlanet >= 0 && planets[selectedPlanet].id == planet.id) {
+            DrawSphereWires(planet.position, planet.radius * 1.2f, 16, 16, YELLOW);
+        }
+        
+        // Draw name tags
+        if ((selectedPlanet >= 0 && planets[selectedPlanet].id == planet.id) || planet.radius > 2.0f) {
+            Vector2 screenPos = GetWorldToScreen(planet.position, camera);
+            
+            // Only draw if on screen
+            if (screenPos.x > 0 && screenPos.x < GetScreenWidth() &&
+                screenPos.y > 0 && screenPos.y < GetScreenHeight()) {
+                
+                // Check if selected
+                bool isSelected = (selectedPlanet >= 0 && planets[selectedPlanet].id == planet.id);
+                Color textColor = isSelected ? YELLOW : WHITE;
+                
+                DrawText(planet.name.c_str(), (int)screenPos.x - 20, (int)screenPos.y - 10, 12, textColor);
+            }
+        }
+    }
+    
+    EndMode3D();
 }
 
 void PlanetMapGUI::DrawPlanet(const PlanetMapEntry& planet) {
-    // Draw planet sphere
+    // Draw planet sphere only (selection highlight handled in Render)
     DrawSphere(planet.position, planet.radius, planet.color);
-    
-    // Draw selection highlight
-    if (selectedPlanet >= 0 && planets[selectedPlanet].id == planet.id) {
-        DrawSphereWires(planet.position, planet.radius * 1.2f, 16, 16, YELLOW);
-    }
-    
-    // Draw label if selected or large enough
-    if ((selectedPlanet >= 0 && planets[selectedPlanet].id == planet.id) || planet.radius > 2.0f) {
-        Vector2 screenPos = GetWorldToScreen(planet.position, camera);
-        // Note: Can't draw 2D text here, handled in DrawUI
-    }
 }
 
 void PlanetMapGUI::DrawOrbits() {

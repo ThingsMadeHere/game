@@ -38,6 +38,12 @@ private:
     Vector3 cameraTarget = {0, 0, 0}; // Camera focus point
     double simulationTime = 0.0;      // Accumulated time for orbits
     float timeScale = 0.5f;           // Speed multiplier for orbit animation
+    float aspectRatio = 1.0f;         // Screen aspect ratio for projection matrix
+    bool isRightMouseDragging = false; // Right mouse drag state
+    Vector2 lastMousePos = {0, 0};    // Last mouse position for drag calculation
+    RenderTexture2D sceneTexture = {0}; // Texture for rendering 3D scene
+    float cameraYaw = 0.0f;           // Yaw rotation for camera
+    float cameraPitch = 0.0f;         // Pitch rotation for camera
     
     void DrawPlanet(const PlanetMapEntry& planet);
     void DrawOrbits();
