@@ -424,8 +424,8 @@ int main() {
                     int lz = ((vz % CHUNK_SIZE) + CHUNK_SIZE) % CHUNK_SIZE;
                     
                     if (cy == 0 && lx >= 0 && lx < CHUNK_SIZE && ly >= 0 && ly < CHUNK_HEIGHT && lz >= 0 && lz < CHUNK_SIZE) {
-                        float density = world.GetVoxel(cx, cy, cz, lx, ly, lz);
-                        if (density > 0.0f) {
+                        BlockType block = world.GetVoxel(cx, cy, cz, lx, ly, lz);
+                        if (block != BlockType::AIR) {
                             // Found a solid block - set highlight
                             highlightPos.x = vx * VOXEL_SIZE + VOXEL_SIZE * 0.5f;
                             highlightPos.y = vy * VOXEL_SIZE + VOXEL_SIZE * 0.5f;
@@ -434,7 +434,7 @@ int main() {
                             
                             // Remove block on left click
                             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                                world.SetVoxel(cx, cy, cz, lx, ly, lz, -1.0f);
+                                world.SetVoxel(cx, cy, cz, lx, ly, lz, BlockType::AIR);
                                 world.UpdateChunk(cx, cy, cz);
                                 hasHighlight = false;
                             }
@@ -486,7 +486,7 @@ int main() {
                                     // Get selected block type from inventory
                                     auto& selectedSlot = inventory.GetSelectedItem();
                                     if (!selectedSlot.IsEmpty() && selectedSlot.type == ItemType::BLOCK) {
-                                        world.SetVoxel(pcx, pcy, pcz, plx, ply, plz, 1.0f);
+                                        world.SetVoxel(pcx, pcy, pcz, plx, ply, plz, BlockType::STONE);
                                         world.UpdateChunk(pcx, pcy, pcz);
                                         inventory.RemoveBlock(inventory.GetSelectedSlot(), 1);
                                     }
@@ -714,8 +714,8 @@ CollisionInfo CheckCollision(Vector3 position, World& world) {
         int lz = ((vz % CHUNK_SIZE) + CHUNK_SIZE) % CHUNK_SIZE;
         
         if (cy == 0 && lx >= 0 && lx < CHUNK_SIZE && ly >= 0 && ly < CHUNK_HEIGHT && lz >= 0 && lz < CHUNK_SIZE) {
-            float density = world.GetVoxel(cx, cy, cz, lx, ly, lz);
-            if (density > 0.0f) {
+            BlockType block = world.GetVoxel(cx, cy, cz, lx, ly, lz);
+            if (block != BlockType::AIR) {
                 float voxelTop = (vy + 1) * VOXEL_SIZE;
                 if (voxelTop > highestGround) {
                     highestGround = voxelTop;

@@ -2,19 +2,15 @@
 # Build artifacts
 build/
 CMakeCache.txt
-CMakeFiles/
-Makefile
-cmake_install.cmake
 
 # Dependencies
-_deps/
-
-# Compiled files
 *.o
 *.obj
 *.a
+*.lib
 *.so
 *.dll
+*.dylib
 *.exe
 
 # Logs and temp files
@@ -26,8 +22,13 @@ _deps/
 .vscode/
 .idea/
 
-# Environment
-.env
-.env.local
-*.env.*
+# Coverage
+coverage/
+htmlcov/
+.coverage
+
+# CMake
+CMakeFiles/
+cmake_install.cmake
+Makefile
 ```

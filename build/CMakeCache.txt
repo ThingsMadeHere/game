@@ -370,9 +370,6 @@ OPENGL_VERSION:STRING=OFF
 //Platform to build for.
 PLATFORM:STRING=Desktop
 
-//No help, variable specified on the command line.
-PLATFORM_DESKTOP:UNINITIALIZED=OFF
-
 //Link raylib against system GLFW instead of embedded one
 USE_EXTERNAL_GLFW:STRING=OFF
 
