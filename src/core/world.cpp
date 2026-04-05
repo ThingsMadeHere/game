@@ -2,6 +2,7 @@
 #include "planet.h"
 #include "../rendering/voxel_mesher.h"
 #include "../terrain/terrain.h"
+#include "raylib.h"
 #include <cstdio>
 #include <cmath>
 #include <algorithm>
@@ -305,7 +306,7 @@ void World::Render(const Camera3D& camera) {
         
         // ONLY render chunks with generated meshes
         if (chunk.meshGenerated && chunk.mesh.vertexCount > 0) {
-            DrawMesh(chunk.mesh);
+            DrawMesh(chunk.mesh, LoadMaterialDefault(), (Matrix){1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1});
             chunksRendered++;
         }
     }

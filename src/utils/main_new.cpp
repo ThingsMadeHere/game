@@ -470,7 +470,7 @@ int main() {
                         
                         if (cy == 0 && lx >= 0 && lx < CHUNK_SIZE && ly >= 0 && ly < CHUNK_HEIGHT && lz >= 0 && lz < CHUNK_SIZE) {
                             // Check if we hit a solid voxel
-                            if (world.GetVoxel(cx, cy, cz, lx, ly, lz) > 0.0f) {
+                            if (world.GetVoxel(cx, cy, cz, lx, ly, lz) != BlockType::AIR) {
                                 // Place block at previous position (the empty space before the hit)
                                 int pvx = (int)floorf(lastPos.x / VOXEL_SIZE);
                                 int pvy = (int)floorf(lastPos.y / VOXEL_SIZE);

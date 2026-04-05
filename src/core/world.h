@@ -29,6 +29,8 @@ public:
     Chunk& GetChunk(int cx, int cy, int cz);
     Chunk* GetChunkIfExists(int cx, int cy, int cz);
     void GenerateAllMeshes(); // Generate meshes for all chunks after terrain is loaded
+    void GenerateTerrain(Chunk& chunk); // Generate terrain for a chunk
+    void GenerateMesh(Chunk& chunk); // Generate mesh for a chunk
     void UpdateChunk(int cx, int cy, int cz);
     void SetVoxel(int cx, int cy, int cz, int x, int y, int z, BlockType type);
     BlockType GetVoxel(int cx, int cy, int cz, int x, int y, int z);

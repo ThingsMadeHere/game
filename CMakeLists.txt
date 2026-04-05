@@ -21,13 +21,14 @@ if(raylib_FOUND)
     get_target_property(RAYLIB_INCLUDES raylib::raylib INTERFACE_INCLUDE_DIRECTORIES)
 endif()
 
-# Add Executable with all source files
+# Add Executable with all source files (temporarily exclude sky rendering)
 add_executable(game 
     src/utils/main_new.cpp
     src/core/world.cpp
     src/core/planet.cpp
     src/terrain/noise.cpp
     src/rendering/marching_cubes.cpp
+    src/rendering/voxel_mesher.cpp
     src/rendering/gpu_renderer.cpp
     src/rendering/deferred_renderer.cpp
     src/rendering/shadow_renderer.cpp
@@ -37,8 +38,7 @@ add_executable(game
     src/ui/game_menu.cpp
     src/ui/loading_screen.cpp
     src/ui/planet_map_gui.cpp
-    src/ui/engine_design_gui.cpp
-)
+    src/ui/engine_design_gui.cpp)
 
 # Include raylib headers explicitly
 if(RAYLIB_INCLUDES)
@@ -50,10 +50,15 @@ if(NOT raylib_FOUND)
     target_include_directories(game PRIVATE ${CMAKE_BINARY_DIR}/_deps/raylib-src/src/external)
 endif()
 
-# Link Libraries (this will also include the necessary headers)
+# Include GLM headers explicitly
+if(GLM_INCLUDES)
+    target_include_directories(game PRIVATE ${GLM_INCLUDES})
+endif()
+
+# Link Libraries (this will also include necessary headers)
 target_link_libraries(game PRIVATE 
     raylib 
-    m  # Math library for Linux
+    m   # Math library for Linux
 )
 
 # Optimizations
