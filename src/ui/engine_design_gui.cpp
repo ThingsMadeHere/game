@@ -3,6 +3,9 @@
 #include <cmath>
 
 EngineDesignGUI::EngineDesignGUI() {
+    // Load NERV model for solid core nuclear engines
+    LoadNERVModel();
+    
     // Initialize type button positions (horizontal layout)
     for (int i = 0; i < 5; i++) {
         typeButtons[i] = {90 + i * 95.0f, 110, 90, 40};
@@ -10,19 +13,19 @@ EngineDesignGUI::EngineDesignGUI() {
     
     // Initialize subvariant button positions
     for (int i = 0; i < 5; i++) {
-        fuelButtons[i] = {90, 280 + i * 30, 180, 25};
-        nuclearFuelButtons[i] = {90, 280 + i * 30, 180, 25};
-        reactorTypeButtons[i] = {290, 280 + i * 30, 200, 25};
-        ionTypeButtons[i] = {90, 280 + i * 30, 200, 25};
+        fuelButtons[i] = {90, 280 + i * 30.0f, 180, 25};
+        nuclearFuelButtons[i] = {90, 280 + i * 30.0f, 180, 25};
+        reactorTypeButtons[i] = {290, 280 + i * 30.0f, 200, 25};
+        ionTypeButtons[i] = {90, 280 + i * 30.0f, 200, 25};
     }
     
     for (int i = 0; i < 4; i++) {
-        oxidizerButtons[i] = {290, 280 + i * 30, 180, 25};
-        fusionFuelButtons[i] = {90, 280 + i * 30, 180, 25};
+        oxidizerButtons[i] = {290, 280 + i * 30.0f, 180, 25};
+        fusionFuelButtons[i] = {90, 280 + i * 30.0f, 180, 25};
     }
     
     for (int i = 0; i < 6; i++) {
-        fusionConfigButtons[i] = {290, 280 + i * 30, 200, 25};
+        fusionConfigButtons[i] = {290, 280 + i * 30.0f, 200, 25};
     }
 }
 
@@ -632,9 +635,20 @@ void EngineDesignGUI::DrawSimpleEngineModel(EngineType type, Vector3 position, f
         case EngineType::NUCLEAR: {
             // Reactor chamber with nozzle
             Color reactorColor = {255, 100, 100, 255}; // Red hot
-            DrawSphere(pos, 0.5f * scale, reactorColor); // Reactor core
-            DrawCylinder({pos.x, pos.y - 0.3f, pos.z}, 0.4f * scale, 0.6f * scale, 0.6f * scale, 16, {150, 150, 150, 255}); // Chamber
-            DrawCylinder({pos.x, pos.y - 0.8f, pos.z}, 0.6f * scale, 0.4f * scale, 0.2f * scale, 16, {100, 100, 100, 255}); // Nozzle
+            
+            printf("Nuclear engine type, reactor type: %d\n", (int)currentDesign.reactorType);
+            
+            // Use NERV model for solid core nuclear
+            if (currentDesign.reactorType == NuclearReactorType::SOLID_CORE && nervModel.meshCount > 0) {
+                printf("Drawing NERV model for solid core nuclear\n");
+                DrawModel(nervModel, {0, 0, 0}, 1.0f, WHITE);
+            } else {
+                printf("Using fallback shapes for nuclear engine\n");
+                // Fallback to simple shapes
+                DrawSphere({0, 0, 0}, 0.5f * scale, reactorColor); // Reactor core
+                DrawCylinder({0, -0.3f, 0}, 0.4f * scale, 0.6f * scale, 0.6f * scale, 16, {150, 150, 150, 255}); // Chamber
+                DrawCylinder({0, -0.8f, 0}, 0.6f * scale, 0.4f * scale, 0.2f * scale, 16, {100, 100, 100, 255}); // Nozzle
+            }
             break;
         }
         case EngineType::ION: {
@@ -676,5 +690,18 @@ void EngineDesignGUI::DrawSimpleEngineModel(EngineType type, Vector3 position, f
             DrawCylinder({pos.x, pos.y - 0.8f, pos.z}, 0.3f * scale, 0.2f * scale, 0.4f * scale, 16, {150, 150, 150, 255});
             break;
         }
+    }
+}
+
+void EngineDesignGUI::LoadNERVModel() {
+    // Load NERV model from data/models directory
+    printf("Attempting to load NERV model from: ../data/models/NERV.obj\n");
+    nervModel = LoadModel("../data/models/NERV.obj");
+    
+    if (nervModel.meshCount > 0) {
+        printf("NERV model loaded successfully - mesh count: %d\n", nervModel.meshCount);
+        // Model will be drawn at appropriate scale in DrawSimpleEngineModel
+    } else {
+        printf("Failed to load NERV model - mesh count: %d\n", nervModel.meshCount);
     }
 }
