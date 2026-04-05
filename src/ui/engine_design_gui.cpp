@@ -61,7 +61,7 @@ void EngineDesignGUI::Update() {
             return;
         }
         
-        // Check type selection buttons
+        // Handle type selection
         for (int i = 0; i < 5; i++) {
             if (CheckCollisionPointRec(mouse, typeButtons[i])) {
                 currentDesign.type = static_cast<EngineType>(i);
@@ -150,6 +150,11 @@ void EngineDesignGUI::Update() {
 
 void EngineDesignGUI::Render() {
     if (!visible) return;
+    
+    if (guiEditMode) {
+        RenderGUIEditor();
+        return;
+    }
     
     DrawMainPanel();
     DrawTypeSelection();
@@ -712,6 +717,79 @@ void EngineDesignGUI::DrawSimpleEngineModel(EngineType type, Vector3 position, f
             break;
         }
     }
+}
+
+void EngineDesignGUI::UpdateGUIEditor() {
+    Vector2 mouse = GetMousePosition();
+    
+    // Handle element dragging
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        // Check all draggable elements
+        Rectangle* elements[] = {
+            &mainPanel, &typePanel, &configPanel, &modelPanel, &performancePanel,
+            &backButton, &saveButton
+        };
+        
+        for (auto element : elements) {
+            if (CheckCollisionPointRec(mouse, *element)) {
+                draggedElement = element;
+                dragOffset = {mouse.x - element->x, mouse.y - element->y};
+                break;
+            }
+        }
+    }
+    
+    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) && draggedElement) {
+        draggedElement->x = mouse.x - dragOffset.x;
+        draggedElement->y = mouse.y - dragOffset.y;
+    }
+    
+    if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+        if (draggedElement) {
+            printf("Element moved to: x=%.1f, y=%.1f, w=%.1f, h=%.1f\n", 
+                   draggedElement->x, draggedElement->y, draggedElement->width, draggedElement->height);
+        }
+        draggedElement = nullptr;
+    }
+    
+    // Print positions on P key press
+    if (IsKeyPressed(KEY_P)) {
+        PrintElementPositions();
+    }
+}
+
+void EngineDesignGUI::RenderGUIEditor() {
+    // Draw editor overlay
+    DrawRectangle(0, 0, 800, 600, {0, 0, 0, 100}); // Dark overlay
+    
+    // Highlight draggable elements
+    Rectangle elements[] = {
+        mainPanel, typePanel, configPanel, modelPanel, performancePanel,
+        backButton, saveButton
+    };
+    
+    for (auto element : elements) {
+        DrawRectangleLinesEx(element, 2, YELLOW); // Yellow outline
+        DrawText("DRAG ME", element.x + 5, element.y + 5, 10, WHITE);
+    }
+    
+    // Instructions
+    DrawText("GUI EDITOR MODE", 10, 10, 20, YELLOW);
+    DrawText("F1: Exit Editor", 10, 40, 15, WHITE);
+    DrawText("P: Print Positions", 10, 60, 15, WHITE);
+    DrawText("Drag elements to reposition", 10, 80, 15, WHITE);
+}
+
+void EngineDesignGUI::PrintElementPositions() {
+    printf("\n=== GUI ELEMENT POSITIONS ===\n");
+    printf("mainPanel: {%.1f, %.1f, %.1f, %.1f}\n", mainPanel.x, mainPanel.y, mainPanel.width, mainPanel.height);
+    printf("typePanel: {%.1f, %.1f, %.1f, %.1f}\n", typePanel.x, typePanel.y, typePanel.width, typePanel.height);
+    printf("configPanel: {%.1f, %.1f, %.1f, %.1f}\n", configPanel.x, configPanel.y, configPanel.width, configPanel.height);
+    printf("modelPanel: {%.1f, %.1f, %.1f, %.1f}\n", modelPanel.x, modelPanel.y, modelPanel.width, modelPanel.height);
+    printf("performancePanel: {%.1f, %.1f, %.1f, %.1f}\n", performancePanel.x, performancePanel.y, performancePanel.width, performancePanel.height);
+    printf("backButton: {%.1f, %.1f, %.1f, %.1f}\n", backButton.x, backButton.y, backButton.width, backButton.height);
+    printf("saveButton: {%.1f, %.1f, %.1f, %.1f}\n", saveButton.x, saveButton.y, saveButton.width, saveButton.height);
+    printf("============================\n\n");
 }
 
 void EngineDesignGUI::LoadChemicalModel() {

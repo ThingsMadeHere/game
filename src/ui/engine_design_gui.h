@@ -108,6 +108,9 @@ public:
     
 private:
     bool visible = false;
+    bool guiEditMode = false; // GUI editor mode
+    Vector2 dragOffset = {0, 0};
+    Rectangle* draggedElement = nullptr;
     EngineType currentType = EngineType::CHEMICAL;
     EngineDesign currentDesign;
     
@@ -187,4 +190,9 @@ private:
     void DrawSimpleEngineModel(EngineType type, Vector3 position, float scale, Material material, Vector3 lightPos);
     void LoadNERVModel(); // Load NERV model for solid core nuclear
     void LoadChemicalModel(); // Load chemical engine model
+    
+    // GUI editor functions
+    void UpdateGUIEditor();
+    void RenderGUIEditor();
+    void PrintElementPositions(); // Print current positions to console
 };
