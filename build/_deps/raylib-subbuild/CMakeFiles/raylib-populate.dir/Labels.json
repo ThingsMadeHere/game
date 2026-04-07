@@ -2,37 +2,37 @@
 	"sources" : 
 	[
 		{
-			"file" : "/home/carter/Desktop/Farout/build/_deps/raylib-subbuild/CMakeFiles/raylib-populate"
+			"file" : "/home/physicsiscool314/game/build/_deps/raylib-subbuild/CMakeFiles/raylib-populate"
 		},
 		{
-			"file" : "/home/carter/Desktop/Farout/build/_deps/raylib-subbuild/CMakeFiles/raylib-populate.rule"
+			"file" : "/home/physicsiscool314/game/build/_deps/raylib-subbuild/CMakeFiles/raylib-populate.rule"
 		},
 		{
-			"file" : "/home/carter/Desktop/Farout/build/_deps/raylib-subbuild/CMakeFiles/raylib-populate-complete.rule"
+			"file" : "/home/physicsiscool314/game/build/_deps/raylib-subbuild/CMakeFiles/raylib-populate-complete.rule"
 		},
 		{
-			"file" : "/home/carter/Desktop/Farout/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-build.rule"
+			"file" : "/home/physicsiscool314/game/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-build.rule"
 		},
 		{
-			"file" : "/home/carter/Desktop/Farout/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-configure.rule"
+			"file" : "/home/physicsiscool314/game/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-configure.rule"
 		},
 		{
-			"file" : "/home/carter/Desktop/Farout/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-download.rule"
+			"file" : "/home/physicsiscool314/game/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-download.rule"
 		},
 		{
-			"file" : "/home/carter/Desktop/Farout/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-install.rule"
+			"file" : "/home/physicsiscool314/game/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-install.rule"
 		},
 		{
-			"file" : "/home/carter/Desktop/Farout/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-mkdir.rule"
+			"file" : "/home/physicsiscool314/game/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-mkdir.rule"
 		},
 		{
-			"file" : "/home/carter/Desktop/Farout/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-patch.rule"
+			"file" : "/home/physicsiscool314/game/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-patch.rule"
 		},
 		{
-			"file" : "/home/carter/Desktop/Farout/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-test.rule"
+			"file" : "/home/physicsiscool314/game/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-test.rule"
 		},
 		{
-			"file" : "/home/carter/Desktop/Farout/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-update.rule"
+			"file" : "/home/physicsiscool314/game/build/_deps/raylib-subbuild/raylib-populate-prefix/src/raylib-populate-stamp/raylib-populate-update.rule"
 		}
 	],
 	"target" : 

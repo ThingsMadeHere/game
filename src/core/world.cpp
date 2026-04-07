@@ -76,6 +76,9 @@ void ChunkWorker(World* world) {
         }
         
         // Generate mesh from voxel data
+        if (chunk.meshGenerated && chunk.mesh.vertexCount > 0) {
+            UnloadMesh(chunk.mesh);
+        }
         chunk.mesh = VoxelMesher::GenerateChunkMesh(chunk, nullptr);
         chunk.meshGenerated = true;
         chunk.needsUpdate = false;
@@ -115,6 +118,7 @@ void World::GenerateTerrain(Chunk& chunk) {
     PlanetDefinition* activePlanet = g_PlanetSystem.GetActivePlanet();
     std::string planetId = activePlanet ? activePlanet->id : "etaui";
     
+    int blocksGenerated = 0;
     for (int x = 0; x < CHUNK_SIZE; x++) {
         for (int y = 0; y < CHUNK_HEIGHT; y++) {
             for (int z = 0; z < CHUNK_SIZE; z++) {
@@ -127,25 +131,43 @@ void World::GenerateTerrain(Chunk& chunk) {
                 float noiseVal = FBM(worldX * 0.05f, worldZ * 0.05f, 0, 4);
                 float terrainHeight = baseHeight + noiseVal * 15.0f;
                 
+                // Debug: Print terrain height for first few blocks (DISABLED FOR PERFORMANCE)
+                // static int debugCount = 0;
+                // if (debugCount < 10) {
+                //     printf("Terrain at (%.1f, %.1f): height=%.1f, worldY=%.1f\n", 
+                //            worldX, worldZ, terrainHeight, worldY);
+                //     debugCount++;
+                // }
+                
                 if (worldY < terrainHeight - 5) {
                     chunk.setVoxel(x, y, z, BlockType::STONE);
+                    blocksGenerated++;
                 } else if (worldY < terrainHeight - 1) {
                     chunk.setVoxel(x, y, z, BlockType::DIRT);
+                    blocksGenerated++;
                 } else if (worldY < terrainHeight) {
                     if (terrainHeight < 18.0f) {
                         chunk.setVoxel(x, y, z, BlockType::SAND);
                     } else {
                         chunk.setVoxel(x, y, z, BlockType::GRASS);
                     }
+                    blocksGenerated++;
                 }
             }
         }
     }
     
+    printf("Generated %d blocks in chunk (%d, %d, %d)\n", blocksGenerated, chunk.cx, chunk.cy, chunk.cz);
+    
     // Generate mesh using voxel mesher
+    if (chunk.meshGenerated && chunk.mesh.vertexCount > 0) {
+        UnloadMesh(chunk.mesh);
+    }
     chunk.mesh = VoxelMesher::GenerateChunkMesh(chunk, &chunks);
     chunk.meshGenerated = true;
     chunk.needsUpdate = false;
+    
+    printf("Generated mesh with %d vertices for chunk (%d, %d, %d)\n", chunk.mesh.vertexCount, chunk.cx, chunk.cy, chunk.cz);
 }
 
 void World::UpdateChunk(int cx, int cy, int cz) {
@@ -157,6 +179,9 @@ void World::UpdateChunk(int cx, int cy, int cz) {
             
             // Regenerate mesh if needed
             if (!it->second.meshGenerated || it->second.needsUpdate) {
+                if (it->second.meshGenerated && it->second.mesh.vertexCount > 0) {
+                    UnloadMesh(it->second.mesh);
+                }
                 it->second.mesh = VoxelMesher::GenerateChunkMesh(it->second, &chunks);
                 it->second.meshGenerated = true;
                 it->second.needsUpdate = false;
@@ -296,28 +321,56 @@ void World::Render(const Camera3D& camera) {
         int chunkDistZ = abs(chunk.cz - playerChunkZ);
         int chunkDist = (int)sqrtf(chunkDistX * chunkDistX + chunkDistZ * chunkDistZ);
         
-        // Skip chunks beyond 4 chunks for performance
-        if (chunkDist > 4) continue;
+        // Skip chunks beyond 8 chunks for performance (increased from 4)
+        if (chunkDist > 8) continue;
         
-        // Frustum culling - only render visible chunks
-        if (!IsChunkVisible(camera, chunk.cx, chunk.cy, chunk.cz)) {
-            continue;
-        }
+        // Frustum culling - only render visible chunks (DISABLED FOR TESTING)
+        // if (!IsChunkVisible(camera, chunk.cx, chunk.cy, chunk.cz)) {
+        //     continue;
+        // }
         
         // ONLY render chunks with generated meshes
         if (chunk.meshGenerated && chunk.mesh.vertexCount > 0) {
-            DrawMesh(chunk.mesh, LoadMaterialDefault(), (Matrix){1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1});
+            // TEMP: Render terrain as individual cubes to bypass mesh rendering issues
+            for (int x = 0; x < CHUNK_SIZE; x++) {
+                for (int y = 0; y < CHUNK_HEIGHT; y++) {
+                    for (int z = 0; z < CHUNK_SIZE; z++) {
+                        BlockType block = chunk.getBlock(x, y, z);
+                        if (block != BlockType::AIR) {
+                            Vector3 blockPos = {
+                                (float)(chunk.cx * CHUNK_SIZE + x),
+                                (float)(chunk.cy * CHUNK_HEIGHT + y),
+                                (float)(chunk.cz * CHUNK_SIZE + z)
+                            };
+                            
+                            // Only render visible faces (simple check)
+                            bool renderTop = (y == CHUNK_HEIGHT - 1) || (chunk.getBlock(x, y + 1, z) == BlockType::AIR);
+                            bool renderBottom = (y == 0) || (chunk.getBlock(x, y - 1, z) == BlockType::AIR);
+                            bool renderFront = (z == CHUNK_SIZE - 1) || (chunk.getBlock(x, y, z + 1) == BlockType::AIR);
+                            bool renderBack = (z == 0) || (chunk.getBlock(x, y, z - 1) == BlockType::AIR);
+                            bool renderRight = (x == CHUNK_SIZE - 1) || (chunk.getBlock(x + 1, y, z) == BlockType::AIR);
+                            bool renderLeft = (x == 0) || (chunk.getBlock(x - 1, y, z) == BlockType::AIR);
+                            
+                            // Draw cube if any face is visible
+                            if (renderTop || renderBottom || renderFront || renderBack || renderRight || renderLeft) {
+                                DrawCube(blockPos, 0.9f, 0.9f, 0.9f, WHITE);
+                            }
+                        }
+                    }
+                }
+            }
+            
             chunksRendered++;
         }
     }
     
     if (chunksRendered > 0) {
         fprintf(stderr,"Drew %d chunks, total chunks: %d\n", chunksRendered, (int)chunks.size());
+    }
     
     // Debug: Print player position and nearby chunks
     fprintf(stderr,"Player pos: (%.1f, %.1f, %.1f), Player chunk: (%d, %d)\n", 
            playerPos.x, playerPos.y, playerPos.z, playerChunkX, playerChunkZ);
-    }
     
     // Draw all models (separate from voxel terrain)
     modelManager.DrawAll();
@@ -358,6 +411,11 @@ int World::GetGeneratedChunkCount() const {
 }
 
 void World::GenerateMesh(Chunk& chunk) {
+    // Unload old mesh if it exists
+    if (chunk.meshGenerated && chunk.mesh.vertexCount > 0) {
+        UnloadMesh(chunk.mesh);
+    }
+    
     chunk.mesh = VoxelMesher::GenerateChunkMesh(chunk, &chunks);
     chunk.meshGenerated = true;
     chunk.needsUpdate = false;

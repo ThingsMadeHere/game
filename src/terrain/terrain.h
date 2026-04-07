@@ -175,7 +175,22 @@ struct Chunk {
         // Check if neighbor is in this chunk
         if (isValid(nx, ny, nz)) {
             BlockType neighbor = getBlock(nx, ny, nz);
-            return neighbor == BlockType::AIR || GetBlockProperties(neighbor).transparent;
+            if (neighbor == BlockType::AIR) return true;
+            
+            const BlockProperties& currentProps = GetBlockProperties(getBlock(x, y, z));
+            const BlockProperties& neighborProps = GetBlockProperties(neighbor);
+            
+            // Different block types should render faces between them
+            if (currentProps.transparent != neighborProps.transparent) return true;
+            
+            // Same transparent blocks don't render faces between them
+            if (currentProps.transparent && neighborProps.transparent) return false;
+            
+            // Solid blocks don't render faces between them
+            if (!currentProps.transparent && !neighborProps.transparent) return false;
+            
+            // Transparent next to solid renders the face
+            return true;
         }
         
         // Neighbor is in another chunk - check if it exists and is air
@@ -197,7 +212,22 @@ struct Chunk {
             auto it = neighborChunks->find(key);
             if (it != neighborChunks->end()) {
                 BlockType neighbor = it->second.getBlock(localX, localY, localZ);
-                return neighbor == BlockType::AIR || GetBlockProperties(neighbor).transparent;
+                if (neighbor == BlockType::AIR) return true;
+                
+                const BlockProperties& currentProps = GetBlockProperties(getBlock(x, y, z));
+                const BlockProperties& neighborProps = GetBlockProperties(neighbor);
+                
+                // Different block types should render faces between them
+                if (currentProps.transparent != neighborProps.transparent) return true;
+                
+                // Same transparent blocks don't render faces between them
+                if (currentProps.transparent && neighborProps.transparent) return false;
+                
+                // Solid blocks don't render faces between them
+                if (!currentProps.transparent && !neighborProps.transparent) return false;
+                
+                // Transparent next to solid renders the face
+                return true;
             }
         }
         

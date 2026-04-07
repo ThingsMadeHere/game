@@ -36,13 +36,15 @@ ShadowRenderer g_shadowRenderer;
 
 // Player physics variables
 Vector3 playerVelocity = {0.0f, 0.0f, 0.0f};
-Vector3 playerPosition = {0.0f, 20.0f, 0.0f}; // Start above ground
+Vector3 playerPosition = {0.0f, 100.0f, 0.0f}; // Start high above ground
 bool isGrounded = false;
+bool flyMode = true; // Start in fly mode for easier testing
 const float GRAVITY = -9.81f;
 const float PLAYER_HEIGHT = 1.83f;  // 6 feet tall
 const float PLAYER_WIDTH = 0.5f;    // Shoulder width
 const float PLAYER_DEPTH = 0.3f;    // Front-to-back
 const float JUMP_FORCE = 8.0f;
+const float FLY_SPEED = 50.0f; // Fast movement in fly mode
 
 int main() {
     const int screenWidth = 1200;
@@ -60,7 +62,7 @@ int main() {
     
     // Initialize camera
     Camera camera;
-    camera.position = (Vector3){0.0f, 20.0f, 0.0f};
+    camera.position = (Vector3){0.0f, 100.0f, 0.0f};
     camera.target = (Vector3){0.0f, 0.0f, 10.0f};
     camera.up = (Vector3){0.0f, 1.0f, 0.0f};
     camera.fovy = 45.0f;
@@ -285,64 +287,93 @@ int main() {
             
             // Update camera (only when cursor is hidden)
             if (IsCursorHidden()) {
-                // Apply gravity
-                static float yVelocity = 0.0f;
-                static bool grounded = false;
-                float gravity = -9.8f;
+                // Toggle fly mode with F key
+                if (IsKeyPressed(KEY_F)) {
+                    flyMode = !flyMode;
+                    printf("Fly mode: %s\n", flyMode ? "ON" : "OFF");
+                }
+                
                 float dt = GetFrameTime();
                 
-                // Get terrain height at player position for initial ground check
-                float terrainHeight = GetTerrainHeight(camera.position.x, camera.position.z) + PLAYER_HEIGHT;
-                
-                // Apply gravity
-                if (!grounded) {
-                    yVelocity += gravity * dt;
-                    camera.position.y += yVelocity * dt;
-                }
-                
-                // Ground collision using actual voxel data
-                auto collision = CheckCollision(camera.position, world);
-                if (collision.hit) {
-                    // Place player standing on ground (eye level = ground + player height)
-                    camera.position.y = collision.groundY + PLAYER_HEIGHT;
-                    yVelocity = 0.0f;
-                    grounded = true;
+                if (flyMode) {
+                    // Fly mode - free movement in all directions
+                    float moveSpeed = FLY_SPEED * dt;
+                    
+                    // Get camera vectors
+                    Vector3 forward = Vector3Subtract(camera.target, camera.position);
+                    forward = Vector3Normalize(forward);
+                    Vector3 right = Vector3CrossProduct(forward, camera.up);
+                    
+                    // Movement
+                    if (IsKeyDown(KEY_W)) camera.position = Vector3Add(camera.position, Vector3Scale(forward, moveSpeed));
+                    if (IsKeyDown(KEY_S)) camera.position = Vector3Add(camera.position, Vector3Scale(forward, -moveSpeed));
+                    if (IsKeyDown(KEY_A)) camera.position = Vector3Add(camera.position, Vector3Scale(right, -moveSpeed));
+                    if (IsKeyDown(KEY_D)) camera.position = Vector3Add(camera.position, Vector3Scale(right, moveSpeed));
+                    if (IsKeyDown(KEY_SPACE)) camera.position.y += moveSpeed;
+                    if (IsKeyDown(KEY_LEFT_SHIFT)) camera.position.y -= moveSpeed;
+                    
+                    // Update camera target to match new position
+                    camera.target = Vector3Add(camera.position, Vector3Scale(forward, 10.0f));
                 } else {
-                    grounded = false;
-                }
-                
-                // Jump
-                if (IsKeyPressed(KEY_SPACE) && grounded) {
-                    yVelocity = 8.0f;
-                    grounded = false;
-                }
-                
-                // Manual camera control for movement
-                float moveSpeed = 8.0f * dt;
-                
-                // Get camera vectors
-                Vector3 forward = Vector3Subtract(camera.target, camera.position);
-                forward.y = 0; // Keep movement horizontal
-                forward = Vector3Normalize(forward);
-                Vector3 right = Vector3CrossProduct(forward, camera.up);
-                right = Vector3Normalize(right);
-                
-                // Movement
-                if (IsKeyDown(KEY_W)) {
-                    camera.position = Vector3Add(camera.position, Vector3Scale(forward, moveSpeed));
-                    camera.target = Vector3Add(camera.target, Vector3Scale(forward, moveSpeed));
-                }
-                if (IsKeyDown(KEY_S)) {
-                    camera.position = Vector3Subtract(camera.position, Vector3Scale(forward, moveSpeed));
-                    camera.target = Vector3Subtract(camera.target, Vector3Scale(forward, moveSpeed));
-                }
-                if (IsKeyDown(KEY_A)) {
-                    camera.position = Vector3Subtract(camera.position, Vector3Scale(right, moveSpeed));
-                    camera.target = Vector3Subtract(camera.target, Vector3Scale(right, moveSpeed));
-                }
-                if (IsKeyDown(KEY_D)) {
-                    camera.position = Vector3Add(camera.position, Vector3Scale(right, moveSpeed));
-                    camera.target = Vector3Add(camera.target, Vector3Scale(right, moveSpeed));
+                    // Normal gravity mode
+                    // Apply gravity
+                    static float yVelocity = 0.0f;
+                    static bool grounded = false;
+                    float gravity = -9.8f;
+                    
+                    // Get terrain height at player position for initial ground check
+                    float terrainHeight = GetTerrainHeight(camera.position.x, camera.position.z) + PLAYER_HEIGHT;
+                    
+                    // Apply gravity
+                    if (!grounded) {
+                        yVelocity += gravity * dt;
+                        camera.position.y += yVelocity * dt;
+                    }
+                    
+                    // Ground collision using actual voxel data
+                    auto collision = CheckCollision(camera.position, world);
+                    if (collision.hit) {
+                        // Place player standing on ground (eye level = ground + player height)
+                        camera.position.y = collision.groundY + PLAYER_HEIGHT;
+                        yVelocity = 0.0f;
+                        grounded = true;
+                    } else {
+                        grounded = false;
+                    }
+                    
+                    // Jump
+                    if (IsKeyPressed(KEY_SPACE) && grounded) {
+                        yVelocity = 8.0f;
+                        grounded = false;
+                    }
+                    
+                    // Manual camera control for movement
+                    float moveSpeed = 8.0f * dt;
+                    
+                    // Get camera vectors
+                    Vector3 forward = Vector3Subtract(camera.target, camera.position);
+                    forward.y = 0; // Keep movement horizontal
+                    forward = Vector3Normalize(forward);
+                    Vector3 right = Vector3CrossProduct(forward, camera.up);
+                    right = Vector3Normalize(right);
+                    
+                    // Movement
+                    if (IsKeyDown(KEY_W)) {
+                        camera.position = Vector3Add(camera.position, Vector3Scale(forward, moveSpeed));
+                        camera.target = Vector3Add(camera.target, Vector3Scale(forward, moveSpeed));
+                    }
+                    if (IsKeyDown(KEY_S)) {
+                        camera.position = Vector3Subtract(camera.position, Vector3Scale(forward, moveSpeed));
+                        camera.target = Vector3Subtract(camera.target, Vector3Scale(forward, moveSpeed));
+                    }
+                    if (IsKeyDown(KEY_A)) {
+                        camera.position = Vector3Subtract(camera.position, Vector3Scale(right, moveSpeed));
+                        camera.target = Vector3Subtract(camera.target, Vector3Scale(right, moveSpeed));
+                    }
+                    if (IsKeyDown(KEY_D)) {
+                        camera.position = Vector3Add(camera.position, Vector3Scale(right, moveSpeed));
+                        camera.target = Vector3Add(camera.target, Vector3Scale(right, moveSpeed));
+                    }
                 }
                 
                 // Hotbar selection with number keys
@@ -394,9 +425,9 @@ int main() {
                 
                 // Pitch (rotate around right axis)
                 Vector3 view = Vector3Subtract(camera.target, camera.position);
-                right = Vector3CrossProduct(view, camera.up);
-                right = Vector3Normalize(right);
-                Matrix pitchMatrix = MatrixRotate(right, -mouseDelta.y * mouseSensitivity);
+                Vector3 mouseRight = Vector3CrossProduct(view, camera.up);
+                mouseRight = Vector3Normalize(mouseRight);
+                Matrix pitchMatrix = MatrixRotate(mouseRight, -mouseDelta.y * mouseSensitivity);
                 view = Vector3Transform(view, pitchMatrix);
                 camera.target = Vector3Add(camera.position, view);
                 
@@ -527,12 +558,17 @@ int main() {
             
             // 2. Main pass - render with shadows
             BeginMode3D(camera);
-            g_shadowRenderer.BeginMainPass(camera, lightDir);
             
-            DrawCube((Vector3){0.0f, 0.0f, 10.0f}, 2.0f, 2.0f, 2.0f, RED);
+            // Test: Draw terrain without shadows first
             world.Render(camera);
             
-            g_shadowRenderer.EndMainPass();
+            // Test colored cubes to verify rendering works
+            DrawCube((Vector3){0.0f, 20.0f, 0.0f}, 2.0f, 2.0f, 2.0f, RED);
+            DrawCube((Vector3){5.0f, 20.0f, 0.0f}, 2.0f, 2.0f, 2.0f, GREEN);
+            DrawCube((Vector3){-5.0f, 20.0f, 0.0f}, 2.0f, 2.0f, 2.0f, BLUE);
+            
+            // g_shadowRenderer.BeginMainPass(camera, lightDir);
+            // g_shadowRenderer.EndMainPass();
             EndMode3D();
             
             // === END SHADOW MAPPING ===
@@ -544,6 +580,46 @@ int main() {
             DrawText("ESC: Menu", 10, 40, 20, RAYWHITE);
             DrawText("WASD: Move | SPACE: Jump | Mouse: Look", 10, 70, 15, YELLOW);
             DrawText("Left Click: Remove | Right Click: Place | E: Inventory | 1-9: Select", 10, 90, 15, YELLOW);
+            
+            // Coordinate indicator
+            char coordText[256];
+            sprintf(coordText, "Position: (%.1f, %.1f, %.1f)", camera.position.x, camera.position.y, camera.position.z);
+            DrawText(coordText, 10, 110, 15, WHITE);
+            
+            char chunkText[256];
+            int uiChunkX = (int)floorf(camera.position.x / (CHUNK_SIZE * VOXEL_SIZE));
+            int uiChunkZ = (int)floorf(camera.position.z / (CHUNK_SIZE * VOXEL_SIZE));
+            sprintf(chunkText, "Chunk: (%d, %d)", uiChunkX, uiChunkZ);
+            DrawText(chunkText, 10, 130, 15, WHITE);
+            
+            // Direction indicator
+            Vector3 uiForward = Vector3Subtract(camera.target, camera.position);
+            uiForward = Vector3Normalize(uiForward);
+            char dirText[256];
+            sprintf(dirText, "Facing: (%.2f, %.2f, %.2f)", uiForward.x, uiForward.y, uiForward.z);
+            DrawText(dirText, 10, 150, 15, WHITE);
+            
+            // Terrain height at player position
+            float terrainHeight = GetTerrainHeight(camera.position.x, camera.position.z);
+            char heightText[256];
+            sprintf(heightText, "Terrain Height: %.1f", terrainHeight);
+            DrawText(heightText, 10, 170, 15, WHITE);
+            
+            // Check if player is underground
+            if (camera.position.y < terrainHeight) {
+                DrawText("UNDERGROUND", 10, 190, 20, RED);
+            } else {
+                float aboveGround = camera.position.y - terrainHeight;
+                sprintf(coordText, "Above Ground: %.1f", aboveGround);
+                DrawText(coordText, 10, 190, 15, GREEN);
+            }
+            
+            // Fly mode indicator
+            if (flyMode) {
+                DrawText("FLY MODE (F to toggle)", 10, 210, 20, YELLOW);
+            } else {
+                DrawText("GRAVITY MODE (F to toggle)", 10, 210, 20, WHITE);
+            }
             
             // Draw crosshair at center of screen
             int screenWidth = GetScreenWidth();
@@ -559,6 +635,33 @@ int main() {
             if (inventory.IsOpen()) {
                 inventory.DrawInventory(screenWidth, screenHeight);
             }
+            
+            // Draw minimap in top-right corner
+            int minimapSize = 150;
+            int minimapX = GetScreenWidth() - minimapSize - 10;
+            int minimapY = 10;
+            
+            // Draw minimap background
+            DrawRectangle(minimapX, minimapY, minimapSize, minimapSize, (Color){0, 0, 0, 180});
+            DrawRectangleLines(minimapX, minimapY, minimapSize, minimapSize, WHITE);
+            
+            // Draw player position on minimap
+            int playerMapX = minimapX + minimapSize / 2;
+            int playerMapY = minimapY + minimapSize / 2;
+            DrawCircle(playerMapX, playerMapY, 3, RED);
+            
+            // Draw direction indicator on minimap
+            Vector3 minimapForward = Vector3Subtract(camera.target, camera.position);
+            minimapForward = Vector3Normalize(minimapForward);
+            int dirX = playerMapX + (int)(minimapForward.x * 15);
+            int dirZ = playerMapY + (int)(minimapForward.z * 15);
+            DrawLine(playerMapX, playerMapY, dirX, dirZ, YELLOW);
+            
+            // Draw compass directions
+            DrawText("N", minimapX + minimapSize/2 - 5, minimapY + 5, 10, WHITE);
+            DrawText("S", minimapX + minimapSize/2 - 5, minimapY + minimapSize - 15, 10, WHITE);
+            DrawText("E", minimapX + minimapSize - 15, minimapY + minimapSize/2 - 5, 10, WHITE);
+            DrawText("W", minimapX + 5, minimapY + minimapSize/2 - 5, 10, WHITE);
             
             // Draw planet map hint
             DrawText("M: Planet Map", 10, 130, 15, YELLOW);
