@@ -2,33 +2,16 @@
 # Build artifacts
 build/
 CMakeCache.txt
+CMakeFiles/
 
 # Dependencies
-*.o
-*.obj
-*.a
-*.lib
-*.so
-*.dll
-*.dylib
-*.exe
+_deps/
 
-# Logs and temp files
-*.log
+# Temporary files
 *.tmp
-*.swp
+*.log
 
-# Editors
+# IDE files
 .vscode/
 .idea/
-
-# Coverage
-coverage/
-htmlcov/
-.coverage
-
-# CMake
-CMakeFiles/
-cmake_install.cmake
-Makefile
 ```
