@@ -256,11 +256,12 @@ void ChunkWorker(World* world) {
         }
         
         // Generate mesh from voxel data
-        if (chunk.meshGenerated && chunk.mesh.vertexCount > 0) {
-            UnloadMesh(chunk.mesh);
-        }
         chunk.mesh = VoxelMesher::GenerateChunkMesh(chunk, nullptr);
-        chunk.meshGenerated = true;
+        if (chunk.mesh.vertexCount > 0) {
+            chunk.meshGenerated = true;
+        } else {
+            chunk.meshGenerated = false;
+        }
         chunk.needsUpdate = false;
         
         // Debug for problematic chunks
@@ -334,11 +335,15 @@ void World::GenerateTerrain(Chunk& chunk) {
     printf("Generated %d blocks in chunk (%d, %d, %d)\n", blocksGenerated, chunk.cx, chunk.cy, chunk.cz);
     
     // Generate mesh using voxel mesher
-    if (chunk.meshGenerated && chunk.mesh.vertexCount > 0) {
+    if (chunk.mesh.vertexCount > 0) {
         UnloadMesh(chunk.mesh);
     }
     chunk.mesh = VoxelMesher::GenerateChunkMesh(chunk, &chunks);
-    chunk.meshGenerated = true;
+    if (chunk.mesh.vertexCount > 0) {
+        chunk.meshGenerated = true;
+    } else {
+        chunk.meshGenerated = false;
+    }
     chunk.needsUpdate = false;
     
     printf("Generated mesh with %d vertices for chunk (%d, %d, %d)\n", chunk.mesh.vertexCount, chunk.cx, chunk.cy, chunk.cz);
@@ -353,11 +358,15 @@ void World::UpdateChunk(int cx, int cy, int cz) {
             
             // Regenerate mesh if needed
             if (!it->second.meshGenerated || it->second.needsUpdate) {
-                if (it->second.meshGenerated && it->second.mesh.vertexCount > 0) {
+                if (it->second.mesh.vertexCount > 0) {
                     UnloadMesh(it->second.mesh);
                 }
                 it->second.mesh = VoxelMesher::GenerateChunkMesh(it->second, &chunks);
-                it->second.meshGenerated = true;
+                if (it->second.mesh.vertexCount > 0) {
+                    it->second.meshGenerated = true;
+                } else {
+                    it->second.meshGenerated = false;
+                }
                 it->second.needsUpdate = false;
             }
         } else {
@@ -580,12 +589,16 @@ int World::GetGeneratedChunkCount() const {
 
 void World::GenerateMesh(Chunk& chunk) {
     // Unload old mesh if it exists
-    if (chunk.meshGenerated && chunk.mesh.vertexCount > 0) {
+    if (chunk.mesh.vertexCount > 0) {
         UnloadMesh(chunk.mesh);
     }
     
     chunk.mesh = VoxelMesher::GenerateChunkMesh(chunk, &chunks);
-    chunk.meshGenerated = true;
+    if (chunk.mesh.vertexCount > 0) {
+        chunk.meshGenerated = true;
+    } else {
+        chunk.meshGenerated = false;
+    }
     chunk.needsUpdate = false;
     
     // Regenerate neighbor chunks to ensure seamless boundaries
@@ -650,7 +663,11 @@ void World::ProcessChunkQueue() {
         auto result = chunks.emplace(key, chunk);
         if (result.second) {
             result.first->second.mesh = VoxelMesher::GenerateChunkMesh(result.first->second, &chunks);
-            result.first->second.meshGenerated = true;
+            if (result.first->second.mesh.vertexCount > 0) {
+                result.first->second.meshGenerated = true;
+            } else {
+                result.first->second.meshGenerated = false;
+            }
             result.first->second.needsUpdate = false;
         }
         
