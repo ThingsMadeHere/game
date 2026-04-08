@@ -57,10 +57,10 @@ Mesh VoxelMesher::GenerateChunkMesh(const Chunk& chunk,
             x01 = s;  y01 = fu0; z01 = fv1;
             x11 = s;  y11 = fu1; z11 = fv1;
         } else if (axis == 1) {
-            x00 = fv0; y00 = s;  z00 = fu0;
-            x10 = fv1; y10 = s;  z10 = fu0;
-            x01 = fv0; y01 = s;  z01 = fu1;
-            x11 = fv1; y11 = s;  z11 = fu1;
+            x00 = fu0; y00 = s;  z00 = fv0;
+            x10 = fu1; y10 = s;  z10 = fv0;
+            x01 = fu0; y01 = s;  z01 = fv1;
+            x11 = fu1; y11 = s;  z11 = fv1;
         } else {
             x00 = fu0; y00 = fv0; z00 = s;
             x10 = fu1; y10 = fv0; z10 = s;
