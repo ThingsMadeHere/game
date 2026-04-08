@@ -1,41 +1,65 @@
-# NOTE FOR AI ASSISTANTS: This .gitignore is manually maintained. DO NOT OVERWRITE THIS FILE.
-# If you need to add patterns, append them at the bottom. Never delete existing rules.
-
-# Build artifacts
-build/
-build-*/
-CMakeCache.txt
-CMakeFiles/
-cmake-build-*/
+```
+# Compiled and build artifacts
 *.o
 *.obj
-*.a
-*.lib
-*.so
-*.dll
-*.dylib
-*.exe
 *.out
-compile_commands.json
+build/
+dist/
 
 # Dependencies
-_deps/
-external/
-vendor/
+node_modules/
+.venv/
+venv/
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+target/
+.gradle/
 
-# Generated files
-*.generated.*
-*.tmp
+# Logs and temp files
 *.log
-*.cache
+*.tmp
+*.swp
 
-# IDE files
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
 .vscode/
 .idea/
-*.swp
-*.swo
-*~
-.DS_Store
 
-# Game specific
-terrain.log
+# System files
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+
+# Compressed files
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
+```

@@ -85,9 +85,14 @@ const std::vector<NoiseLayerDef>* GetPlanetNoisePreset(const std::string& planet
 // Improved Perlin-like noise implementation
 float Hash(float x, float y, float z) {
     // Better hash function for smoother noise
-    int xi = (int)floorf(x) & 255;
-    int yi = (int)floorf(y) & 255;
-    int zi = (int)floorf(z) & 255;
+    int xi = ((int)floorf(x)) & 255;
+    int yi = ((int)floorf(y)) & 255;
+    int zi = ((int)floorf(z)) & 255;
+    
+    // Handle negative coordinates properly
+    if (xi < 0) xi += 256;
+    if (yi < 0) yi += 256;
+    if (zi < 0) zi += 256;
     
     // Simple permutation table simulation
     int hash = (xi * 374761393 + yi * 668265263 + zi * 217460973) % 256;
@@ -106,14 +111,14 @@ float SmoothNoise3D(float x, float y, float z) {
     float fz = z - iz;
     
     // Get hash values for corners
-    float h000 = Hash(ix, iy, iz);
-    float h001 = Hash(ix, iy, iz + 1);
-    float h010 = Hash(ix, iy + 1, iz);
-    float h011 = Hash(ix, iy + 1, iz + 1);
-    float h100 = Hash(ix + 1, iy, iz);
-    float h101 = Hash(ix + 1, iy, iz + 1);
-    float h110 = Hash(ix + 1, iy + 1, iz);
-    float h111 = Hash(ix + 1, iy + 1, iz + 1);
+    float h000 = Hash((float)ix, (float)iy, (float)iz);
+    float h001 = Hash((float)ix, (float)iy, (float)(iz + 1));
+    float h010 = Hash((float)ix, (float)(iy + 1), (float)iz);
+    float h011 = Hash((float)ix, (float)(iy + 1), (float)(iz + 1));
+    float h100 = Hash((float)(ix + 1), (float)iy, (float)iz);
+    float h101 = Hash((float)(ix + 1), (float)iy, (float)(iz + 1));
+    float h110 = Hash((float)(ix + 1), (float)(iy + 1), (float)iz);
+    float h111 = Hash((float)(ix + 1), (float)(iy + 1), (float)(iz + 1));
     
     // Smoothstep interpolation
     float u = fx * fx * (3.0f - 2.0f * fx);
