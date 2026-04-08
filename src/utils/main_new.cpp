@@ -279,6 +279,18 @@ int main() {
                     printf("Fly mode: %s\n", flyMode ? "ON" : "OFF");
                 }
                 
+                // Screenshot with F12
+                if (IsKeyPressed(KEY_M)) {
+                    char filename[64];
+                    time_t now = time(nullptr);
+                    struct tm* t = localtime(&now);
+                    sprintf(filename, "screenshot_%04d%02d%02d_%02d%02d%02d.png",
+                            t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
+                            t->tm_hour, t->tm_min, t->tm_sec);
+                    TakeScreenshot(filename);
+                    printf("Screenshot saved: %s\n", filename);
+                }
+                
                 float dt = GetFrameTime();
                 
                 if (flyMode) {

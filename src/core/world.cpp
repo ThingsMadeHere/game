@@ -155,16 +155,26 @@ void World::UpdateChunkLoading(const Vector3& playerPos) {
             int horizontalDist = (int)sqrtf(distX * distX + distZ * distZ);
             
             if (horizontalDist <= CHUNK_LOAD_RADIUS) {
-                // Sample terrain height at center of this column to know which chunks to load
+                // Sample terrain height at center of this column
                 float worldX = (float)(cx * CHUNK_SIZE + CHUNK_SIZE / 2) * VOXEL_SIZE;
                 float worldZ = (float)(cz * CHUNK_SIZE + CHUNK_SIZE / 2) * VOXEL_SIZE;
                 float terrainHeight = GetTerrainHeightAdvanced(worldX, worldZ);
-                int maxChunkY = (int)(terrainHeight / (CHUNK_HEIGHT * VOXEL_SIZE)) + 1;
-                int minChunkY = 0; // Always load from bottom up to terrain
+                int terrainChunkY = (int)(terrainHeight / (CHUNK_HEIGHT * VOXEL_SIZE));
+                
+                // Load chunks from bottom up to terrain surface + a buffer above
+                int minChunkY = 0;
+                int maxChunkY = terrainChunkY + 1; // +1 to include surface chunks
+                
+                // Also load chunks around player height
+                int playerMinY = playerChunkY - CHUNK_VERTICAL_RADIUS;
+                int playerMaxY = playerChunkY + CHUNK_VERTICAL_RADIUS;
+                
+                // Combine both ranges
+                int loadMinY = 0;  // Always start from bottom
+                int loadMaxY = fmaxf(maxChunkY, playerMaxY);
                 
                 // Load vertical column of chunks at this X,Z position
-                // Only load chunks that could contain terrain (from bottom up to max height)
-                for (int cy = minChunkY; cy <= maxChunkY && cy <= playerChunkY + CHUNK_VERTICAL_RADIUS; cy++) {
+                for (int cy = loadMinY; cy <= loadMaxY; cy++) {
                     // Check vertical distance from player
                     int distY = abs(cy - playerChunkY);
                     int totalDist = (int)sqrtf(distX*distX + distY*distY + distZ*distZ);

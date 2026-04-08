@@ -3,25 +3,22 @@
 #include <cstdint>
 #include <cmath>
 
-// Greedy meshing implementation - merges adjacent faces for better performance
-
 struct MaskCell {
     BlockType type;
-    int sign; // +1 or -1, indicates normal direction along the axis
+    int sign;
 };
 
-Mesh VoxelMesher::GenerateChunkMesh(const Chunk& chunk, 
+// Forward declaration - defined in texturing file
+void CalculateLightingAndTexture(BlockType blockType, Face face, int axis, int sign, int du, int dv,
+                                  float& uBase, float& vBase, float& cellSize,
+                                  uint8_t& cr, uint8_t& cg, uint8_t& cb, uint8_t& ca);
+
+Mesh VoxelMesher::GenerateChunkMesh(const Chunk& chunk,
                                      const std::unordered_map<long long, Chunk>* neighborChunks) {
     std::vector<Vertex> vertices;
     vertices.reserve(CHUNK_SIZE * CHUNK_SIZE * 6);
 
-    // Lambda to emit a merged quad for greedy meshing
     auto emitQuad = [&](int axis, int sign, int slice, int u0, int v0, int du, int dv, BlockType blockType) {
-        const uint8_t r = (uint8_t)GetBlockProperties(blockType).color.r;
-        const uint8_t g = (uint8_t)GetBlockProperties(blockType).color.g;
-        const uint8_t b = (uint8_t)GetBlockProperties(blockType).color.b;
-        const uint8_t a = (uint8_t)GetBlockProperties(blockType).color.a;
-
         float nx = 0, ny = 0, nz = 0;
         if (axis == 0) nx = (float)sign;
         if (axis == 1) ny = (float)sign;
@@ -33,28 +30,9 @@ Mesh VoxelMesher::GenerateChunkMesh(const Chunk& chunk,
         if (axis == 2) face = (sign > 0) ? FACE_FRONT : FACE_BACK;
 
         float uBase, vBase, cellSize;
-        int texIndex = GetBlockProperties(blockType).texSide;
-        if (face == FACE_TOP) texIndex = GetBlockProperties(blockType).texTop;
-        else if (face == FACE_BOTTOM) texIndex = GetBlockProperties(blockType).texBottom;
-        cellSize = 0.25f;
-        int row = texIndex / 4;
-        int col = texIndex % 4;
-        uBase = col * cellSize;
-        vBase = row * cellSize;
-
-        float sunX = 0.5f, sunY = 0.8f, sunZ = 0.3f;
-        float sunLen = sqrtf(sunX*sunX + sunY*sunY + sunZ*sunZ);
-        sunX /= sunLen; sunY /= sunLen; sunZ /= sunLen;
-        const float AMBIENT = 0.3f;
-        float lightIntensity = nx * sunX + ny * sunY + nz * sunZ;
-        lightIntensity = AMBIENT + (1.0f - AMBIENT) * fmaxf(0.0f, lightIntensity);
-
-        float baseR = r / 255.0f;
-        float baseG = g / 255.0f;
-        float baseB = b / 255.0f;
-        uint8_t cr = (uint8_t)(baseR * lightIntensity * 255.0f);
-        uint8_t cg = (uint8_t)(baseG * lightIntensity * 255.0f);
-        uint8_t cb = (uint8_t)(baseB * lightIntensity * 255.0f);
+        uint8_t cr, cg, cb, ca;
+        CalculateLightingAndTexture(blockType, face, axis, sign, du, dv,
+                                     uBase, vBase, cellSize, cr, cg, cb, ca);
 
         const float tu0 = uBase;
         const float tv0 = vBase;
@@ -62,7 +40,7 @@ Mesh VoxelMesher::GenerateChunkMesh(const Chunk& chunk,
         const float tv1 = vBase + cellSize * dv;
 
         auto push = [&](float px, float py, float pz, float uu, float vv) {
-            vertices.push_back({px, py, pz, nx, ny, nz, uu, vv, cr, cg, cb, a});
+            vertices.push_back({px, py, pz, nx, ny, nz, uu, vv, cr, cg, cb, ca});
         };
 
         const float s = (float)slice;
@@ -79,10 +57,10 @@ Mesh VoxelMesher::GenerateChunkMesh(const Chunk& chunk,
             x01 = s;  y01 = fu0; z01 = fv1;
             x11 = s;  y11 = fu1; z11 = fv1;
         } else if (axis == 1) {
-            x00 = fu0; y00 = s;  z00 = fv0;
-            x10 = fu1; y10 = s;  z10 = fv0;
-            x01 = fu0; y01 = s;  z01 = fv1;
-            x11 = fu1; y11 = s;  z11 = fv1;
+            x00 = fv0; y00 = s;  z00 = fu0;
+            x10 = fv1; y10 = s;  z10 = fu0;
+            x01 = fv0; y01 = s;  z01 = fu1;
+            x11 = fv1; y11 = s;  z11 = fu1;
         } else {
             x00 = fu0; y00 = fv0; z00 = s;
             x10 = fu1; y10 = fv0; z10 = s;
@@ -212,17 +190,4 @@ Mesh VoxelMesher::GenerateChunkMesh(const Chunk& chunk,
     }
     UploadMesh(&mesh, false);
     return mesh;
-}
-
-void VoxelMesher::GetTextureUV(BlockType type, Face face, float& u, float& v, float& cellSize) {
-    const BlockProperties& props = GetBlockProperties(type);
-    int texIndex = props.texSide;
-    if (face == FACE_TOP) texIndex = props.texTop;
-    else if (face == FACE_BOTTOM) texIndex = props.texBottom;
-    
-    cellSize = 0.25f;
-    int row = texIndex / 4;
-    int col = texIndex % 4;
-    u = col * cellSize;
-    v = row * cellSize;
 }

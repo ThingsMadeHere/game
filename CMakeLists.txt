@@ -28,7 +28,8 @@ add_executable(game
     src/core/planet.cpp
     src/terrain/noise.cpp
     src/rendering/marching_cubes.cpp
-    src/rendering/voxel_mesher.cpp
+    src/rendering/voxel_mesher_geometry.cpp
+    src/rendering/voxel_mesher_texturing.cpp
     src/rendering/gpu_renderer.cpp
     src/rendering/deferred_renderer.cpp
     src/rendering/shadow_renderer.cpp
