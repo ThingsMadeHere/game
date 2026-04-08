@@ -526,7 +526,14 @@ void World::Render(const Camera3D& camera) {
         }
 
         if (chunk.meshGenerated && chunk.mesh.vertexCount > 0) {
-            Material mat = LoadMaterialDefault();
+            // Don't reload material every frame - use a static cached one
+            static Material mat = {0};
+            static bool matLoaded = false;
+            if (!matLoaded) {
+                mat = LoadMaterialDefault();
+                matLoaded = true;
+            }
+            
             Vector3 chunkPos = {
                 (float)(chunk.cx * CHUNK_SIZE) * VOXEL_SIZE,
                 (float)(chunk.cy * CHUNK_HEIGHT) * VOXEL_SIZE,

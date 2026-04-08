@@ -21,12 +21,13 @@ if(raylib_FOUND)
     get_target_property(RAYLIB_INCLUDES raylib::raylib INTERFACE_INCLUDE_DIRECTORIES)
 endif()
 
-# Add Executable with all source files (temporarily exclude sky rendering)
+# Add Executable with all source files
 add_executable(game 
     src/utils/main_new.cpp
     src/core/world.cpp
     src/core/planet.cpp
     src/terrain/noise.cpp
+    src/rendering/SkyAtmosphere.cpp
     src/rendering/marching_cubes.cpp
     src/rendering/voxel_mesher_geometry.cpp
     src/rendering/voxel_mesher_texturing.cpp
