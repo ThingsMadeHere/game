@@ -250,23 +250,9 @@ int main() {
             
             // Get player position for chunk loading
             Vector3 playerPos = camera.position;
-            int playerChunkX = (int)floorf(playerPos.x / (CHUNK_SIZE * VOXEL_SIZE));
-            int playerChunkZ = (int)floorf(playerPos.z / (CHUNK_SIZE * VOXEL_SIZE));
             
-            // Only queue chunks within reasonable distance for performance
-            int maxGenerateDistance = 12; // Limit generation to 12 chunks
-            
-            // Queue chunks around player for async generation (infinite procedural generation)
-            for (int x = playerChunkX - maxGenerateDistance; x <= playerChunkX + maxGenerateDistance; x++) {
-                for (int z = playerChunkZ - maxGenerateDistance; z <= playerChunkZ + maxGenerateDistance; z++) {
-                    // Skip chunks that are too far from player
-                    int distX = abs(x - playerChunkX);
-                    int distZ = abs(z - playerChunkZ);
-                    if (distX > maxGenerateDistance || distZ > maxGenerateDistance) continue;
-                    
-                    world.QueueChunkGeneration(x, 0, z);
-                }
-            }
+            // Update infinite terrain chunk loading
+            world.UpdateChunkLoading(playerPos);
             
             // Process completed chunks
             world.ProcessChunkQueue();
@@ -588,8 +574,9 @@ int main() {
             
             char chunkText[256];
             int uiChunkX = (int)floorf(camera.position.x / (CHUNK_SIZE * VOXEL_SIZE));
+            int uiChunkY = (int)floorf(camera.position.y / (CHUNK_HEIGHT * VOXEL_SIZE));
             int uiChunkZ = (int)floorf(camera.position.z / (CHUNK_SIZE * VOXEL_SIZE));
-            sprintf(chunkText, "Chunk: (%d, %d)", uiChunkX, uiChunkZ);
+            sprintf(chunkText, "Chunk: (%d, %d, %d)", uiChunkX, uiChunkY, uiChunkZ);
             DrawText(chunkText, 10, 130, 15, WHITE);
             
             // Direction indicator
@@ -836,7 +823,7 @@ float GetTerrainHeightAtPoint(float x, float z) {
 }
 
 float GetTerrainHeight(float x, float z) {
-    // Sample terrain height using noise function
-    float height = 8.0f + SmoothNoise3D(x * 0.02f, 0, z * 0.02f) * 6.0f;
-    return height;
+    // Use the advanced multi-layer terrain generation
+    extern float GetTerrainHeightAdvanced(float worldX, float worldZ);
+    return GetTerrainHeightAdvanced(x, z);
 }

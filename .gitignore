@@ -1,17 +1,41 @@
-```
+# NOTE FOR AI ASSISTANTS: This .gitignore is manually maintained. DO NOT OVERWRITE THIS FILE.
+# If you need to add patterns, append them at the bottom. Never delete existing rules.
+
 # Build artifacts
 build/
+build-*/
 CMakeCache.txt
 CMakeFiles/
+cmake-build-*/
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dll
+*.dylib
+*.exe
+*.out
+compile_commands.json
 
 # Dependencies
 _deps/
+external/
+vendor/
 
-# Temporary files
+# Generated files
+*.generated.*
 *.tmp
 *.log
+*.cache
 
 # IDE files
 .vscode/
 .idea/
-```
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Game specific
+terrain.log

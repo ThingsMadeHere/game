@@ -6,6 +6,10 @@
 float SmoothNoise3D(float x, float y, float z);
 float FBM(float x, float y, float z, int octaves);
 
+// Advanced terrain generation
+float GetTerrainHeightAdvanced(float worldX, float worldZ);
+float GetCaveDensity(float worldX, float worldY, float worldZ);
+
 // Noise layer definition
 struct NoiseLayerDef {
     const char* name;

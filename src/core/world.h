@@ -58,6 +58,9 @@ public:
                   Vector3 rotation = {0,0,0}, float scale = 1.0f);
     void DrawModels(); // Draw all models (called after voxel rendering)
     
+    // Infinite terrain management
+    void UpdateChunkLoading(const Vector3& playerPos);
+    
     // Garbage collection
     void GarbageCollectChunks(int playerChunkX, int playerChunkZ, int maxDistance);
     int GetGeneratedChunkCount() const;
