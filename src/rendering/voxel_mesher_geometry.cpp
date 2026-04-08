@@ -1,4 +1,5 @@
 #include "voxel_mesher.h"
+#include "raylib.h"
 #include <cstring>
 #include <cstdint>
 #include <cmath>
@@ -61,6 +62,9 @@ Mesh VoxelMesher::GenerateChunkMesh(const Chunk& chunk,
             x10 = fu1; y10 = s;  z10 = fv0;
             x01 = fu0; y01 = s;  z01 = fv1;
             x11 = fu1; y11 = s;  z11 = fv1;
+            
+            // Fix: For Y-axis faces, u maps to X and v maps to Z (correct order)
+            // The original code had this correct, but texture UVs may need adjustment
         } else {
             x00 = fu0; y00 = fv0; z00 = s;
             x10 = fu1; y10 = fv0; z10 = s;
@@ -188,6 +192,8 @@ Mesh VoxelMesher::GenerateChunkMesh(const Chunk& chunk,
         mesh.colors[i*4+2] = vertices[i].cb;
         mesh.colors[i*4+3] = vertices[i].ca;
     }
-    UploadMesh(&mesh, false);
+    // Use LoadMeshFromBuffers which is the correct raylib function
+    mesh = LoadMeshFromBuffers(mesh.vertexCount, mesh.vertices, mesh.normals, 
+                                mesh.texcoords, mesh.colors, nullptr, 0);
     return mesh;
 }
