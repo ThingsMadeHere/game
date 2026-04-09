@@ -1,33 +1,25 @@
 ```
-# Compiled and build artifacts
+# Build artifacts
+build/
+cmake-build-*/
 *.o
 *.obj
 *.a
+*.lib
 *.so
 *.dll
 *.exe
 *.out
 
 # Dependencies
-node_modules/
-venv/
-.venv/
-__pycache__/
-.mypy_cache/
-.pytest_cache/
-target/
-.gradle/
-
-# Build directories (common in C++ projects)
-build/
-dist/
+vendor/
 
 # Logs and temp files
 *.log
 *.tmp
 *.swp
 
-# Environment files
+# Environment
 .env
 .env.local
 *.env.*
@@ -35,8 +27,10 @@ dist/
 # Editors
 .vscode/
 .idea/
+*.swp
+*.swo
 
-# System files
+# OS
 .DS_Store
 Thumbs.db
 ```
