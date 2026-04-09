@@ -21,6 +21,19 @@ if(raylib_FOUND)
     get_target_property(RAYLIB_INCLUDES raylib::raylib INTERFACE_INCLUDE_DIRECTORIES)
 endif()
 
+# Find or fetch GLM
+find_package(glm QUIET)
+if(NOT glm_FOUND)
+    include(FetchContent)
+    FetchContent_Declare(
+        glm
+        GIT_REPOSITORY https://github.com/g-truc/glm.git
+        GIT_TAG 1.0.1
+    )
+    FetchContent_MakeAvailable(glm)
+    set(GLM_INCLUDES ${glm_SOURCE_DIR})
+endif()
+
 # Add Executable with all source files
 add_executable(game 
     src/utils/main_new.cpp

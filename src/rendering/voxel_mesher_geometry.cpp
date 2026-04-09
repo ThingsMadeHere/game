@@ -192,8 +192,8 @@ Mesh VoxelMesher::GenerateChunkMesh(const Chunk& chunk,
         mesh.colors[i*4+2] = vertices[i].cb;
         mesh.colors[i*4+3] = vertices[i].ca;
     }
-    // Use LoadMeshFromBuffers which is the correct raylib function
-    mesh = LoadMeshFromBuffers(mesh.vertexCount, mesh.vertices, mesh.normals, 
-                                mesh.texcoords, mesh.colors, nullptr, 0);
+    // Manually assign vertex buffers to the mesh (raylib 5.0 approach)
+    // The mesh structure already has the CPU-side arrays, we just need to upload them
+    UploadMesh(&mesh, nullptr);
     return mesh;
 }
